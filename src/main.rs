@@ -10,7 +10,7 @@ pub mod engine;
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]
 struct Args {
-    #[clap(required = true, display_order = 1, help = "File")]
+    #[clap(required = true, display_order = 1)]
     file: String,
 
     #[clap(long, default_value_t = 1, display_order = 2)]
