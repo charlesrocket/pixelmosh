@@ -6,7 +6,7 @@ pub struct Options {
     pub max_rate: u16,
     pub line_shift_rng: f64,
     pub channel_swap_rng: f64,
-    pub shift_channel_rng: f64,
+    pub channel_shift_rng: f64,
 }
 
 pub trait Mosh {
@@ -73,7 +73,7 @@ fn mosh_chunk(
     };
 
 
-    let shift_channel = if rng.gen_bool(options.shift_channel_rng) {
+    let shift_channel = if rng.gen_bool(options.channel_shift_rng) {
         let amount = line_shift_dist.sample(rng) / channel_count;
         let channel = channel_count_dist.sample(rng);
         Some(MoshLine::ChannelShift(
