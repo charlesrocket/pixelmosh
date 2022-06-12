@@ -40,9 +40,9 @@ fn main() {
 
     let path = Path::new("moshed.png");
     let file = File::create(path).unwrap();
-    let writer = &mut BufWriter::new(file);
+    let b_writer = &mut BufWriter::new(file);
 
-    let mut encoder = png::Encoder::new(writer, info.width, info.height);
+    let mut encoder = png::Encoder::new(b_writer, info.width, info.height);
     encoder.set_color(info.color_type);
     encoder.set_depth(info.bit_depth);
     let mut writer = encoder.write_header().unwrap();
