@@ -3,6 +3,9 @@ name = "pixelmosh"
 version = "0.1.0"
 edition = "2021"
 repository = "https://github.com/charlesrocket/pixelmosh"
+authors = ["charlesrocket"]
+description = "PNG corrupter"
+categories = ["command-line-utilities", "multimedia::images"]
 
 [dependencies]
 clap = { version = "~3", features = ["derive"] }
