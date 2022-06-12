@@ -34,7 +34,7 @@ fn main() {
     let mut rng = thread_rng();
 
     println!("Reading input");
-    let decoder = png::Decoder::new(File::open(args.file).unwrap());
+    let decoder = png::Decoder::new(File::open(args.file).expect("File not found"));
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf).unwrap();
