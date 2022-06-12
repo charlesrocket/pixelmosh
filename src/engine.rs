@@ -58,7 +58,7 @@ fn mosh_chunk(
     let line_shift = if rng.gen_bool(options.line_shift_rng) {
         let line_shift_amount = line_shift_dist.sample(rng);
 
-        Some(Lines::Shift(line_shift_amount))
+        Some(MoshLine::Shift(line_shift_amount))
     } else {
         None
     };
@@ -67,7 +67,7 @@ fn mosh_chunk(
     let shift_channel = if rng.gen_bool(options.shift_channel_rng) {
         let amount = line_shift_dist.sample(rng) / channel_count;
         let channel = channel_count_dist.sample(rng);
-        Some(Lines::ChannelShift(
+        Some(MoshLine::ChannelShift(
             amount,
             channel,
             channel_count,
@@ -79,7 +79,7 @@ fn mosh_chunk(
     let channel_swap = if rng.gen_bool(options.channel_swap_rng) {
         let channel_1 = channel_count_dist.sample(rng);
         let channel_2 = channel_count_dist.sample(rng);
-        Some(Chunks::ChannelSwap(
+        Some(MoshChunk::ChannelSwap(
             channel_1,
             channel_2,
             channel_count,
@@ -113,19 +113,19 @@ fn mosh_chunk(
     };
 }
 
-pub enum Chunks {
+pub enum MoshChunk {
     ChannelSwap(usize, usize, usize),
 }
 
-pub enum Lines {
+pub enum MoshLine {
     ChannelShift(usize, usize, usize),
     Shift(usize),
 }
 
-impl Mosh for Chunks {
+impl Mosh for MoshChunk {
     fn run(&self, chunk: &mut [u8]) {
         match self {
-            Chunks::ChannelSwap(channel_1, channel_2, channel_count) => {
+            MoshChunk::ChannelSwap(channel_1, channel_2, channel_count) => {
                 let chunk_length = chunk.len();
                 let channel_value_count = chunk_length / channel_count;
 
@@ -144,10 +144,10 @@ impl Mosh for Chunks {
 }
 
 
-impl Mosh for Lines {
+impl Mosh for MoshLine {
     fn run(&self, line: &mut [u8]) {
         match self {
-            Lines::ChannelShift(amount, channel, channel_count) => {
+            MoshLine::ChannelShift(amount, channel, channel_count) => {
                 let line_length = line.len();
                 let channel_value_count = line_length / channel_count;
 
@@ -156,7 +156,7 @@ impl Mosh for Lines {
                         line[(i * channel_count + channel + (channel + 1) * amount) % line_length];
                 }
             }
-            Lines::Shift(amount) => {
+            MoshLine::Shift(amount) => {
                 line.rotate_left(*amount);
             }
         }
