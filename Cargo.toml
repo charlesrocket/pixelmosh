@@ -6,6 +6,9 @@ repository = "https://github.com/charlesrocket/pixelmosh"
 authors = ["charlesrocket"]
 description = "PNG corrupter"
 categories = ["command-line-utilities", "multimedia::images"]
+keywords = ["glitch"]
+license = "MIT"
+readme = "README.md"
 
 [dependencies]
 clap = { version = "~3", features = ["derive"] }
