@@ -22,7 +22,6 @@ pub enum MoshLine {
     Shift(usize),
 }
 
-
 pub fn mosh(
     png_info: &png::OutputInfo,
     pixel_buf: &mut [u8],
