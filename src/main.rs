@@ -33,6 +33,7 @@ fn main() {
     let args = Args::parse();
     let mut rng = thread_rng();
 
+    println!("Reading input");
     let decoder = png::Decoder::new(File::open(args.input).unwrap());
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
@@ -61,6 +62,8 @@ fn main() {
         shift_channel_rng,
     };
 
+    println!("Processing");
     engine::mosh(&info, &mut buf, &mut rng, &options);
+    println!("Writing output");
     writer.write_image_data(&buf).unwrap();
 }
