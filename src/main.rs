@@ -26,7 +26,7 @@ struct Args {
     channel_swap: f64,
 
     #[clap(long, default_value_t = 0.5, display_order = 6)]
-    shift_channel: f64,
+    channel_shift: f64,
 }
 
 fn main() {
@@ -52,14 +52,14 @@ fn main() {
     let max_rate = args.max_rate;
     let line_shift_rng = args.line_shift;
     let channel_swap_rng = args.channel_swap;
-    let shift_channel_rng = args.shift_channel;
+    let channel_shift_rng = args.channel_shift;
 
     let options = engine::Options {
         min_rate,
         max_rate,
         line_shift_rng,
         channel_swap_rng,
-        shift_channel_rng,
+        channel_shift_rng,
     };
 
     println!("Processing");
