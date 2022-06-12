@@ -11,7 +11,7 @@ pub mod engine;
 #[clap(version, about, long_about = None)]
 struct Args {
     #[clap(required = true, display_order = 1, help = "File")]
-    input: String,
+    file: String,
 
     #[clap(long, default_value_t = 1, display_order = 2)]
     min_rate: u16,
@@ -34,14 +34,14 @@ fn main() {
     let mut rng = thread_rng();
 
     println!("Reading input");
-    let decoder = png::Decoder::new(File::open(args.input).unwrap());
+    let decoder = png::Decoder::new(File::open(args.file).unwrap());
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf).unwrap();
 
     let path = Path::new("moshed.png");
-    let file = File::create(path).unwrap();
-    let b_writer = &mut BufWriter::new(file);
+    let output = File::create(path).unwrap();
+    let b_writer = &mut BufWriter::new(output);
 
     let mut encoder = png::Encoder::new(b_writer, info.width, info.height);
     encoder.set_color(info.color_type);
