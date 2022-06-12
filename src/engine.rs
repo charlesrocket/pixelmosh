@@ -13,6 +13,16 @@ pub trait Mosh {
     fn run(&self, chunk: &mut [u8]);
 }
 
+pub enum MoshChunk {
+    ChannelSwap(usize, usize, usize),
+}
+
+pub enum MoshLine {
+    ChannelShift(usize, usize, usize),
+    Shift(usize),
+}
+
+
 pub fn mosh(
     png_info: &png::OutputInfo,
     pixel_buf: &mut [u8],
@@ -111,15 +121,6 @@ fn mosh_chunk(
     if let Some(cs) = channel_swap {
         cs.run(chunk)
     };
-}
-
-pub enum MoshChunk {
-    ChannelSwap(usize, usize, usize),
-}
-
-pub enum MoshLine {
-    ChannelShift(usize, usize, usize),
-    Shift(usize),
 }
 
 impl Mosh for MoshChunk {
