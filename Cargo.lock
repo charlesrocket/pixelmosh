@@ -176,6 +176,7 @@ dependencies = [
  "clap",
  "png",
  "rand",
+ "rand_chacha",
 ]
 
 [[package]]
