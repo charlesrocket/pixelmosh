@@ -2,7 +2,8 @@ use std::fs::File;
 use std::io::BufWriter;
 use std::path::Path;
 
-use rand::thread_rng;
+use rand::prelude::*;
+use rand_chacha::ChaCha8Rng;
 use clap::Parser;
 
 pub mod engine;
@@ -31,7 +32,7 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let mut rng = thread_rng();
+    let mut rng = ChaCha8Rng::seed_from_u64(thread_rng().next_u64());
 
     println!("Reading input");
     let decoder = png::Decoder::new(File::open(args.file).expect("File not found"));
