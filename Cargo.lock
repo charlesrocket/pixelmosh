@@ -173,6 +173,7 @@ checksum = "21326818e99cfe6ce1e524c2a805c189a99b5ae555a35d19f9a284b427d86afa"
 name = "pixelmosh"
 version = "0.2.0"
 dependencies = [
+ "adler",
  "clap",
  "png",
  "rand",
