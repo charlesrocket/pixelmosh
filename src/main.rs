@@ -28,6 +28,10 @@ struct Args {
 
     #[clap(long, default_value_t = 0.5, display_order = 6)]
     channel_shift: f64,
+
+    #[clap(short, long, default_value_t = thread_rng().next_u64(), display_order = 6)]
+    seed: u64,
+
 }
 
 fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
@@ -59,15 +63,12 @@ fn write_file(buf: std::vec::Vec<u8>, info: png::OutputInfo) {
 
 fn main() {
     let args = Args::parse();
-    let mut rng = ChaCha8Rng::seed_from_u64(thread_rng().next_u64());
-    let (mut buf, info) = read_file(args.file);
-
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
     let line_shift_rng = args.line_shift;
     let channel_swap_rng = args.channel_swap;
     let channel_shift_rng = args.channel_shift;
-
+    let seed = args.seed;
     let options = engine::Options {
         min_rate,
         max_rate,
@@ -76,7 +77,10 @@ fn main() {
         channel_shift_rng,
     };
 
-    println!("Processing");
+    let mut rng = ChaCha8Rng::seed_from_u64(seed);
+    let (mut buf, info) = read_file(args.file);
+
+    println!("Seed: {}\nProcessing", seed);
     engine::mosh(&info, &mut buf, &mut rng, &options);
     write_file(buf, info);
 }
