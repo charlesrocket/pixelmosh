@@ -32,10 +32,12 @@ struct Args {
 
 fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     println!("Reading input");
+
     let decoder = png::Decoder::new(File::open(file).expect("File not found"));
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf).unwrap();
+
     (buf, info)
 }
 
