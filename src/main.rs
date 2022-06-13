@@ -41,19 +41,26 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     (buf, info)
 }
 
-fn main() {
-    let args = Args::parse();
-    let mut rng = ChaCha8Rng::seed_from_u64(thread_rng().next_u64());
+fn write_file(buf: std::vec::Vec<u8>, info: png::OutputInfo) {
+    println!("Writing output");
 
-    let (mut buf, info) = read_file(args.file);
     let path = Path::new("moshed.png");
     let output = File::create(path).unwrap();
     let buf_writer = &mut BufWriter::new(output);
-
     let mut encoder = png::Encoder::new(buf_writer, info.width, info.height);
+
     encoder.set_color(info.color_type);
     encoder.set_depth(info.bit_depth);
+
     let mut writer = encoder.write_header().unwrap();
+
+    writer.write_image_data(&buf).unwrap();
+}
+
+fn main() {
+    let args = Args::parse();
+    let mut rng = ChaCha8Rng::seed_from_u64(thread_rng().next_u64());
+    let (mut buf, info) = read_file(args.file);
 
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
@@ -71,6 +78,5 @@ fn main() {
 
     println!("Processing");
     engine::mosh(&info, &mut buf, &mut rng, &options);
-    println!("Writing output");
-    writer.write_image_data(&buf).unwrap();
+    write_file(buf, info);
 }
