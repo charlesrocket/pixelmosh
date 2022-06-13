@@ -84,3 +84,6 @@ fn main() {
     engine::mosh(&info, &mut buf, &mut rng, &options);
     write_file(buf, info);
 }
+
+#[cfg(test)]
+mod tests;
