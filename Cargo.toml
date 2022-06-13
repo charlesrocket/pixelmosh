@@ -14,3 +14,4 @@ readme = "README.md"
 clap = { version = "~3", features = ["derive"] }
 png = "~0.17"
 rand = "~0.8"
+rand_chacha = "~0.3"
