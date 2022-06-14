@@ -9,15 +9,15 @@ pub struct Options {
     pub channel_shift_rng: f64,
 }
 
-pub trait Mosh {
+trait Mosh {
     fn run(&self, chunk: &mut [u8]);
 }
 
-pub enum MoshChunk {
+enum MoshChunk {
     ChannelSwap(usize, usize, usize),
 }
 
-pub enum MoshLine {
+enum MoshLine {
     ChannelShift(usize, usize, usize),
     Shift(usize),
 }
