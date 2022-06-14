@@ -29,7 +29,6 @@ pub fn mosh(
     options: &Options,
 ) {
     let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
-
     let mosh_rate = chunk_count_dist.sample(rng);
 
     for _ in 0..mosh_rate {
@@ -71,7 +70,6 @@ fn mosh_chunk(
     } else {
         None
     };
-
 
     let shift_channel = if rng.gen_bool(options.channel_shift_rng) {
         let amount = line_shift_dist.sample(rng) / channel_count;
@@ -142,7 +140,6 @@ impl Mosh for MoshChunk {
         }
     }
 }
-
 
 impl Mosh for MoshLine {
     fn run(&self, line: &mut [u8]) {
