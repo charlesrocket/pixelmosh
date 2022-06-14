@@ -7,5 +7,18 @@
 PNG corrupter
 
 USAGE:
-pixelmosh <FILE>
+    pixelmosh [OPTIONS] <FILE>
+
+ARGS:
+    <FILE>
+
+OPTIONS:
+        --min-rate <MIN_RATE>              [default: 1]
+        --max-rate <MAX_RATE>              [default: 7]
+        --line-shift <LINE_SHIFT>          [default: 0.5]
+        --channel-swap <CHANNEL_SWAP>      [default: 0.5]
+        --channel-shift <CHANNEL_SHIFT>    [default: 0.5]
+    -s, --seed <SEED>
+    -h, --help                             Print help information
+    -V, --version                          Print version information
 ```
