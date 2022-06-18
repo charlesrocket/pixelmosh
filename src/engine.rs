@@ -74,11 +74,8 @@ fn mosh_chunk(
     let shift_channel = if rng.gen_bool(options.channel_shift_rng) {
         let amount = line_shift_dist.sample(rng) / channel_count;
         let channel = channel_count_dist.sample(rng);
-        Some(MoshLine::ChannelShift(
-            amount,
-            channel,
-            channel_count,
-        ))
+
+        Some(MoshLine::ChannelShift(amount,channel,channel_count))
     } else {
         None
     };
@@ -86,11 +83,8 @@ fn mosh_chunk(
     let channel_swap = if rng.gen_bool(options.channel_swap_rng) {
         let channel_1 = channel_count_dist.sample(rng);
         let channel_2 = channel_count_dist.sample(rng);
-        Some(MoshChunk::ChannelSwap(
-            channel_1,
-            channel_2,
-            channel_count,
-        ))
+
+        Some(MoshChunk::ChannelSwap(channel_1,channel_2,channel_count))
     } else {
         None
     };
@@ -98,7 +92,6 @@ fn mosh_chunk(
     for line_number in first_line..last_line {
         let line_start = line_number * png_info.line_size;
         let line_end = line_start + png_info.line_size;
-
         let line = &mut pixel_buf[line_start..line_end];
 
         if let Some(shift_channel) = &shift_channel {
@@ -112,7 +105,6 @@ fn mosh_chunk(
 
     let chunk_start = first_line * png_info.line_size;
     let chunk_end = last_line * png_info.line_size;
-
     let chunk = &mut pixel_buf[chunk_start..chunk_end];
 
     if let Some(cs) = channel_swap {
