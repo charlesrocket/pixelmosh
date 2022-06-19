@@ -18,3 +18,5 @@ rand_chacha = "~0.3"
 
 [dev-dependencies]
 adler = "~1"
+assert_cmd = "~2"
+predicates = "~2"
