@@ -75,7 +75,7 @@ fn mosh_chunk(
         let amount = line_shift_dist.sample(rng) / channel_count;
         let channel = channel_count_dist.sample(rng);
 
-        Some(MoshLine::ChannelShift(amount,channel,channel_count))
+        Some(MoshLine::ChannelShift(amount, channel, channel_count))
     } else {
         None
     };
@@ -84,7 +84,7 @@ fn mosh_chunk(
         let channel_1 = channel_count_dist.sample(rng);
         let channel_2 = channel_count_dist.sample(rng);
 
-        Some(MoshChunk::ChannelSwap(channel_1,channel_2,channel_count))
+        Some(MoshChunk::ChannelSwap(channel_1, channel_2, channel_count))
     } else {
         None
     };
