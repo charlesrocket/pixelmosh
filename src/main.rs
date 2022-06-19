@@ -2,9 +2,9 @@ use std::fs::File;
 use std::io::BufWriter;
 use std::path::Path;
 
+use clap::Parser;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
-use clap::Parser;
 
 pub mod engine;
 
@@ -31,7 +31,6 @@ struct Args {
 
     #[clap(short, long, default_value_t = thread_rng().next_u64(), hide_default_value = true, display_order = 7)]
     seed: u64,
-
 }
 
 fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
