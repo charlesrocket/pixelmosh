@@ -79,7 +79,8 @@ fn main() {
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = read_file(args.file);
 
-    println!("Seed: {}\nProcessing", seed);
+    println!("Seed: {}", seed);
+    println!("\x1b[24mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
     write_file(buf, info);
 }
