@@ -56,7 +56,6 @@ fn write_file(buf: std::vec::Vec<u8>, info: png::OutputInfo) {
     encoder.set_depth(info.bit_depth);
 
     let mut writer = encoder.write_header().unwrap();
-
     writer.write_image_data(&buf).unwrap();
 }
 
