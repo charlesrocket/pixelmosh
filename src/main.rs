@@ -82,6 +82,8 @@ fn main() {
     println!("\x1b[94mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
     write_file(buf, info);
+
+    println!("\x1b[32mDONE\x1b[0m")
 }
 
 #[cfg(test)]
