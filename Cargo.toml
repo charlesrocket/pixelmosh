@@ -12,6 +12,7 @@ readme = "README.md"
 
 [dependencies]
 clap = { version = "~3", features = ["derive"] }
+indicatif = "~0.16"
 png = "~0.17"
 rand = "~0.8"
 rand_chacha = "~0.3"

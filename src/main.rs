@@ -3,6 +3,7 @@ use std::io::BufWriter;
 use std::path::Path;
 
 use clap::Parser;
+use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
