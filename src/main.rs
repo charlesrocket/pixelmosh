@@ -35,8 +35,6 @@ struct Args {
 }
 
 fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
-    println!("Reading input");
-
     let decoder = png::Decoder::new(File::open(file).expect("File not found"));
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
@@ -46,8 +44,6 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
 }
 
 fn write_file(buf: std::vec::Vec<u8>, info: png::OutputInfo) {
-    println!("Writing output");
-
     let path = Path::new("moshed.png");
     let output = File::create(path).unwrap();
     let buf_writer = &mut BufWriter::new(output);
@@ -61,6 +57,7 @@ fn write_file(buf: std::vec::Vec<u8>, info: png::OutputInfo) {
 }
 
 fn main() {
+    let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
@@ -76,15 +73,30 @@ fn main() {
         channel_shift_rng,
     };
 
+    println!("Seed: \x1b[100m{}\x1b[0m", seed);
+    spinner.enable_steady_tick(140);
+    spinner.set_style(
+        ProgressStyle::default_spinner()
+            .tick_strings(&[
+                "▹▹▹▹▹",
+                "▸▹▹▹▹",
+                "▹▸▹▹▹",
+                "▹▹▸▹▹",
+                "▹▹▹▸▹",
+                "▹▹▹▹▸",
+                "▪▪▪▪▪",
+            ]),
+    );
+    spinner.set_message("Reading input");
+
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = read_file(args.file);
 
-    println!("Seed: \x1b[100m{}\x1b[0m", seed);
-    println!("\x1b[94mProcessing\x1b[0m");
+    spinner.set_message("\x1b[94mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
+    spinner.set_message("Writing output");
     write_file(buf, info);
-
-    println!("\x1b[32mDONE\x1b[0m")
+    spinner.finish_with_message("\x1b[32mDONE\x1b[0m");
 }
 
 #[cfg(test)]
