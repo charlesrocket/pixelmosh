@@ -44,10 +44,10 @@ fn mosh_chunk(
 ) {
     let line_count = pixel_buf.len() / png_info.line_size;
     let channel_count = match png_info.color_type {
-        png::ColorType::Grayscale => 1,
-        png::ColorType::Rgb => 3,
         png::ColorType::Indexed => 1,
+        png::ColorType::Grayscale => 1,
         png::ColorType::GrayscaleAlpha => 2,
+        png::ColorType::Rgb => 3,
         png::ColorType::Rgba => 4,
     };
 
