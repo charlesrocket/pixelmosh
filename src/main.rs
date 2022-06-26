@@ -89,7 +89,6 @@ fn main() {
     );
 
     spinner.set_message("Reading input");
-
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = read_file(args.file);
 
