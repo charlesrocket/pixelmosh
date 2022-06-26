@@ -1,9 +1,6 @@
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
 
-pub const INTRO_1: &str = "█▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█";
-pub const INTRO_2: &str = "█▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █";
-
 pub struct Options {
     pub min_rate: u16,
     pub max_rate: u16,
