@@ -87,6 +87,7 @@ fn main() {
                 "▪▪▪▪▪",
             ]),
     );
+
     spinner.set_message("Reading input");
 
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
@@ -94,6 +95,7 @@ fn main() {
 
     spinner.set_message("\x1b[94mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
+
     spinner.set_message("Writing output");
     write_file(buf, info);
     spinner.finish_with_message("\x1b[32mDONE\x1b[0m");
