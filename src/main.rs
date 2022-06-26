@@ -75,6 +75,7 @@ fn main() {
 
     println!("\x1b[1mPIXELMOSH\x1b[0m");
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
+
     spinner.enable_steady_tick(140);
     spinner.set_style(
         ProgressStyle::default_spinner()
