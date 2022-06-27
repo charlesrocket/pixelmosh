@@ -73,7 +73,7 @@ fn main() {
         channel_shift_rng,
     };
 
-    println!("\x1b[2m─\x1b[0m\n{}\n\x1b[2m^\x1b[0m", engine::INTRO);
+    println!("{}", engine::INTRO);
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
