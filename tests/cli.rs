@@ -19,16 +19,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
     cmd.arg("src/tests/test.png")
-       .arg("--min-rate")
-       .arg("5")
-       .arg("--max-rate")
-       .arg("10")
-       .arg("--line-shift")
-       .arg("0.2")
-       .arg("--seed")
-       .arg("1309999")
-       .assert()
-       .success();
+        .arg("--min-rate")
+        .arg("5")
+        .arg("--max-rate")
+        .arg("10")
+        .arg("--line-shift")
+        .arg("0.2")
+        .arg("--seed")
+        .arg("1309999")
+        .assert()
+        .success();
 
     Ok(())
 }

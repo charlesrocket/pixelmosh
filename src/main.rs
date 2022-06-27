@@ -77,18 +77,15 @@ fn main() {
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
-    spinner.set_style(
-        ProgressStyle::default_spinner()
-            .tick_strings(&[
-                "∙∙∙∙∙",
-                "●∙∙∙∙",
-                "∙●∙∙∙",
-                "∙∙●∙∙",
-                "∙∙∙●∙",
-                "∙∙∙∙●",
-                "∙∙∙∙∙"
-            ]),
-    );
+    spinner.set_style(ProgressStyle::default_spinner().tick_strings(&[
+        "∙∙∙∙∙",
+        "●∙∙∙∙",
+        "∙●∙∙∙",
+        "∙∙●∙∙",
+        "∙∙∙●∙",
+        "∙∙∙∙●",
+        "∙∙∙∙∙",
+    ]));
 
     spinner.set_message("Reading input");
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
