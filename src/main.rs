@@ -73,7 +73,7 @@ fn main() {
         channel_shift_rng,
     };
 
-    println!("\n{}\n", engine::INTRO);
+    println!("\x1b[2m─\x1b[0m\n{}\n\x1b[2m^\x1b[0m", engine::INTRO);
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
@@ -96,7 +96,7 @@ fn main() {
 
     spinner.set_message("Writing output");
     write_file(buf, info);
-    spinner.finish_with_message("\x1b[32mDONE\x1b[0m");
+    spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
 }
 
 #[cfg(test)]
