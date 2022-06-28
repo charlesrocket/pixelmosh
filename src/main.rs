@@ -24,16 +24,16 @@ struct Args {
     #[clap(long, default_value_t = 0.5, display_order = 4)]
     line_shift: f64,
 
-    #[clap(long, default_value_t = 0.5, display_order = 4)]
+    #[clap(long, default_value_t = 0.5, display_order = 5)]
     reverse: f64,
 
-    #[clap(long, default_value_t = 0.5, display_order = 4)]
+    #[clap(long, default_value_t = 0.5, display_order = 6)]
     flip: f64,
 
-    #[clap(long, default_value_t = 0.5, display_order = 5)]
+    #[clap(long, default_value_t = 0.5, display_order = 7)]
     channel_swap: f64,
 
-    #[clap(long, default_value_t = 0.5, display_order = 6)]
+    #[clap(long, default_value_t = 0.5, display_order = 8)]
     channel_shift: f64,
 
     #[clap(short, long, default_value_t = thread_rng().next_u64(), hide_default_value = true, display_order = 7)]
