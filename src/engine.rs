@@ -10,6 +10,7 @@ pub struct Options {
     pub min_rate: u16,
     pub max_rate: u16,
     pub line_shift_rng: f64,
+    pub flip_rng: f64,
     pub channel_swap_rng: f64,
     pub channel_shift_rng: f64,
 }
@@ -20,6 +21,7 @@ trait Mosh {
 
 enum MoshChunk {
     ChannelSwap(usize, usize, usize),
+    Flip,
 }
 
 enum MoshLine {
@@ -68,6 +70,8 @@ fn chunkmosh(
         first_line + chunk_size
     };
 
+    let flip = rng.gen_bool(options.flip_rng);
+
     let line_shift = if rng.gen_bool(options.line_shift_rng) {
         let line_shift_amount = line_shift_dist.sample(rng);
 
@@ -115,6 +119,10 @@ fn chunkmosh(
     if let Some(cs) = channel_swap {
         cs.run(chunk)
     };
+
+    if flip {
+        MoshChunk::Flip.run(chunk);
+    };
 }
 
 impl Mosh for MoshChunk {
@@ -133,6 +141,9 @@ impl Mosh for MoshChunk {
                     chunk[channel_1_index] = channel_2_value;
                     chunk[channel_2_index] = channel_1_value;
                 }
+            }
+            MoshChunk::Flip => {
+                chunk.reverse();
             }
         }
     }
