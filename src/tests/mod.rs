@@ -32,5 +32,5 @@ fn engine() {
 
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 3361689054);
+    assert_eq!(checksum, 1914553783);
 }
