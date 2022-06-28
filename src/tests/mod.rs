@@ -6,6 +6,8 @@ fn engine() {
     let min_rate = 5;
     let max_rate = 7;
     let line_shift_rng = 0.8;
+    let reverse_rng = 0.4;
+    let flip_rng = 0.3;
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
 
@@ -13,6 +15,8 @@ fn engine() {
         min_rate,
         max_rate,
         line_shift_rng,
+        reverse_rng,
+        flip_rng,
         channel_swap_rng,
         channel_shift_rng,
     };
