@@ -25,6 +25,9 @@ struct Args {
     line_shift: f64,
 
     #[clap(long, default_value_t = 0.5, display_order = 4)]
+    reverse: f64,
+
+    #[clap(long, default_value_t = 0.5, display_order = 4)]
     flip: f64,
 
     #[clap(long, default_value_t = 0.5, display_order = 5)]
@@ -65,6 +68,7 @@ fn main() {
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
     let line_shift_rng = args.line_shift;
+    let reverse_rng = args.reverse;
     let flip_rng = args.flip;
     let channel_swap_rng = args.channel_swap;
     let channel_shift_rng = args.channel_shift;
@@ -73,6 +77,7 @@ fn main() {
         min_rate,
         max_rate,
         line_shift_rng,
+        reverse_rng,
         flip_rng,
         channel_swap_rng,
         channel_shift_rng,

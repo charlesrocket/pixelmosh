@@ -10,6 +10,7 @@ pub struct Options {
     pub min_rate: u16,
     pub max_rate: u16,
     pub line_shift_rng: f64,
+    pub reverse_rng: f64,
     pub flip_rng: f64,
     pub channel_swap_rng: f64,
     pub channel_shift_rng: f64,
@@ -27,6 +28,7 @@ enum MoshChunk {
 enum MoshLine {
     ChannelShift(usize, usize, usize),
     Shift(usize),
+    Reverse,
 }
 
 pub fn mosh(
@@ -70,6 +72,7 @@ fn chunkmosh(
         first_line + chunk_size
     };
 
+    let reverse = rng.gen_bool(options.reverse_rng);
     let flip = rng.gen_bool(options.flip_rng);
 
     let line_shift = if rng.gen_bool(options.line_shift_rng) {
@@ -109,6 +112,9 @@ fn chunkmosh(
 
         if let Some(ls) = &line_shift {
             ls.run(line);
+        }
+        if reverse {
+            MoshLine::Reverse.run(line);
         }
     }
 
@@ -163,6 +169,9 @@ impl Mosh for MoshLine {
             }
             MoshLine::Shift(amount) => {
                 line.rotate_left(*amount);
+            }
+            MoshLine::Reverse => {
+                line.reverse();
             }
         }
     }
