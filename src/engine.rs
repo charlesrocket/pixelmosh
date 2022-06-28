@@ -28,7 +28,7 @@ enum MoshLine {
 }
 
 pub fn mosh(
-    png_info: &png::OutputInfo,
+    image_inf: &png::OutputInfo,
     pixel_buf: &mut [u8],
     rng: &mut impl Rng,
     options: &Options,
@@ -37,18 +37,18 @@ pub fn mosh(
     let mosh_rate = chunk_count_dist.sample(rng);
 
     for _ in 0..mosh_rate {
-        mosh_chunk(png_info, pixel_buf, rng, options);
+        mosh_chunk(image_inf, pixel_buf, rng, options);
     }
 }
 
 fn mosh_chunk(
-    png_info: &png::OutputInfo,
+    image_inf: &png::OutputInfo,
     pixel_buf: &mut [u8],
     rng: &mut impl Rng,
     options: &Options,
 ) {
-    let line_count = pixel_buf.len() / png_info.line_size;
-    let channel_count = match png_info.color_type {
+    let line_count = pixel_buf.len() / image_inf.line_size;
+    let channel_count = match image_inf.color_type {
         png::ColorType::Indexed => 1,
         png::ColorType::Grayscale => 1,
         png::ColorType::GrayscaleAlpha => 2,
@@ -56,7 +56,7 @@ fn mosh_chunk(
         png::ColorType::Rgba => 4,
     };
 
-    let line_shift_dist = Uniform::from(0..png_info.line_size);
+    let line_shift_dist = Uniform::from(0..image_inf.line_size);
     let line_number_dist = Uniform::from(0..line_count);
     let channel_count_dist = Uniform::from(0..channel_count);
 
@@ -95,8 +95,8 @@ fn mosh_chunk(
     };
 
     for line_number in first_line..last_line {
-        let line_start = line_number * png_info.line_size;
-        let line_end = line_start + png_info.line_size;
+        let line_start = line_number * image_inf.line_size;
+        let line_end = line_start + image_inf.line_size;
         let line = &mut pixel_buf[line_start..line_end];
 
         if let Some(shift_channel) = &shift_channel {
@@ -108,8 +108,8 @@ fn mosh_chunk(
         }
     }
 
-    let chunk_start = first_line * png_info.line_size;
-    let chunk_end = last_line * png_info.line_size;
+    let chunk_start = first_line * image_inf.line_size;
+    let chunk_end = last_line * image_inf.line_size;
     let chunk = &mut pixel_buf[chunk_start..chunk_end];
 
     if let Some(cs) = channel_swap {
