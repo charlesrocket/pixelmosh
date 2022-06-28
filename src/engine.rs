@@ -37,11 +37,11 @@ pub fn mosh(
     let mosh_rate = chunk_count_dist.sample(rng);
 
     for _ in 0..mosh_rate {
-        mosh_chunk(image_inf, pixel_buf, rng, options);
+        chunkmosh(image_inf, pixel_buf, rng, options);
     }
 }
 
-fn mosh_chunk(
+fn chunkmosh(
     image_inf: &png::OutputInfo,
     pixel_buf: &mut [u8],
     rng: &mut impl Rng,
