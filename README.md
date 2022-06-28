@@ -16,6 +16,8 @@ OPTIONS:
         --min-rate <MIN_RATE>              [default: 1]
         --max-rate <MAX_RATE>              [default: 7]
         --line-shift <LINE_SHIFT>          [default: 0.5]
+        --reverse <REVERSE>                [default: 0.5]
+        --flip <FLIP>                      [default: 0.5]
         --channel-swap <CHANNEL_SWAP>      [default: 0.5]
         --channel-shift <CHANNEL_SHIFT>    [default: 0.5]
     -s, --seed <SEED>
