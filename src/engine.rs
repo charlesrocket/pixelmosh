@@ -148,6 +148,7 @@ impl Mosh for MoshChunk {
                     chunk[channel_2_index] = channel_1_value;
                 }
             }
+
             MoshChunk::Flip => {
                 chunk.reverse();
             }
@@ -167,9 +168,11 @@ impl Mosh for MoshLine {
                         line[(i * channel_count + channel + (channel + 1) * amount) % line_length];
                 }
             }
+
             MoshLine::Shift(amount) => {
                 line.rotate_left(*amount);
             }
+
             MoshLine::Reverse => {
                 line.reverse();
             }
