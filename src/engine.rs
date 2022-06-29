@@ -123,7 +123,7 @@ fn chunkmosh(
     let chunk = &mut pixel_buf[chunk_start..chunk_end];
 
     if let Some(cs) = channel_swap {
-        cs.run(chunk)
+        cs.run(chunk);
     };
 
     if flip {
