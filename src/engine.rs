@@ -82,7 +82,7 @@ fn chunkmosh(
         None
     };
 
-    let shift_channel = if rng.gen_bool(options.channel_shift_rng) {
+    let channel_shift = if rng.gen_bool(options.channel_shift_rng) {
         let amount = line_shift_dist.sample(rng) / channel_count;
         let channel = channel_count_dist.sample(rng);
 
@@ -105,8 +105,8 @@ fn chunkmosh(
         let line_end = line_start + image_inf.line_size;
         let line = &mut pixel_buf[line_start..line_end];
 
-        if let Some(shift_channel) = &shift_channel {
-            shift_channel.run(line);
+        if let Some(channel_shift) = &channel_shift {
+            channel_shift.run(line);
         }
 
         if let Some(ls) = &line_shift {
