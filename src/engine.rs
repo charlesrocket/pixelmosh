@@ -53,8 +53,7 @@ fn chunkmosh(
 ) {
     let line_count = pixel_buf.len() / image_inf.line_size;
     let channel_count = match image_inf.color_type {
-        png::ColorType::Indexed => 1,
-        png::ColorType::Grayscale => 1,
+        png::ColorType::Grayscale | png::ColorType::Indexed => 1,
         png::ColorType::GrayscaleAlpha => 2,
         png::ColorType::Rgb => 3,
         png::ColorType::Rgba => 4,
