@@ -133,7 +133,7 @@ fn chunkmosh(
 impl Mosh for MoshChunk {
     fn run(&self, chunk: &mut [u8]) {
         match self {
-            MoshChunk::ChannelSwap(channel_1, channel_2, channel_count) => {
+            Self::ChannelSwap(channel_1, channel_2, channel_count) => {
                 let chunk_length = chunk.len();
                 let channel_value_count = chunk_length / channel_count;
 
@@ -148,7 +148,7 @@ impl Mosh for MoshChunk {
                 }
             }
 
-            MoshChunk::Flip => {
+            Self::Flip => {
                 chunk.reverse();
             }
         }
@@ -158,7 +158,7 @@ impl Mosh for MoshChunk {
 impl Mosh for MoshLine {
     fn run(&self, line: &mut [u8]) {
         match self {
-            MoshLine::ChannelShift(amount, channel, channel_count) => {
+            Self::ChannelShift(amount, channel, channel_count) => {
                 let line_length = line.len();
                 let channel_value_count = line_length / channel_count;
 
@@ -168,11 +168,11 @@ impl Mosh for MoshLine {
                 }
             }
 
-            MoshLine::Shift(amount) => {
+            Self::Shift(amount) => {
                 line.rotate_left(*amount);
             }
 
-            MoshLine::Reverse => {
+            Self::Reverse => {
                 line.reverse();
             }
         }
