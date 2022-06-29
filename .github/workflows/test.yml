@@ -4,7 +4,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build_and_test:
+  cargo:
     runs-on: ubuntu-latest
     strategy:
       matrix:
