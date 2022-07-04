@@ -10,7 +10,7 @@ use rand_chacha::ChaCha8Rng;
 pub mod engine;
 
 #[derive(Parser, Debug)]
-#[clap(version, about, long_about = None)]
+#[clap(version, about = engine::INTRO)]
 struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
@@ -84,7 +84,6 @@ fn main() {
         channel_shift_rng,
     };
 
-    println!("{}", engine::INTRO);
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
