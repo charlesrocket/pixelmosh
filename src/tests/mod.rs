@@ -10,7 +10,6 @@ fn engine() {
     let flip_rng = 0.3;
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
-
     let options = engine::Options {
         min_rate,
         max_rate,
@@ -29,7 +28,6 @@ fn engine() {
 
     let output = File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
-
     let checksum = adler32(&mut file).unwrap();
 
     assert_eq!(checksum, 1914553783);
