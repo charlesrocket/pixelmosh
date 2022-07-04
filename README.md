@@ -19,11 +19,11 @@ ARGS:
 OPTIONS:
         --min-rate <MIN_RATE>              [default: 1]
         --max-rate <MAX_RATE>              [default: 7]
-        --line-shift <LINE_SHIFT>          [default: 0.5]
-        --reverse <REVERSE>                [default: 0.5]
-        --flip <FLIP>                      [default: 0.5]
-        --channel-swap <CHANNEL_SWAP>      [default: 0.5]
-        --channel-shift <CHANNEL_SHIFT>    [default: 0.5]
+        --line-shift <LINE_SHIFT>          [default: 0.3]
+        --reverse <REVERSE>                [default: 0.3]
+        --flip <FLIP>                      [default: 0.3]
+        --channel-swap <CHANNEL_SWAP>      [default: 0.3]
+        --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
     -s, --seed <SEED>
     -h, --help                             Print help information
     -V, --version                          Print version information
