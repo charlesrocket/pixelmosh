@@ -10,7 +10,7 @@ use rand_chacha::ChaCha8Rng;
 pub mod engine;
 
 #[derive(Parser, Debug)]
-#[clap(version, about = engine::INTRO)]
+#[clap(version, author = engine::INTRO, about, long_about = None)]
 struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
