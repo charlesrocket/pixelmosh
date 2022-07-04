@@ -46,7 +46,6 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf).unwrap();
-
     (buf, info)
 }
 
