@@ -84,7 +84,7 @@ fn main() {
         channel_shift_rng,
     };
 
-    println!("Input: {}", args.file);
+    println!("File: {}", args.file);
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
