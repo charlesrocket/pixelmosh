@@ -4,7 +4,10 @@
 [![codecov](https://codecov.io/gh/charlesrocket/pixelmosh/branch/master/graph/badge.svg)](https://codecov.io/gh/charlesrocket/pixelmosh)
 
 ```
-PNG corrupter
+┌─────────────────────────────────────┐
+│ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │
+│ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │
+└─────────────────────────────────────┘
 
 USAGE:
     pixelmosh [OPTIONS] <FILE>
