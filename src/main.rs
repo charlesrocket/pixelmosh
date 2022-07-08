@@ -15,6 +15,9 @@ struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
 
+    #[clap(long, default_value = "moshed.png", display_order = 1)]
+    output: String,
+
     #[clap(long, default_value_t = 1, display_order = 2)]
     min_rate: u16,
 
@@ -55,8 +58,8 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     (buf, info)
 }
 
-fn write_file(buf: &[u8], info: &png::OutputInfo) {
-    let path = Path::new("moshed.png");
+fn write_file(path: String, buf: &[u8], info: &png::OutputInfo) {
+    let path = Path::new(&path);
     let output = File::create(path).unwrap();
     let buf_writer = &mut BufWriter::new(output);
     let mut encoder = png::Encoder::new(buf_writer, info.width, info.height);
@@ -71,6 +74,7 @@ fn write_file(buf: &[u8], info: &png::OutputInfo) {
 fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
+    let output = args.output;
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
     let line_shift_rng = args.line_shift;
@@ -111,7 +115,7 @@ fn main() {
     engine::mosh(&info, &mut buf, &mut rng, &options);
 
     spinner.set_message("Writing output");
-    write_file(&buf, &info);
+    write_file(output, &buf, &info);
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
 }
 
