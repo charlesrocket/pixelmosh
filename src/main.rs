@@ -41,12 +41,18 @@ struct Args {
     seed: u64,
 }
 
-fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
-    let decoder = png::Decoder::new(File::open(file).expect("File not found"));
+fn read_file(file: String) -> std::io::Result<(std::vec::Vec<u8>, png::OutputInfo)> {
+    let input = File::open(file);
+    let input = match input {
+        Ok(file) => file,
+        Err(error) => panic!("{:?}", error),
+    };
+
+    let decoder = png::Decoder::new(input);
     let mut reader = decoder.read_info().unwrap();
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf).unwrap();
-    (buf, info)
+    Ok((buf, info))
 }
 
 fn write_file(buf: &[u8], info: &png::OutputInfo) {
@@ -99,7 +105,7 @@ fn main() {
 
     spinner.set_message("Reading input");
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
-    let (mut buf, info) = read_file(args.file);
+    let (mut buf, info) = read_file(args.file).unwrap();
 
     spinner.set_message("\x1b[94mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
