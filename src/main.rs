@@ -59,7 +59,7 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     (buf, info)
 }
 
-fn write_file(path: String, buf: &[u8], info: &png::OutputInfo) {
+fn write_file(path: &str, buf: &[u8], info: &png::OutputInfo) {
     let path = Path::new(&path);
     let output = File::create(path).unwrap();
     let buf_writer = &mut BufWriter::new(output);
@@ -116,7 +116,7 @@ fn main() {
     engine::mosh(&info, &mut buf, &mut rng, &options);
 
     spinner.set_message("Writing output");
-    write_file(output, &buf, &info);
+    write_file(&output, &buf, &info);
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
 }
 
