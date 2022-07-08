@@ -15,9 +15,6 @@ struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
 
-    #[clap(long, default_value = "moshed.png", display_order = 1)]
-    output: String,
-
     #[clap(long, default_value_t = 1, display_order = 2)]
     min_rate: u16,
 
@@ -42,6 +39,10 @@ struct Args {
     #[clap(short, long, default_value_t = thread_rng().next_u64())]
     #[clap(hide_default_value = true, display_order = 9)]
     seed: u64,
+
+    #[clap(short, long, default_value = "moshed.png")]
+    #[clap(hide_default_value = true, display_order = 10)]
+    output: String,
 }
 
 fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
