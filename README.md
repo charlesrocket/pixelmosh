@@ -25,6 +25,7 @@ OPTIONS:
         --channel-swap <CHANNEL_SWAP>      [default: 0.3]
         --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
     -s, --seed <SEED>
+    -o, --output <OUTPUT>
     -h, --help                             Print help information
     -V, --version                          Print version information
 ```
