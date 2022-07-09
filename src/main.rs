@@ -49,7 +49,10 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     let input = File::open(file);
     let input = match input {
         Ok(file) => file,
-        Err(error) => panic!("{:?}", error),
+        Err(error) => {
+            eprintln!("Error: {}", error);
+            std::process::exit(1)
+        },
     };
 
     let decoder = png::Decoder::new(input);
