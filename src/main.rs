@@ -50,7 +50,7 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     let input = match input {
         Ok(file) => file,
         Err(error) => {
-            eprintln!("Error: {}", error);
+            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
         },
     };
@@ -60,7 +60,7 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     let mut reader = match reader {
         Ok(reader) => reader,
         Err(error) => {
-            eprintln!("Error: {}", error);
+            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
         },
     };
