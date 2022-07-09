@@ -52,7 +52,7 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
-        },
+        }
     };
 
     let decoder = png::Decoder::new(input);
@@ -62,7 +62,7 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
-        },
+        }
     };
 
     let mut buf = vec![0; reader.output_buffer_size()];
