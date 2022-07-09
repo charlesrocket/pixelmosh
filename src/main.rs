@@ -36,12 +36,17 @@ struct Args {
     #[clap(long, default_value_t = 0.3, display_order = 8)]
     channel_shift: f64,
 
-    #[clap(short, long, default_value_t = thread_rng().next_u64())]
-    #[clap(hide_default_value = true, display_order = 9)]
+    #[clap(short, long, default_value_t = thread_rng().next_u64(),
+           hide_default_value = true, display_order = 9)]
     seed: u64,
 
-    #[clap(short, long, default_value = "moshed.png")]
-    #[clap(hide_default_value = true, display_order = 10)]
+    #[clap(
+        short,
+        long,
+        default_value = "moshed.png",
+        hide_default_value = true,
+        display_order = 10
+    )]
     output: String,
 }
 
