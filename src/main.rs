@@ -56,7 +56,15 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     };
 
     let decoder = png::Decoder::new(input);
-    let mut reader = decoder.read_info().unwrap();
+    let reader = decoder.read_info();
+    let mut reader = match reader {
+        Ok(reader) => reader,
+        Err(error) => {
+            eprintln!("Error: {}", error);
+            std::process::exit(1)
+        },
+    };
+
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf).unwrap();
     (buf, info)
