@@ -15,6 +15,18 @@ fn file_not_found() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
+fn invalid_sig() -> Result<(), Box<dyn std::error::Error>> {
+    let mut cmd = Command::cargo_bin("pixelmosh")?;
+
+    cmd.arg("README.md");
+    cmd.assert()
+        .success()
+        .stderr(predicate::str::contains("Invalid PNG signature"));
+
+    Ok(())
+}
+
+#[test]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
