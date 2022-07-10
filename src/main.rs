@@ -65,8 +65,8 @@ fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     let mut reader = match reader {
         Ok(reader) => reader,
         Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
-            std::process::exit(1)
+            eprintln!("\x1b[1;31merror:\x1b[0m {} Exiting", error);
+            std::process::exit(0)
         }
     };
 
