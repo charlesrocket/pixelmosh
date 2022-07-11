@@ -9,12 +9,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install stable toolchain
+      - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: nightly
+          override: true
           components: llvm-tools-preview
+
 
       - uses: Swatinem/fucov@v1
 
