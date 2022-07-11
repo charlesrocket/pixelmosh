@@ -115,8 +115,12 @@ fn main() {
         channel_shift_rng,
     };
 
-    let spinner_style = if display_var() {
-        engine::SPINNER_2
+    let spinner_style = if cfg!(unix) {
+        if display_var() {
+            engine::SPINNER_2
+        } else {
+            engine::SPINNER_1
+        }
     } else {
         engine::SPINNER_1
     };
