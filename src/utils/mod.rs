@@ -21,7 +21,7 @@ fn engine() {
     };
 
     let mut rng = ChaCha8Rng::seed_from_u64(901042006);
-    let (mut buf, info) = read_file("src/tests/test.png".to_string());
+    let (mut buf, info) = read_file("src/utils/test.png".to_string());
 
     engine::mosh(&info, &mut buf, &mut rng, &options);
     write_file(&"moshed.png".to_string(), &buf, &info);
