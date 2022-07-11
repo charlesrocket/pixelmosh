@@ -1,3 +1,4 @@
+use std::env;
 use std::fs::File;
 use std::io::BufWriter;
 use std::path::Path;
@@ -88,6 +89,10 @@ fn write_file(path: &str, buf: &[u8], info: &png::OutputInfo) {
     writer.write_image_data(buf).unwrap();
 }
 
+fn display_var() -> bool {
+    matches!(env::var("DISPLAY"), Ok(_))
+}
+
 fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
@@ -110,11 +115,17 @@ fn main() {
         channel_shift_rng,
     };
 
+    let spinner_style = if display_var() {
+        engine::SPINNER_2
+    } else {
+        engine::SPINNER_1
+    };
+
     println!("File: {}", args.file);
     println!("Seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
-    spinner.set_style(ProgressStyle::default_spinner().tick_strings(&engine::SPINNER));
+    spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
 
     spinner.set_message("Reading input");
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
