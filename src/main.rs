@@ -1,13 +1,9 @@
-use std::env;
-use std::fs::File;
-use std::io::BufWriter;
-use std::path::Path;
-
 use clap::Parser;
 use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
+pub mod cli;
 pub mod engine;
 
 #[derive(Parser, Debug)]
@@ -51,48 +47,6 @@ struct Args {
     output: String,
 }
 
-fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
-    let input = File::open(file);
-    let input = match input {
-        Ok(file) => file,
-        Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
-            std::process::exit(1)
-        }
-    };
-
-    let decoder = png::Decoder::new(input);
-    let reader = decoder.read_info();
-    let mut reader = match reader {
-        Ok(reader) => reader,
-        Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {} Exiting", error);
-            std::process::exit(0)
-        }
-    };
-
-    let mut buf = vec![0; reader.output_buffer_size()];
-    let info = reader.next_frame(&mut buf).unwrap();
-    (buf, info)
-}
-
-fn write_file(path: &str, buf: &[u8], info: &png::OutputInfo) {
-    let path = Path::new(&path);
-    let output = File::create(path).unwrap();
-    let buf_writer = &mut BufWriter::new(output);
-    let mut encoder = png::Encoder::new(buf_writer, info.width, info.height);
-
-    encoder.set_color(info.color_type);
-    encoder.set_depth(info.bit_depth);
-
-    let mut writer = encoder.write_header().unwrap();
-    writer.write_image_data(buf).unwrap();
-}
-
-fn display_var() -> bool {
-    matches!(env::var("DISPLAY"), Ok(_))
-}
-
 fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
@@ -116,7 +70,7 @@ fn main() {
     };
 
     let spinner_style = if cfg!(unix) {
-        if display_var() {
+        if cli::display_var() {
             engine::SPINNER_2
         } else {
             engine::SPINNER_1
@@ -133,13 +87,13 @@ fn main() {
 
     spinner.set_message("Reading input");
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
-    let (mut buf, info) = read_file(args.file);
+    let (mut buf, info) = cli::read_file(args.file);
 
     spinner.set_message("\x1b[94mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
 
     spinner.set_message("Writing output");
-    write_file(&output, &buf, &info);
+    cli::write_file(&output, &buf, &info);
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
 }
 
