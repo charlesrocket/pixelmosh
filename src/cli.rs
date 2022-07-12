@@ -3,10 +3,12 @@ use std::fs::File;
 use std::io::BufWriter;
 use std::path::Path;
 
+#[must_use]
 pub fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
 
+#[must_use]
 pub fn read_file(file: String) -> (std::vec::Vec<u8>, png::OutputInfo) {
     let input = File::open(file);
     let input = match input {
