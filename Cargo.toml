@@ -12,7 +12,7 @@ readme = "README.md"
 
 [lib]
 name = "libmosh"
-path = "src/libmosh.rs"
+path = "src/lib.rs"
 test = false
 doctest = false
 
