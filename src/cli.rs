@@ -8,6 +8,8 @@ pub fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
 
+/// # Errors
+/// TODO
 pub fn read_file(file: String) -> Result<(std::vec::Vec<u8>, png::OutputInfo), Error> {
     let input = File::open(file)?;
     let decoder = png::Decoder::new(input);
@@ -18,6 +20,8 @@ pub fn read_file(file: String) -> Result<(std::vec::Vec<u8>, png::OutputInfo), E
     Ok((buf, info))
 }
 
+/// # Errors
+/// TODO
 pub fn write_file(dest: &str, buf: &[u8], info: &png::OutputInfo) -> Result<(), Error> {
     let path = Path::new(&dest);
     let output = File::create(path)?;
