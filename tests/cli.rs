@@ -30,7 +30,7 @@ fn invalid_sig() -> Result<(), Box<dyn std::error::Error>> {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
-    cmd.arg("src/utils/test.png")
+    cmd.arg("src/util/test.png")
         .arg("--min-rate")
         .arg("5")
         .arg("--max-rate")
