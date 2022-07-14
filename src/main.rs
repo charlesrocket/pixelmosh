@@ -1,3 +1,5 @@
+use std::io::Error;
+
 use clap::Parser;
 use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
@@ -47,7 +49,7 @@ struct Args {
     output: String,
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
     let output = args.output;
@@ -87,7 +89,12 @@ fn main() {
 
     spinner.set_message("Reading input");
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
-    let (mut buf, info) = cli::read_file(args.file);
+    let (mut buf, info) = match cli::read_file(args.file) {
+        Ok((buf, info)) => (buf, info),
+        Err(error) => {
+            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
+            std::process::exit(1)}
+    };
 
     spinner.set_message("\x1b[94mProcessing\x1b[0m");
     engine::mosh(&info, &mut buf, &mut rng, &options);
@@ -95,6 +102,7 @@ fn main() {
     spinner.set_message("Writing output");
     cli::write_file(&output, &buf, &info);
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
+    Ok(())
 }
 
 #[cfg(test)]
