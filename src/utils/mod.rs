@@ -24,7 +24,7 @@ fn engine() {
     let (mut buf, info) = cli::read_file("src/utils/test.png".to_string()).unwrap();
 
     engine::mosh(&info, &mut buf, &mut rng, &options);
-    cli::write_file(&"moshed.png".to_string(), &buf, &info);
+    cli::write_file(&"moshed.png".to_string(), &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
