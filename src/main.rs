@@ -3,8 +3,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
-mod cli;
-mod engine;
+pub mod cli;
 
 #[derive(Parser, Debug)]
 #[clap(version, author = engine::INTRO, about, long_about = None)]
@@ -107,4 +106,4 @@ fn main() {
 }
 
 #[cfg(test)]
-mod utils;
+mod util;
