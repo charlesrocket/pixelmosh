@@ -10,6 +10,16 @@ keywords = ["glitch"]
 license = "MIT"
 readme = "README.md"
 
+[lib]
+name = "libmosh"
+path = "src/libmosh.rs"
+test = false
+doctest = false
+
+[[bin]]
+name = "pixelmosh"
+path = "src/main.rs"
+
 [dependencies]
 clap = { version = "~3", features = ["derive"] }
 indicatif = "~0.16"
