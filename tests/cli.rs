@@ -39,6 +39,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .arg("0.2")
         .arg("--seed")
         .arg("1309999")
+        .arg("--output")
+        .arg("test.png")
         .assert()
         .success();
 
