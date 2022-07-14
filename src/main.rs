@@ -78,12 +78,12 @@ fn main() {
         libmosh::SPINNER_1
     };
 
-    println!("File: {}", args.file);
-    println!("Seed: \x1b[3m{}\x1b[0m", seed);
+    println!("file: {}", args.file);
+    println!("seed: \x1b[3m{}\x1b[0m", seed);
 
     spinner.enable_steady_tick(90);
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
-    spinner.set_message("Reading input");
+    spinner.set_message("reading input");
 
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = match cli::read_file(args.file) {
@@ -93,10 +93,10 @@ fn main() {
             std::process::exit(1)}
     };
 
-    spinner.set_message("\x1b[94mProcessing\x1b[0m");
+    spinner.set_message("\x1b[94mprocessing\x1b[0m");
     libmosh::mosh(&info, &mut buf, &mut rng, &options);
 
-    spinner.set_message("Writing output");
+    spinner.set_message("writing output");
     match cli::write_file(&output, &buf, &info) {
         Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
         Err(error) => {
