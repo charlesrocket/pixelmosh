@@ -1,5 +1,3 @@
-use std::io::Error;
-
 use clap::Parser;
 use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
@@ -49,7 +47,7 @@ struct Args {
     output: String,
 }
 
-fn main() -> Result<(), Error> {
+fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
     let output = args.output;
@@ -102,7 +100,6 @@ fn main() -> Result<(), Error> {
     spinner.set_message("Writing output");
     cli::write_file(&output, &buf, &info);
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
-    Ok(())
 }
 
 #[cfg(test)]
