@@ -21,7 +21,6 @@ pub fn read_file(file: String) -> Result<(std::vec::Vec<u8>, png::OutputInfo), E
 pub fn write_file(dest: &str, buf: &[u8], info: &png::OutputInfo) -> Result<(), Error> {
     let path = Path::new(&dest);
     let output = File::create(path)?;
-
     let buf_writer = &mut BufWriter::new(output);
     let mut encoder = png::Encoder::new(buf_writer, info.width, info.height);
 
