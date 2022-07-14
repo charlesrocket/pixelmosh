@@ -2,7 +2,7 @@ use super::*;
 use adler::adler32;
 
 #[test]
-fn engine() {
+fn libmosh() {
     let min_rate = 5;
     let max_rate = 7;
     let line_shift_rng = 0.8;
@@ -10,7 +10,7 @@ fn engine() {
     let flip_rng = 0.3;
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
-    let options = engine::Options {
+    let options = libmosh::Options {
         min_rate,
         max_rate,
         line_shift_rng,
@@ -21,9 +21,9 @@ fn engine() {
     };
 
     let mut rng = ChaCha8Rng::seed_from_u64(901042006);
-    let (mut buf, info) = cli::read_file("src/utils/test.png".to_string()).unwrap();
+    let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
 
-    engine::mosh(&info, &mut buf, &mut rng, &options);
+    libmosh::mosh(&info, &mut buf, &mut rng, &options);
     cli::write_file(&"moshed.png".to_string(), &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
