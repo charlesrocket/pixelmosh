@@ -98,8 +98,12 @@ fn main() {
     engine::mosh(&info, &mut buf, &mut rng, &options);
 
     spinner.set_message("Writing output");
-    cli::write_file(&output, &buf, &info);
-    spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
+    match cli::write_file(&output, &buf, &info) {
+        Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
+        Err(error) => {
+            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
+            std::process::exit(1)}
+    };
 }
 
 #[cfg(test)]
