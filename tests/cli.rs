@@ -20,7 +20,7 @@ fn invalid_sig() -> Result<(), Box<dyn std::error::Error>> {
 
     cmd.arg("README.md");
     cmd.assert()
-        .success()
+        .failure()
         .stderr(predicate::str::contains("Invalid PNG signature"));
 
     Ok(())
