@@ -14,6 +14,7 @@ pub fn read_file(file: String) -> Result<(std::vec::Vec<u8>, png::OutputInfo), E
     let mut reader = decoder.read_info()?;
     let mut buf = vec![0; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf)?;
+
     Ok((buf, info))
 }
 
@@ -28,5 +29,6 @@ pub fn write_file(dest: &str, buf: &[u8], info: &png::OutputInfo) -> Result<(), 
 
     let mut writer = encoder.write_header()?;
     writer.write_image_data(buf)?;
+
     Ok(())
 }
