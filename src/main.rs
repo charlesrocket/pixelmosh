@@ -84,8 +84,8 @@ fn main() {
 
     spinner.enable_steady_tick(90);
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
-
     spinner.set_message("Reading input");
+
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = match cli::read_file(args.file) {
         Ok((buf, info)) => (buf, info),
