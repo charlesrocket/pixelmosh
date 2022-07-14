@@ -6,7 +6,7 @@ use rand_chacha::ChaCha8Rng;
 pub mod cli;
 
 #[derive(Parser, Debug)]
-#[clap(version, author = engine::INTRO, about, long_about = None)]
+#[clap(version, author = libmosh::INTRO, about, long_about = None)]
 struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
@@ -58,7 +58,7 @@ fn main() {
     let channel_swap_rng = args.channel_swap;
     let channel_shift_rng = args.channel_shift;
     let seed = args.seed;
-    let options = engine::Options {
+    let options = libmosh::Options {
         min_rate,
         max_rate,
         line_shift_rng,
@@ -70,12 +70,12 @@ fn main() {
 
     let spinner_style = if cfg!(unix) {
         if cli::display_var() {
-            engine::SPINNER_2
+            libmosh::SPINNER_2
         } else {
-            engine::SPINNER_1
+            libmosh::SPINNER_1
         }
     } else {
-        engine::SPINNER_1
+        libmosh::SPINNER_1
     };
 
     println!("File: {}", args.file);
@@ -94,7 +94,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mProcessing\x1b[0m");
-    engine::mosh(&info, &mut buf, &mut rng, &options);
+    libmosh::mosh(&info, &mut buf, &mut rng, &options);
 
     spinner.set_message("Writing output");
     match cli::write_file(&output, &buf, &info) {
