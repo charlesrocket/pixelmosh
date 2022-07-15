@@ -55,12 +55,12 @@ fn main() {
     let output = args.output;
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
-    let pixelation = args.pixelation;
     let line_shift_rng = args.line_shift;
     let reverse_rng = args.reverse;
     let flip_rng = args.flip;
     let channel_swap_rng = args.channel_swap;
     let channel_shift_rng = args.channel_shift;
+    let pixelation = args.pixelation;
     let seed = args.seed;
     let options = libmosh::Options {
         min_rate,
