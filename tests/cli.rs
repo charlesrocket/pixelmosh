@@ -10,13 +10,14 @@ fn file_not_found() -> Result<(), Box<dyn std::error::Error>> {
     if cfg!(windows) {
         cmd.assert()
             .failure()
-            .stderr(predicate::str::contains("cannot find the path"));
+            .stderr(predicate::str::contains("The system cannot find the path specified"));
     }
 
-    cmd.assert()
-        .failure()
-        .stderr(predicate::str::contains("No such file or directory"));
-
+    if cfg!(unix) {
+        cmd.assert()
+            .failure()
+            .stderr(predicate::str::contains("No such file or directory"));
+    }
     Ok(())
 }
 
