@@ -112,7 +112,6 @@ fn main() {
 
     libmosh::pixelmosh(&info, &output, pixelation).unwrap();
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
-
 }
 
 #[cfg(test)]

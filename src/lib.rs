@@ -1,5 +1,5 @@
-use image::ImageError;
 use image::imageops::Nearest;
+use image::ImageError;
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
 
