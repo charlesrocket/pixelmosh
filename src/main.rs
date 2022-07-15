@@ -90,7 +90,8 @@ fn main() {
         Ok((buf, info)) => (buf, info),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
-            std::process::exit(1)}
+            std::process::exit(1)
+        }
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
@@ -101,7 +102,8 @@ fn main() {
         Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
-            std::process::exit(1)}
+            std::process::exit(1)
+        }
     };
 }
 
