@@ -32,8 +32,11 @@ struct Args {
     #[clap(long, default_value_t = 0.3, display_order = 8)]
     channel_shift: f64,
 
+    #[clap(short, long, default_value_t = 30, display_order = 9)]
+    pixelation: u32,
+
     #[clap(short, long, default_value_t = thread_rng().next_u64(),
-           hide_default_value = true, display_order = 9)]
+           hide_default_value = true, display_order = 10)]
     seed: u64,
 
     #[clap(
@@ -41,7 +44,7 @@ struct Args {
         long,
         default_value = "moshed.png",
         hide_default_value = true,
-        display_order = 10
+        display_order = 11
     )]
     output: String,
 }
@@ -52,6 +55,7 @@ fn main() {
     let output = args.output;
     let min_rate = args.min_rate;
     let max_rate = args.max_rate;
+    let pixelation = args.pixelation;
     let line_shift_rng = args.line_shift;
     let reverse_rng = args.reverse;
     let flip_rng = args.flip;
@@ -99,12 +103,16 @@ fn main() {
 
     spinner.set_message("writing output");
     match cli::write_file(&output, &buf, &info) {
-        Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
+        Ok(()) => (spinner.set_message("\x1b[94mpixelating\x1b[0m")),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
         }
     };
+
+    libmosh::pixelmosh(&info, &output, pixelation).unwrap();
+    spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
+
 }
 
 #[cfg(test)]
