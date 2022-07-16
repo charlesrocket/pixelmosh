@@ -18,6 +18,7 @@ fn file_not_found() -> Result<(), Box<dyn std::error::Error>> {
             .failure()
             .stderr(predicate::str::contains("No such file or directory"));
     }
+
     Ok(())
 }
 
