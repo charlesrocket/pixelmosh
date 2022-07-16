@@ -72,6 +72,7 @@ fn main() {
         channel_shift_rng,
     };
 
+    // $TERM?
     let spinner_style = if cfg!(unix) {
         if cli::display_var() {
             libmosh::SPINNER_2
