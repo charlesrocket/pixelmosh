@@ -2,7 +2,7 @@ use super::*;
 use adler::adler32;
 
 #[test]
-fn libmosh() {
+fn mosh() {
     let min_rate = 5;
     let max_rate = 7;
     let line_shift_rng = 0.8;
