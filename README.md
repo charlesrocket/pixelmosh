@@ -24,6 +24,7 @@ OPTIONS:
         --flip <FLIP>                      [default: 0.3]
         --channel-swap <CHANNEL_SWAP>      [default: 0.3]
         --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
+    -p, --pixelation <PIXELATION>          [default: 30]
     -s, --seed <SEED>
     -o, --output <OUTPUT>
     -h, --help                             Print help information
