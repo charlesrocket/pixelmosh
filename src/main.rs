@@ -87,7 +87,7 @@ fn main() {
 
     spinner.enable_steady_tick(90);
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
-    spinner.set_message("reading input");
+    spinner.set_message("\x1b[36mreading input\x1b[0m");
 
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = match cli::read_file(args.file) {
@@ -101,9 +101,9 @@ fn main() {
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
     libmosh::mosh(&info, &mut buf, &mut rng, &options);
 
-    spinner.set_message("writing output");
+    spinner.set_message("\x1b[36mwriting output\x1b[0m");
     match cli::write_file(&output, &buf, &info) {
-        Ok(()) => (spinner.set_message("\x1b[94mpixelating\x1b[0m")),
+        Ok(()) => (spinner.set_message("\x1b[95mpixelating\x1b[0m")),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
