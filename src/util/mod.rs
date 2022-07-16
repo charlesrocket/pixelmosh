@@ -24,7 +24,7 @@ fn mosh() {
     let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
 
     libmosh::mosh(&info, &mut buf, &mut rng, &options);
-    cli::write_file(&"moshed.png".to_string(), &buf, &info).unwrap();
+    cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -56,7 +56,7 @@ fn pixelmosh() {
     let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
 
     libmosh::mosh(&info, &mut buf, &mut rng, &options);
-    cli::write_file(&"moshed.png".to_string(), &buf, &info).unwrap();
+    cli::write_file("moshed.png", &buf, &info).unwrap();
     libmosh::pixelmosh(&info, &"moshed.png".to_string(), 30).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
