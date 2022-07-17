@@ -26,6 +26,7 @@ uninstall:
 	rm -f $(APP)
 
 clean:
+	@rm -f moshed.png test.png
 	cargo clean
 	cargo clean -r
 
