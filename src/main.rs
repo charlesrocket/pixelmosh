@@ -29,7 +29,7 @@ struct Args {
     #[clap(short, long, default_value_t = 0.3, display_order = 7)]
     channel_swap: f64,
 
-    #[clap(short = 'k', long, default_value_t = 0.3, display_order = 8)]
+    #[clap(short = 't', long, default_value_t = 0.3, display_order = 8)]
     channel_shift: f64,
 
     #[clap(short, long, default_value_t = 30, display_order = 9)]
