@@ -23,7 +23,7 @@ OPTIONS:
     -r, --reverse <REVERSE>                [default: 0.3]
     -f, --flip <FLIP>                      [default: 0.3]
     -c, --channel-swap <CHANNEL_SWAP>      [default: 0.3]
-    -k, --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
+    -t, --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
     -p, --pixelation <PIXELATION>          [default: 30]
     -s, --seed <SEED>
     -o, --output <OUTPUT>
