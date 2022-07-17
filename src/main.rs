@@ -112,7 +112,13 @@ fn main() {
     };
 
     if pixelation > 0 {
-        libmosh::pixelmosh(&info, &output, pixelation).unwrap();
+        match libmosh::pixelmosh(&info, &output, pixelation) {
+            Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
+            Err(error) => {
+                eprintln!("\x1b[1;31mpixelation error:\x1b[0m {}", error);
+                std::process::exit(1)
+            }
+        }
     }
 
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
