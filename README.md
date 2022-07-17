@@ -17,13 +17,13 @@ ARGS:
     <FILE>
 
 OPTIONS:
-        --min-rate <MIN_RATE>              [default: 1]
-        --max-rate <MAX_RATE>              [default: 7]
-        --line-shift <LINE_SHIFT>          [default: 0.3]
-        --reverse <REVERSE>                [default: 0.3]
-        --flip <FLIP>                      [default: 0.3]
-        --channel-swap <CHANNEL_SWAP>      [default: 0.3]
-        --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
+    -m, --min-rate <MIN_RATE>              [default: 1]
+    -n, --max-rate <MAX_RATE>              [default: 7]
+    -l, --line-shift <LINE_SHIFT>          [default: 0.3]
+    -r, --reverse <REVERSE>                [default: 0.3]
+    -f, --flip <FLIP>                      [default: 0.3]
+    -c, --channel-swap <CHANNEL_SWAP>      [default: 0.3]
+    -k, --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
     -p, --pixelation <PIXELATION>          [default: 30]
     -s, --seed <SEED>
     -o, --output <OUTPUT>
