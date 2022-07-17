@@ -74,7 +74,7 @@ fn main() {
 
     // $TERM?
     let spinner_style = if cfg!(unix) {
-        if cli::display_var() {
+        if cli::display_var() | cfg!(target_os = "macos") {
             libmosh::SPINNER_2
         } else {
             libmosh::SPINNER_1
