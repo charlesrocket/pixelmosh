@@ -20,7 +20,7 @@ fn mosh() {
         channel_shift_rng,
     };
 
-    let mut rng = ChaCha8Rng::seed_from_u64(901042006);
+    let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
 
     libmosh::mosh(&info, &mut buf, &mut rng, &options);
@@ -30,7 +30,7 @@ fn mosh() {
     let mut file = std::io::BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 1914553783);
+    assert_eq!(checksum, 1_914_553_783);
 }
 
 #[test]
@@ -52,7 +52,7 @@ fn pixelmosh() {
         channel_shift_rng,
     };
 
-    let mut rng = ChaCha8Rng::seed_from_u64(901042006);
+    let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
 
     libmosh::mosh(&info, &mut buf, &mut rng, &options);
@@ -63,5 +63,5 @@ fn pixelmosh() {
     let mut file = std::io::BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 2387507753);
+    assert_eq!(checksum, 2_387_507_753);
 }
