@@ -1,4 +1,4 @@
-use super::{ChaCha8Rng, SeedableRng, cli};
+use super::{cli, ChaCha8Rng, SeedableRng};
 use adler::adler32;
 
 #[test]
