@@ -11,25 +11,25 @@ struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
 
-    #[clap(long, default_value_t = 1, display_order = 2)]
+    #[clap(short, long, default_value_t = 1, display_order = 2)]
     min_rate: u16,
 
-    #[clap(long, default_value_t = 7, display_order = 3)]
+    #[clap(short = 'n', long, default_value_t = 7, display_order = 3)]
     max_rate: u16,
 
-    #[clap(long, default_value_t = 0.3, display_order = 4)]
+    #[clap(short, long, default_value_t = 0.3, display_order = 4)]
     line_shift: f64,
 
-    #[clap(long, default_value_t = 0.3, display_order = 5)]
+    #[clap(short, long, default_value_t = 0.3, display_order = 5)]
     reverse: f64,
 
-    #[clap(long, default_value_t = 0.3, display_order = 6)]
+    #[clap(short, long, default_value_t = 0.3, display_order = 6)]
     flip: f64,
 
-    #[clap(long, default_value_t = 0.3, display_order = 7)]
+    #[clap(short, long, default_value_t = 0.3, display_order = 7)]
     channel_swap: f64,
 
-    #[clap(long, default_value_t = 0.3, display_order = 8)]
+    #[clap(short = 'k', long, default_value_t = 0.3, display_order = 8)]
     channel_shift: f64,
 
     #[clap(short, long, default_value_t = 30, display_order = 9)]
