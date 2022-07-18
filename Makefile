@@ -26,7 +26,6 @@ uninstall:
 
 clean:
 	@rm -f moshed.png test.png
-	cargo clean
-	cargo clean -r
+	@cargo clean && cargo clean -r
 
 .PHONY: build test format-check lint install uninstall clean
