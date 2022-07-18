@@ -3,6 +3,15 @@
 [![Test](https://github.com/charlesrocket/pixelmosh/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/charlesrocket/pixelmosh/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/charlesrocket/pixelmosh/branch/master/graph/badge.svg)](https://codecov.io/gh/charlesrocket/pixelmosh)
 
+### Compilation
+
+```shell
+make
+sudo make install
+```
+
+### Usage
+
 ```
 ┌─────────────────────────────────────┐
 │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │
