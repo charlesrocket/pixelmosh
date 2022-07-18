@@ -23,7 +23,7 @@ jobs:
 
   release:
     needs: cargo
-    name: Release ${{ matrix.target }}
+    name: Release
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     strategy:
