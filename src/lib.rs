@@ -145,8 +145,8 @@ fn chunkmosh(
             channel_shift.run(line);
         }
 
-        if let Some(ls) = &line_shift {
-            ls.run(line);
+        if let Some(line_shift) = &line_shift {
+            line_shift.run(line);
         }
         if reverse {
             MoshLine::Reverse.run(line);
@@ -157,8 +157,8 @@ fn chunkmosh(
     let chunk_end = last_line * image_inf.line_size;
     let chunk = &mut pixel_buf[chunk_start..chunk_end];
 
-    if let Some(cs) = channel_swap {
-        cs.run(chunk);
+    if let Some(channel_swap) = channel_swap {
+        channel_swap.run(chunk);
     };
 
     if flip {
