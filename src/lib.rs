@@ -1,5 +1,4 @@
 use image::imageops::Nearest;
-use image::ImageError;
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
 
@@ -55,7 +54,7 @@ enum MoshLine {
 
 /// # Errors
 /// TODO
-pub fn pixelmosh(info: &png::OutputInfo, input: &String, rate: u32) -> Result<(), ImageError> {
+pub fn pixelmosh(info: &png::OutputInfo, input: &String, rate: u32) -> Result<(), image::ImageError> {
     let mut img = image::io::Reader::open(input)?.decode()?;
     let (w1, h1) = (info.width / rate, info.height / rate);
     let (w2, h2) = (w1 * rate, h1 * rate);
