@@ -1,6 +1,7 @@
-use image::imageops::Nearest;
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
+use resize::Pixel::{RGB8, RGBA8, Gray8};
+use resize::Type::Point;
 
 pub const INTRO: &str = "┌─────────────────────────────────────┐\n\
                          │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\

@@ -22,11 +22,11 @@ path = "src/main.rs"
 
 [dependencies]
 clap = { version = "~3", features = ["derive"] }
-image =  { version = "~0.24", default-features = false, features = ["png"] }
 indicatif = "~0.16"
 png = "~0.17"
 rand = "~0.8"
 rand_chacha = "~0.3"
+resize = "~0.7"
 
 [dev-dependencies]
 adler = "~1"
