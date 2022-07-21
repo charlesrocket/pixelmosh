@@ -27,6 +27,7 @@ png = "~0.17"
 rand = "~0.8"
 rand_chacha = "~0.3"
 resize = "~0.7"
+rgb = "~0.8"
 
 [dev-dependencies]
 adler = "~1"
