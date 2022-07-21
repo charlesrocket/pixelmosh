@@ -78,8 +78,7 @@ pub fn mosh(
             .unwrap()
             .resize(src.as_gray(), dst.as_gray_mut())
             .unwrap(),
-        png::ColorType::Indexed => unimplemented!(),
-        png::ColorType::GrayscaleAlpha => unimplemented!(),
+        png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => unimplemented!(),
         png::ColorType::Rgb => resize::new(w1, h1, w2, h2, RGB8, Point)
             .unwrap()
             .resize(src.as_rgb(), dst.as_rgb_mut())
@@ -97,8 +96,7 @@ pub fn mosh(
             .unwrap()
             .resize(dst.as_gray(), dst2.as_gray_mut())
             .unwrap(),
-        png::ColorType::Indexed => unimplemented!(),
-        png::ColorType::GrayscaleAlpha => unimplemented!(),
+        png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => unimplemented!(),
         png::ColorType::Rgb => resize::new(w2, h2, w1, h1, RGB8, Point)
             .unwrap()
             .resize(dst.as_rgb(), dst2.as_rgb_mut())
