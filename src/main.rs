@@ -72,7 +72,9 @@ fn main() {
         channel_shift_rng,
     };
 
-    if pixelation == 0 { pixelation = 1 }
+    if pixelation == 0 {
+        pixelation = 1
+    }
 
     // $TERM?
     let spinner_style = if cfg!(unix) {
