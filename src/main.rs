@@ -60,7 +60,7 @@ fn main() {
     let flip_rng = args.flip;
     let channel_swap_rng = args.channel_swap;
     let channel_shift_rng = args.channel_shift;
-    let pixelation = args.pixelation;
+    let mut pixelation = args.pixelation;
     let seed = args.seed;
     let options = libmosh::Options {
         min_rate,
@@ -71,6 +71,8 @@ fn main() {
         channel_swap_rng,
         channel_shift_rng,
     };
+
+    if pixelation == 0 { pixelation = 1 }
 
     // $TERM?
     let spinner_style = if cfg!(unix) {
