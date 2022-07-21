@@ -73,31 +73,37 @@ pub fn mosh(
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
     let (w2, h2) = (w1 / pixel_rate as usize, h1 / pixel_rate as usize);
     let src = pixel_buffer;
-    let mut dst = vec![0u8; w2 * h2 * image_info.color_type.samples()];
+    let mut dst_s = vec![0u8; w2 * h2 * image_info.color_type.samples()];
 
     match image_info.color_type {
-        png::ColorType::Grayscale => resize::new(w1, h1, w2, h2, Gray8, Point)?
-            .resize(src.as_gray(), dst.as_gray_mut())?,
+        png::ColorType::Grayscale => {
+            resize::new(w1, h1, w2, h2, Gray8, Point)?.resize(src.as_gray(), dst_s.as_gray_mut())?
+        }
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => unimplemented!(),
-        png::ColorType::Rgb => resize::new(w1, h1, w2, h2, RGB8, Point)?
-            .resize(src.as_rgb(), dst.as_rgb_mut())?,
-        png::ColorType::Rgba => resize::new(w1, h1, w2, h2, RGBA8, Point)?
-            .resize(src.as_rgba(), dst.as_rgba_mut())?,
+        png::ColorType::Rgb => {
+            resize::new(w1, h1, w2, h2, RGB8, Point)?.resize(src.as_rgb(), dst_s.as_rgb_mut())?
+        }
+        png::ColorType::Rgba => {
+            resize::new(w1, h1, w2, h2, RGBA8, Point)?.resize(src.as_rgba(), dst_s.as_rgba_mut())?
+        }
     };
 
-    let mut dst2 = vec![0u8; w1 * h1 * image_info.color_type.samples()];
+    let mut dst = vec![0u8; w1 * h1 * image_info.color_type.samples()];
 
     match image_info.color_type {
-        png::ColorType::Grayscale => resize::new(w2, h2, w1, h1, Gray8, Point)?
-            .resize(dst.as_gray(), dst2.as_gray_mut())?,
+        png::ColorType::Grayscale => {
+            resize::new(w2, h2, w1, h1, Gray8, Point)?.resize(dst_s.as_gray(), dst.as_gray_mut())?
+        }
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => unimplemented!(),
-        png::ColorType::Rgb => resize::new(w2, h2, w1, h1, RGB8, Point)?
-            .resize(dst.as_rgb(), dst2.as_rgb_mut())?,
-        png::ColorType::Rgba => resize::new(w2, h2, w1, h1, RGBA8, Point)?
-            .resize(dst.as_rgba(), dst2.as_rgba_mut())?,
+        png::ColorType::Rgb => {
+            resize::new(w2, h2, w1, h1, RGB8, Point)?.resize(dst_s.as_rgb(), dst.as_rgb_mut())?
+        }
+        png::ColorType::Rgba => {
+            resize::new(w2, h2, w1, h1, RGBA8, Point)?.resize(dst_s.as_rgba(), dst.as_rgba_mut())?
+        }
     };
 
-    Ok(dst2)
+    Ok(dst)
 }
 
 fn chunkmosh(
