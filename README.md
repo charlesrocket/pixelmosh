@@ -33,7 +33,7 @@ OPTIONS:
     -f, --flip <FLIP>                      [default: 0.3]
     -c, --channel-swap <CHANNEL_SWAP>      [default: 0.3]
     -t, --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
-    -p, --pixelation <PIXELATION>          [default: 30]
+    -p, --pixelation <PIXELATION>          [default: 10]
     -s, --seed <SEED>
     -o, --output <OUTPUT>
     -h, --help                             Print help information
