@@ -63,6 +63,8 @@ pub fn mosh(
     rng: &mut impl Rng,
     options: &Options,
 ) -> Result<Vec<u8>, resize::Error> {
+    let (w1, h1) = (image_info.width as usize, image_info.height as usize);
+    let (w2, h2) = (w1 / pixel_rate as usize, h1 / pixel_rate as usize);
     let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
     let mosh_rate = chunk_count_dist.sample(rng);
 
@@ -70,8 +72,6 @@ pub fn mosh(
         chunkmosh(image_info, pixel_buffer, rng, options);
     }
 
-    let (w1, h1) = (image_info.width as usize, image_info.height as usize);
-    let (w2, h2) = (w1 / pixel_rate as usize, h1 / pixel_rate as usize);
     let src = pixel_buffer;
     let mut dst_s = vec![0u8; w2 * h2 * image_info.color_type.samples()];
 
