@@ -54,6 +54,8 @@ enum MoshLine {
     Reverse,
 }
 
+/// # Errors
+/// TODO
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
