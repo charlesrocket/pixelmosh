@@ -55,25 +55,25 @@ enum MoshLine {
 }
 
 pub fn mosh(
-    image_inf: &png::OutputInfo,
-    pixel_buf: &mut [u8],
+    image_info: &png::OutputInfo,
+    pixel_buffer: &mut [u8],
+    pixel_rate: u32,
     rng: &mut impl Rng,
     options: &Options,
-    rate: u32,
 ) -> Vec<u8> {
     let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
     let mosh_rate = chunk_count_dist.sample(rng);
 
     for _ in 0..mosh_rate {
-        chunkmosh(image_inf, pixel_buf, rng, options);
+        chunkmosh(image_info, pixel_buffer, rng, options);
     }
 
-    let (w1, h1) = (image_inf.width as usize, image_inf.height as usize);
-    let (w2, h2) = (w1 / rate as usize, h1 / rate as usize);
-    let src = pixel_buf;
-    let mut dst = vec![0u8; w2 * h2 * image_inf.color_type.samples()];
+    let (w1, h1) = (image_info.width as usize, image_info.height as usize);
+    let (w2, h2) = (w1 / pixel_rate as usize, h1 / pixel_rate as usize);
+    let src = pixel_buffer;
+    let mut dst = vec![0u8; w2 * h2 * image_info.color_type.samples()];
 
-    match image_inf.color_type {
+    match image_info.color_type {
         png::ColorType::Grayscale => resize::new(w1, h1, w2, h2, Gray8, Point)
             .unwrap()
             .resize(src.as_gray(), dst.as_gray_mut())
@@ -89,9 +89,9 @@ pub fn mosh(
             .unwrap(),
     };
 
-    let mut dst2 = vec![0u8; w1 * h1 * image_inf.color_type.samples()];
+    let mut dst2 = vec![0u8; w1 * h1 * image_info.color_type.samples()];
 
-    match image_inf.color_type {
+    match image_info.color_type {
         png::ColorType::Grayscale => resize::new(w2, h2, w1, h1, Gray8, Point)
             .unwrap()
             .resize(dst.as_gray(), dst2.as_gray_mut())
@@ -111,20 +111,20 @@ pub fn mosh(
 }
 
 fn chunkmosh(
-    image_inf: &png::OutputInfo,
-    pixel_buf: &mut [u8],
+    image_info: &png::OutputInfo,
+    pixel_buffer: &mut [u8],
     rng: &mut impl Rng,
     options: &Options,
 ) {
-    let line_count = pixel_buf.len() / image_inf.line_size;
-    let channel_count = match image_inf.color_type {
+    let line_count = pixel_buffer.len() / image_info.line_size;
+    let channel_count = match image_info.color_type {
         png::ColorType::Grayscale | png::ColorType::Indexed => 1,
         png::ColorType::GrayscaleAlpha => 2,
         png::ColorType::Rgb => 3,
         png::ColorType::Rgba => 4,
     };
 
-    let line_shift_dist = Uniform::from(0..image_inf.line_size);
+    let line_shift_dist = Uniform::from(0..image_info.line_size);
     let line_number_dist = Uniform::from(0..line_count);
     let channel_count_dist = Uniform::from(0..channel_count);
 
@@ -166,9 +166,9 @@ fn chunkmosh(
     };
 
     for line_number in first_line..last_line {
-        let line_start = line_number * image_inf.line_size;
-        let line_end = line_start + image_inf.line_size;
-        let line = &mut pixel_buf[line_start..line_end];
+        let line_start = line_number * image_info.line_size;
+        let line_end = line_start + image_info.line_size;
+        let line = &mut pixel_buffer[line_start..line_end];
 
         if let Some(channel_shift) = &channel_shift {
             channel_shift.run(line);
@@ -182,9 +182,9 @@ fn chunkmosh(
         }
     }
 
-    let chunk_start = first_line * image_inf.line_size;
-    let chunk_end = last_line * image_inf.line_size;
-    let chunk = &mut pixel_buf[chunk_start..chunk_end];
+    let chunk_start = first_line * image_info.line_size;
+    let chunk_end = last_line * image_info.line_size;
+    let chunk = &mut pixel_buffer[chunk_start..chunk_end];
 
     if let Some(channel_swap) = channel_swap {
         channel_swap.run(chunk);
