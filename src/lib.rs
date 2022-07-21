@@ -59,7 +59,7 @@ enum MoshLine {
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
-    pixel_rate: u32,
+    pixel_rate: u8,
     rng: &mut impl Rng,
     options: &Options,
 ) -> Result<Vec<u8>, resize::Error> {
