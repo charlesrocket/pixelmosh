@@ -32,7 +32,7 @@ struct Args {
     #[clap(short = 't', long, default_value_t = 0.3, display_order = 8)]
     channel_shift: f64,
 
-    #[clap(short, long, default_value_t = 30, display_order = 9)]
+    #[clap(short, long, default_value_t = 10, display_order = 9)]
     pixelation: u32,
 
     #[clap(short, long, default_value_t = thread_rng().next_u64(),
