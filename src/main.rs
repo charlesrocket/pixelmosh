@@ -102,7 +102,13 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    let image = libmosh::mosh(&info, &mut buf, pixelation, &mut rng, &options);
+    let image = match libmosh::mosh(&info, &mut buf, pixelation, &mut rng, &options) {
+        Ok(image) => (image),
+        Err(error) => {
+            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
+            std::process::exit(1)
+        }
+    };
 
     spinner.set_message("\x1b[36mwriting output\x1b[0m");
     match cli::write_file(&output, &image, &info) {
