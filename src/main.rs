@@ -73,7 +73,7 @@ fn main() {
     };
 
     if pixelation == 0 {
-        pixelation = 1
+        pixelation = 1;
     }
 
     // $TERM?

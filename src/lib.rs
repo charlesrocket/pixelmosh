@@ -77,14 +77,14 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::Grayscale => {
-            resize::new(w1, h1, w2, h2, Gray8, Point)?.resize(src.as_gray(), dst_s.as_gray_mut())?
+            resize::new(w1, h1, w2, h2, Gray8, Point)?.resize(src.as_gray(), dst_s.as_gray_mut())?;
         }
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => unimplemented!(),
         png::ColorType::Rgb => {
-            resize::new(w1, h1, w2, h2, RGB8, Point)?.resize(src.as_rgb(), dst_s.as_rgb_mut())?
+            resize::new(w1, h1, w2, h2, RGB8, Point)?.resize(src.as_rgb(), dst_s.as_rgb_mut())?;
         }
         png::ColorType::Rgba => {
-            resize::new(w1, h1, w2, h2, RGBA8, Point)?.resize(src.as_rgba(), dst_s.as_rgba_mut())?
+            resize::new(w1, h1, w2, h2, RGBA8, Point)?.resize(src.as_rgba(), dst_s.as_rgba_mut())?;
         }
     };
 
@@ -92,14 +92,14 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::Grayscale => {
-            resize::new(w2, h2, w1, h1, Gray8, Point)?.resize(dst_s.as_gray(), dst.as_gray_mut())?
+            resize::new(w2, h2, w1, h1, Gray8, Point)?.resize(dst_s.as_gray(), dst.as_gray_mut())?;
         }
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => unimplemented!(),
         png::ColorType::Rgb => {
-            resize::new(w2, h2, w1, h1, RGB8, Point)?.resize(dst_s.as_rgb(), dst.as_rgb_mut())?
+            resize::new(w2, h2, w1, h1, RGB8, Point)?.resize(dst_s.as_rgb(), dst.as_rgb_mut())?;
         }
         png::ColorType::Rgba => {
-            resize::new(w2, h2, w1, h1, RGBA8, Point)?.resize(dst_s.as_rgba(), dst.as_rgba_mut())?
+            resize::new(w2, h2, w1, h1, RGBA8, Point)?.resize(dst_s.as_rgba(), dst.as_rgba_mut())?;
         }
     };
 
