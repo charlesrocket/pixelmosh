@@ -2,6 +2,7 @@ use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
 use resize::Pixel::{RGB8, RGBA8, Gray8};
 use resize::Type::Point;
+use rgb::FromSlice;
 
 pub const INTRO: &str = "┌─────────────────────────────────────┐\n\
                          │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\
@@ -53,36 +54,44 @@ enum MoshLine {
     Reverse,
 }
 
-/// # Errors
-/// TODO
-pub fn pixelmosh(
-    info: &png::OutputInfo,
-    input: &String,
-    rate: u32,
-) -> Result<(), image::ImageError> {
-    let mut img = image::io::Reader::open(input)?.decode()?;
-    let (w1, h1) = (info.width / rate, info.height / rate);
-    let (w2, h2) = (w1 * rate, h1 * rate);
-
-    img = img.resize(w1, h1, Nearest);
-    img = img.resize(w2, h2, Nearest);
-    img.save(input)?;
-
-    Ok(())
-}
-
 pub fn mosh(
     image_inf: &png::OutputInfo,
     pixel_buf: &mut [u8],
     rng: &mut impl Rng,
     options: &Options,
-) {
+    rate: u32,
+) -> Vec<u8> {
     let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
     let mosh_rate = chunk_count_dist.sample(rng);
 
     for _ in 0..mosh_rate {
         chunkmosh(image_inf, pixel_buf, rng, options);
     }
+
+    let (w1, h1) = (image_inf.width as usize, image_inf.height as usize);
+    let (w2, h2) = (w1 / rate as usize, h1 / rate as usize);
+    let src = pixel_buf;
+    let mut dst = vec![0u8; w2 * h2 * image_inf.color_type.samples()];
+
+    match image_inf.color_type {
+        png::ColorType::Grayscale => resize::new(w1, h1, w2, h2, Gray8, Point).unwrap().resize(src.as_gray(), dst.as_gray_mut()).unwrap(),
+        png::ColorType::Indexed => unimplemented!(),
+        png::ColorType::GrayscaleAlpha => unimplemented!(),
+        png::ColorType::Rgb => resize::new(w1, h1, w2, h2, RGB8, Point).unwrap().resize(src.as_rgb(), dst.as_rgb_mut()).unwrap(),
+        png::ColorType::Rgba => resize::new(w1, h1, w2, h2, RGBA8, Point).unwrap().resize(src.as_rgba(), dst.as_rgba_mut()).unwrap(),
+    };
+
+    let mut dst2 = vec![0u8; w1 * h1 * image_inf.color_type.samples()];
+
+    match image_inf.color_type {
+        png::ColorType::Grayscale => resize::new(w2, h2, w1, h1, Gray8, Point).unwrap().resize(dst.as_gray(), dst2.as_gray_mut()).unwrap(),
+        png::ColorType::Indexed => unimplemented!(),
+        png::ColorType::GrayscaleAlpha => unimplemented!(),
+        png::ColorType::Rgb => resize::new(w2, h2, w1, h1, RGB8, Point).unwrap().resize(dst.as_rgb(), dst2.as_rgb_mut()).unwrap(),
+        png::ColorType::Rgba => resize::new(w2, h2, w1, h1, RGBA8, Point).unwrap().resize(dst.as_rgba(), dst2.as_rgba_mut()).unwrap(),
+    };
+
+    dst2
 }
 
 fn chunkmosh(

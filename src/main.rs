@@ -100,28 +100,16 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    libmosh::mosh(&info, &mut buf, &mut rng, &options);
+    let image = libmosh::mosh(&info, &mut buf, &mut rng, &options, pixelation);
 
     spinner.set_message("\x1b[36mwriting output\x1b[0m");
-    match cli::write_file(&output, &buf, &info) {
-        Ok(()) => (spinner.set_message("\x1b[95mpixelating\x1b[0m")),
+    match cli::write_file(&output, &image, &info) {
+        Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
         }
     };
-
-    if pixelation > 0 {
-        match libmosh::pixelmosh(&info, &output, pixelation) {
-            Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
-            Err(error) => {
-                eprintln!("\x1b[1;31mpixelation error:\x1b[0m {}", error);
-                std::process::exit(1)
-            }
-        }
-    } else {
-        spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
-    }
 }
 
 #[cfg(test)]
