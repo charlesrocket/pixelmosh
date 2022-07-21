@@ -1,6 +1,6 @@
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
-use resize::Pixel::{RGB8, RGBA8, Gray8};
+use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
 
@@ -74,21 +74,39 @@ pub fn mosh(
     let mut dst = vec![0u8; w2 * h2 * image_inf.color_type.samples()];
 
     match image_inf.color_type {
-        png::ColorType::Grayscale => resize::new(w1, h1, w2, h2, Gray8, Point).unwrap().resize(src.as_gray(), dst.as_gray_mut()).unwrap(),
+        png::ColorType::Grayscale => resize::new(w1, h1, w2, h2, Gray8, Point)
+            .unwrap()
+            .resize(src.as_gray(), dst.as_gray_mut())
+            .unwrap(),
         png::ColorType::Indexed => unimplemented!(),
         png::ColorType::GrayscaleAlpha => unimplemented!(),
-        png::ColorType::Rgb => resize::new(w1, h1, w2, h2, RGB8, Point).unwrap().resize(src.as_rgb(), dst.as_rgb_mut()).unwrap(),
-        png::ColorType::Rgba => resize::new(w1, h1, w2, h2, RGBA8, Point).unwrap().resize(src.as_rgba(), dst.as_rgba_mut()).unwrap(),
+        png::ColorType::Rgb => resize::new(w1, h1, w2, h2, RGB8, Point)
+            .unwrap()
+            .resize(src.as_rgb(), dst.as_rgb_mut())
+            .unwrap(),
+        png::ColorType::Rgba => resize::new(w1, h1, w2, h2, RGBA8, Point)
+            .unwrap()
+            .resize(src.as_rgba(), dst.as_rgba_mut())
+            .unwrap(),
     };
 
     let mut dst2 = vec![0u8; w1 * h1 * image_inf.color_type.samples()];
 
     match image_inf.color_type {
-        png::ColorType::Grayscale => resize::new(w2, h2, w1, h1, Gray8, Point).unwrap().resize(dst.as_gray(), dst2.as_gray_mut()).unwrap(),
+        png::ColorType::Grayscale => resize::new(w2, h2, w1, h1, Gray8, Point)
+            .unwrap()
+            .resize(dst.as_gray(), dst2.as_gray_mut())
+            .unwrap(),
         png::ColorType::Indexed => unimplemented!(),
         png::ColorType::GrayscaleAlpha => unimplemented!(),
-        png::ColorType::Rgb => resize::new(w2, h2, w1, h1, RGB8, Point).unwrap().resize(dst.as_rgb(), dst2.as_rgb_mut()).unwrap(),
-        png::ColorType::Rgba => resize::new(w2, h2, w1, h1, RGBA8, Point).unwrap().resize(dst.as_rgba(), dst2.as_rgba_mut()).unwrap(),
+        png::ColorType::Rgb => resize::new(w2, h2, w1, h1, RGB8, Point)
+            .unwrap()
+            .resize(dst.as_rgb(), dst2.as_rgb_mut())
+            .unwrap(),
+        png::ColorType::Rgba => resize::new(w2, h2, w1, h1, RGBA8, Point)
+            .unwrap()
+            .resize(dst.as_rgba(), dst2.as_rgba_mut())
+            .unwrap(),
     };
 
     dst2
