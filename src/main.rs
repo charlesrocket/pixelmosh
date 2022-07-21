@@ -112,7 +112,7 @@ fn main() {
         }
     };
 
-    spinner.set_message("\x1b[36mwriting output\x1b[0m");
+    spinner.set_message("\x1b[33mwriting output\x1b[0m");
     match cli::write_file(&output, &image, &info) {
         Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
         Err(error) => {
