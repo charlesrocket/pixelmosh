@@ -10,6 +10,7 @@ fn mosh() {
     let flip_rng = 0.3;
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
+    let pixelation = 10;
     let options = libmosh::Options {
         min_rate,
         max_rate,
@@ -23,12 +24,12 @@ fn mosh() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
 
-    libmosh::mosh(&info, &mut buf, &mut rng, &options);
-    cli::write_file("moshed.png", &buf, &info).unwrap();
+    let image = libmosh::mosh(&info, &mut buf, &mut rng, &options, pixelation);
+    cli::write_file("moshed.png", &image, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 1_914_553_783);
+    assert_eq!(checksum, 1_601_040_326);
 }
