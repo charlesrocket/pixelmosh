@@ -6,7 +6,7 @@ use rand_chacha::ChaCha8Rng;
 pub mod cli;
 
 #[derive(Parser, Debug)]
-#[clap(version, author = libmosh::INTRO, about, long_about = None)]
+#[clap(version, author = libmosh::BANNER, about, long_about = None)]
 struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
