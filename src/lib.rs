@@ -4,34 +4,6 @@ use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
 
-/// Logo
-pub const BANNER: &str = "┌─────────────────────────────────────┐\n\
-                          │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\
-                          │ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │\n\
-                          └─────────────────────────────────────┘";
-
-/// TTY
-pub const SPINNER_1: [&str; 7] = [
-    "∙∙∙∙∙",
-    "●∙∙∙∙",
-    "∙●∙∙∙",
-    "∙∙●∙∙",
-    "∙∙∙●∙",
-    "∙∙∙∙●",
-    "∙∙∙∙∙",
-];
-
-/// Terminal
-pub const SPINNER_2: [&str; 7] = [
-    "▱▱▱▱▱",
-    "▰▱▱▱▱",
-    "▱▰▱▱▱",
-    "▱▱▰▱▱",
-    "▱▱▱▰▱",
-    "▱▱▱▱▰",
-    "▰▰▰▰▰",
-];
-
 /// Processing options
 ///
 /// Minimal `pixelation` value is `1`.

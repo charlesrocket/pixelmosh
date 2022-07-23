@@ -3,6 +3,34 @@ use std::fs::File;
 use std::io::{BufWriter, Error};
 use std::path::Path;
 
+/// Logo
+pub const BANNER: &str = "┌─────────────────────────────────────┐\n\
+                          │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\
+                          │ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │\n\
+                          └─────────────────────────────────────┘";
+
+/// TTY
+pub const SPINNER_1: [&str; 7] = [
+    "∙∙∙∙∙",
+    "●∙∙∙∙",
+    "∙●∙∙∙",
+    "∙∙●∙∙",
+    "∙∙∙●∙",
+    "∙∙∙∙●",
+    "∙∙∙∙∙",
+];
+
+/// Terminal
+pub const SPINNER_2: [&str; 7] = [
+    "▱▱▱▱▱",
+    "▰▱▱▱▱",
+    "▱▰▱▱▱",
+    "▱▱▰▱▱",
+    "▱▱▱▰▱",
+    "▱▱▱▱▰",
+    "▰▰▰▰▰",
+];
+
 #[must_use]
 pub fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))

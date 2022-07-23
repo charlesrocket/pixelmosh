@@ -6,7 +6,7 @@ use rand_chacha::ChaCha8Rng;
 pub mod cli;
 
 #[derive(Parser, Debug)]
-#[clap(version, author = libmosh::BANNER, about, long_about = None)]
+#[clap(version, author = cli::BANNER, about, long_about = None)]
 struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
@@ -81,12 +81,12 @@ fn main() {
     // $TERM?
     let spinner_style = if cfg!(unix) {
         if cli::display_var() | cfg!(target_os = "macos") {
-            libmosh::SPINNER_2
+            cli::SPINNER_2
         } else {
-            libmosh::SPINNER_1
+            cli::SPINNER_1
         }
     } else {
-        libmosh::SPINNER_1
+        cli::SPINNER_1
     };
 
     println!("file: {}", args.file);
