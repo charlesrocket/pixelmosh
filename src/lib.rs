@@ -4,11 +4,13 @@ use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
 
+/// Logo
 pub const BANNER: &str = "┌─────────────────────────────────────┐\n\
                           │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\
                           │ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │\n\
                           └─────────────────────────────────────┘";
 
+/// TTY
 pub const SPINNER_1: [&str; 7] = [
     "∙∙∙∙∙",
     "●∙∙∙∙",
@@ -19,6 +21,7 @@ pub const SPINNER_1: [&str; 7] = [
     "∙∙∙∙∙",
 ];
 
+/// Terminal
 pub const SPINNER_2: [&str; 7] = [
     "▱▱▱▱▱",
     "▰▱▱▱▱",
@@ -29,6 +32,9 @@ pub const SPINNER_2: [&str; 7] = [
     "▰▰▰▰▰",
 ];
 
+/// Processing options
+///
+/// Minimal `pixelation` value is `1`.
 pub struct Options {
     pub min_rate: u16,
     pub max_rate: u16,
@@ -55,8 +61,10 @@ enum MoshLine {
     Reverse,
 }
 
+/// Processes provided image data and pixelates the result.
+///
 /// # Errors
-/// TODO
+/// Pixelation may run out of memory.
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
