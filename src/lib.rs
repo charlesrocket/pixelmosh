@@ -6,7 +6,7 @@ use rgb::FromSlice;
 
 /// Processing options
 ///
-/// Minimal `pixelation` value is `1`.
+/// Minimal `pixelation` value is `1` (off).
 pub struct Options {
     pub min_rate: u16,
     pub max_rate: u16,
