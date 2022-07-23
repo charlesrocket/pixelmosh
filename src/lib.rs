@@ -37,6 +37,7 @@ pub struct Options {
     pub flip_rng: f64,
     pub channel_swap_rng: f64,
     pub channel_shift_rng: f64,
+    pub pixelation: u8,
 }
 
 trait Mosh {
@@ -59,12 +60,15 @@ enum MoshLine {
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
-    pixel_rate: u8,
     rng: &mut impl Rng,
     options: &Options,
 ) -> Result<Vec<u8>, resize::Error> {
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
-    let (w2, h2) = (w1 / pixel_rate as usize, h1 / pixel_rate as usize);
+    let (w2, h2) = (
+        w1 / options.pixelation as usize,
+        h1 / options.pixelation as usize,
+    );
+
     let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
     let mosh_rate = chunk_count_dist.sample(rng);
 

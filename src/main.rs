@@ -60,8 +60,13 @@ fn main() {
     let flip_rng = args.flip;
     let channel_swap_rng = args.channel_swap;
     let channel_shift_rng = args.channel_shift;
-    let mut pixelation = args.pixelation;
     let seed = args.seed;
+    let pixelation = if args.pixelation == 0 {
+        1
+    } else {
+        args.pixelation
+    };
+
     let options = libmosh::Options {
         min_rate,
         max_rate,
@@ -70,11 +75,8 @@ fn main() {
         flip_rng,
         channel_swap_rng,
         channel_shift_rng,
+        pixelation,
     };
-
-    if pixelation == 0 {
-        pixelation = 1;
-    }
 
     // $TERM?
     let spinner_style = if cfg!(unix) {
@@ -104,7 +106,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    let image = match libmosh::mosh(&info, &mut buf, pixelation, &mut rng, &options) {
+    let image = match libmosh::mosh(&info, &mut buf, &mut rng, &options) {
         Ok(image) => (image),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
