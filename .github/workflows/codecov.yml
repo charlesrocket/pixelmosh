@@ -14,7 +14,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
       - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -22,10 +21,7 @@ jobs:
           toolchain: nightly
           override: true
           components: llvm-tools-preview
-
-
       - uses: Swatinem/fucov@v1
-
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v3
         with:
