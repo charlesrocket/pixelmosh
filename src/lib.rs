@@ -1,3 +1,7 @@
+//! # pixelmosh's libmosh
+//!
+//! Glitch and pixelate PNG images.
+
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
 use resize::Pixel::{Gray8, RGB8, RGBA8};
@@ -37,6 +41,40 @@ enum MoshLine {
 ///
 /// # Errors
 /// Pixelation may run out of memory.
+///
+/// # Example
+/// ````
+/// use std::fs::File;
+/// use rand_chacha::ChaCha8Rng;
+/// use rand_chacha::rand_core::SeedableRng;
+///
+/// let min_rate = 5;
+/// let max_rate = 7;
+/// let line_shift_rng = 0.8;
+/// let reverse_rng = 0.4;
+/// let flip_rng = 0.3;
+/// let channel_swap_rng = 0.9;
+/// let channel_shift_rng = 0.5;
+/// let pixelation = 10;
+/// let options = libmosh::Options {
+///     min_rate,
+///     max_rate,
+///     line_shift_rng,
+///     reverse_rng,
+///     flip_rng,
+///     channel_swap_rng,
+///     channel_shift_rng,
+///     pixelation,
+/// };
+///
+/// let mut rng = ChaCha8Rng::seed_from_u64(42);
+/// let decoder = png::Decoder::new(File::open("example/delorean.png").unwrap());
+/// let mut reader = decoder.read_info().unwrap();
+/// let mut buf = vec![0; reader.output_buffer_size()];
+/// let info = reader.next_frame(&mut buf).unwrap();
+///
+/// libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+/// ````
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
