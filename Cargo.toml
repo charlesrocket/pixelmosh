@@ -14,7 +14,7 @@ readme = "README.md"
 name = "libmosh"
 path = "src/lib.rs"
 test = false
-doctest = false
+doctest = true
 
 [[bin]]
 name = "pixelmosh"
