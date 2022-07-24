@@ -2,7 +2,7 @@ use super::{cli, ChaCha8Rng, SeedableRng};
 use adler::adler32;
 
 #[test]
-fn mosh() {
+fn rgba() {
     let min_rate = 5;
     let max_rate = 7;
     let line_shift_rng = 0.8;
