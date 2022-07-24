@@ -23,7 +23,7 @@ fn mosh() {
     };
 
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
-    let (mut buf, info) = cli::read_file("src/util/test.png".to_string()).unwrap();
+    let (mut buf, info) = cli::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
 
     let image = libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
     cli::write_file("moshed.png", &image, &info).unwrap();
