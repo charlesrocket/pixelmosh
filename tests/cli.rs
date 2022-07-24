@@ -35,6 +35,18 @@ fn invalid_sig() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
+fn unsupported_color_type() -> Result<(), Box<dyn std::error::Error>> {
+    let mut cmd = Command::cargo_bin("pixelmosh")?;
+
+    cmd.arg("src/util/test-grayscale-alpha.png");
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("Unsupported color type"));
+
+    Ok(())
+}
+
+#[test]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
