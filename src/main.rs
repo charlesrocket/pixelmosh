@@ -107,7 +107,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    let image = match libmosh::mosh(&info, &mut buf, &mut rng, &options) {
+    match libmosh::mosh(&info, &mut buf, &mut rng, &options) {
         Ok(image) => (image),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
@@ -116,7 +116,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[33mwriting output\x1b[0m");
-    match cli::write_file(&output, &image, &info) {
+    match cli::write_file(&output, &buf, &info) {
         Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
