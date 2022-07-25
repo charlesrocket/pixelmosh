@@ -37,7 +37,7 @@ enum MoshLine {
     Reverse,
 }
 
-/// Processes provided image data and pixelates the result.
+/// Processes provided image data.
 ///
 /// # Errors
 /// Pixelation may run out of memory.
