@@ -21,7 +21,7 @@ name = "pixelmosh"
 path = "src/main.rs"
 
 [dependencies]
-clap = { version = "~3", features = ["derive"] }
+clap = { version = "~3", features = ["std", "derive"], default-features = false }
 indicatif = "~0.16"
 png = "~0.17"
 rand = "~0.8"
