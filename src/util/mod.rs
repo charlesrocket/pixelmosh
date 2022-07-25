@@ -25,8 +25,8 @@ fn rgb() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test-rgb.png".to_string()).unwrap();
 
-    let image = libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
-    cli::write_file("moshed.png", &image, &info).unwrap();
+    libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+    cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -59,8 +59,8 @@ fn rgba() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
 
-    let image = libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
-    cli::write_file("moshed.png", &image, &info).unwrap();
+    libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+    cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -93,8 +93,8 @@ fn grayscale() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test-grayscale.png".to_string()).unwrap();
 
-    let image = libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
-    cli::write_file("moshed.png", &image, &info).unwrap();
+    libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+    cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
