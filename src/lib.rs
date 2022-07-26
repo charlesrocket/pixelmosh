@@ -3,7 +3,6 @@
 //! Glitch and pixelate PNG images.
 
 use rand::distributions::{Distribution, Uniform};
-use rand::Rng;
 use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
@@ -78,7 +77,7 @@ enum MoshLine {
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
-    rng: &mut impl Rng,
+    rng: &mut impl rand::Rng,
     options: &Options,
 ) -> Result<(), resize::Error> {
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
@@ -145,7 +144,7 @@ pub fn mosh(
 fn chunkmosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
-    rng: &mut impl Rng,
+    rng: &mut impl rand::Rng,
     options: &Options,
 ) {
     let line_count = pixel_buffer.len() / image_info.line_size;
