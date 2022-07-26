@@ -89,17 +89,16 @@ pub fn mosh(
 
     let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
     let mosh_rate = chunk_count_dist.sample(rng);
+    let mut dest = vec![0u8; w2 * h2 * image_info.color_type.samples()];
 
     for _ in 0..mosh_rate {
         chunkmosh(image_info, pixel_buffer, rng, options);
     }
 
-    let mut dst_s = vec![0u8; w2 * h2 * image_info.color_type.samples()];
-
     match image_info.color_type {
         png::ColorType::Grayscale => {
             resize::new(w1, h1, w2, h2, Gray8, Point)?
-                .resize(pixel_buffer.as_gray(), dst_s.as_gray_mut())?;
+                .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
         }
 
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
@@ -108,19 +107,19 @@ pub fn mosh(
         }
 
         png::ColorType::Rgb => {
-            resize::new(w1, h1, w2, h2, RGB8, Point)?.resize(pixel_buffer.as_rgb(), dst_s.as_rgb_mut())?;
+            resize::new(w1, h1, w2, h2, RGB8, Point)?.resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
         }
 
         png::ColorType::Rgba => {
             resize::new(w1, h1, w2, h2, RGBA8, Point)?
-                .resize(pixel_buffer.as_rgba(), dst_s.as_rgba_mut())?;
+                .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
         }
     };
 
     match image_info.color_type {
         png::ColorType::Grayscale => {
             resize::new(w2, h2, w1, h1, Gray8, Point)?
-                .resize(dst_s.as_gray(), pixel_buffer.as_gray_mut())?;
+                .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
         }
 
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
@@ -129,12 +128,12 @@ pub fn mosh(
         }
 
         png::ColorType::Rgb => {
-            resize::new(w2, h2, w1, h1, RGB8, Point)?.resize(dst_s.as_rgb(), pixel_buffer.as_rgb_mut())?;
+            resize::new(w2, h2, w1, h1, RGB8, Point)?.resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
         }
 
         png::ColorType::Rgba => {
             resize::new(w2, h2, w1, h1, RGBA8, Point)?
-                .resize(dst_s.as_rgba(), pixel_buffer.as_rgba_mut())?;
+                .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
         }
     };
 
