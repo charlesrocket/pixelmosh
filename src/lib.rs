@@ -1,4 +1,4 @@
-//! # pixelmosh's libmosh
+//! # libmosh
 //!
 //! Glitch and pixelate PNG images.
 
