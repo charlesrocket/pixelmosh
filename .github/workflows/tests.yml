@@ -28,6 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+    needs: cargo
     name: Code coverage on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
