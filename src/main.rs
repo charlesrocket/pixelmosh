@@ -78,8 +78,6 @@ fn main() {
         pixelation,
     };
 
-    // TODO
-    // $TERM?
     let spinner_style = if cfg!(unix) {
         if cli::display_var() | cfg!(target_os = "macos") {
             cli::SPINNER_2
