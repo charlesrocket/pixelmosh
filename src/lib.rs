@@ -107,7 +107,8 @@ pub fn mosh(
         }
 
         png::ColorType::Rgb => {
-            resize::new(w1, h1, w2, h2, RGB8, Point)?.resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
+            resize::new(w1, h1, w2, h2, RGB8, Point)?
+                .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
         }
 
         png::ColorType::Rgba => {
@@ -128,7 +129,8 @@ pub fn mosh(
         }
 
         png::ColorType::Rgb => {
-            resize::new(w2, h2, w1, h1, RGB8, Point)?.resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
+            resize::new(w2, h2, w1, h1, RGB8, Point)?
+                .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
         }
 
         png::ColorType::Rgba => {
