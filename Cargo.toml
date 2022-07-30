@@ -11,6 +11,8 @@ license = "MIT"
 readme = "README.md"
 
 [profile.release]
+debug = 0
+strip = true
 lto = true
 
 [lib]
