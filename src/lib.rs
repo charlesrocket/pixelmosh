@@ -142,6 +142,10 @@ pub fn mosh(
     Ok(())
 }
 
+// Use pnglitch approach
+//
+// TODO
+// Add more `rng` to `chunk_size`?
 fn chunkmosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
