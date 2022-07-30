@@ -8,17 +8,23 @@ use resize::Type::Point;
 use rgb::FromSlice;
 
 /// Processing options
-///
-/// Minimal `pixelation` value is `1` (off).
 #[derive(Debug, Clone, Copy)]
 pub struct Options {
+    /// Minimal amount of chunks to process.
     pub min_rate: u16,
+    /// Maximal amount of chunks to process.
     pub max_rate: u16,
+    /// Chance of line shift.
     pub line_shift_rng: f64,
+    /// Chance of reverse.
     pub reverse_rng: f64,
+    /// Chance of flip.
     pub flip_rng: f64,
+    /// Chance of channel swap.
     pub channel_swap_rng: f64,
+    /// Chance of channel shift.
     pub channel_shift_rng: f64,
+    /// Pixelation's intensity (`1` to OFF).
     pub pixelation: u8,
 }
 
