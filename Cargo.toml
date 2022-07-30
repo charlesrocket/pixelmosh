@@ -10,6 +10,9 @@ keywords = ["glitch"]
 license = "MIT"
 readme = "README.md"
 
+[profile.release]
+lto = true
+
 [lib]
 name = "libmosh"
 path = "src/lib.rs"
