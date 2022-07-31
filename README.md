@@ -28,12 +28,12 @@ ARGS:
 OPTIONS:
     -m, --min-rate <MIN_RATE>              [default: 1]
     -n, --max-rate <MAX_RATE>              [default: 7]
+    -p, --pixelation <PIXELATION>          [default: 10]
     -l, --line-shift <LINE_SHIFT>          [default: 0.3]
     -r, --reverse <REVERSE>                [default: 0.3]
     -f, --flip <FLIP>                      [default: 0.3]
     -c, --channel-swap <CHANNEL_SWAP>      [default: 0.3]
     -t, --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
-    -p, --pixelation <PIXELATION>          [default: 10]
     -s, --seed <SEED>
     -o, --output <OUTPUT>
     -h, --help                             Print help information
