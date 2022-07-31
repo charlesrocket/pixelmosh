@@ -18,12 +18,11 @@ lto = true
 [lib]
 name = "libmosh"
 path = "src/lib.rs"
-test = false
-doctest = true
 
 [[bin]]
 name = "pixelmosh"
 path = "src/main.rs"
+test = false
 
 [dependencies]
 clap = { version = "3", features = ["std", "derive"], default-features = false }
