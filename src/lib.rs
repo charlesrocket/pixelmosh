@@ -34,8 +34,8 @@ pub struct Options {
 }
 
 impl Default for Options {
-    fn default() -> Options {
-        Options {
+    fn default() -> Self {
+        Self {
             min_rate: 1,
             max_rate: 7,
             line_shift_rng: 0.3,
