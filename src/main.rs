@@ -91,7 +91,7 @@ fn main() {
     println!("file: {}", args.file);
     println!("seed: \x1b[3m{}\x1b[0m", seed);
 
-    spinner.enable_steady_tick(90);
+    spinner.enable_steady_tick(std::time::Duration::from_millis(90));
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
     spinner.set_message("\x1b[36mreading input\x1b[0m");
 
