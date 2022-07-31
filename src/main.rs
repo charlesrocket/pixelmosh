@@ -17,23 +17,23 @@ struct Args {
     #[clap(short = 'n', long, default_value_t = Options::default().max_rate, display_order = 3)]
     max_rate: u16,
 
-    #[clap(short, long, default_value_t = Options::default().line_shift_rng, display_order = 4)]
+    #[clap(short, long, default_value_t = Options::default().pixelation, display_order = 4)]
+    pixelation: u8,
+
+    #[clap(short, long, default_value_t = Options::default().line_shift_rng, display_order = 5)]
     line_shift: f64,
 
-    #[clap(short, long, default_value_t = Options::default().reverse_rng, display_order = 5)]
+    #[clap(short, long, default_value_t = Options::default().reverse_rng, display_order = 6)]
     reverse: f64,
 
-    #[clap(short, long, default_value_t = Options::default().flip_rng, display_order = 6)]
+    #[clap(short, long, default_value_t = Options::default().flip_rng, display_order = 7)]
     flip: f64,
 
-    #[clap(short, long, default_value_t = Options::default().channel_swap_rng, display_order = 7)]
+    #[clap(short, long, default_value_t = Options::default().channel_swap_rng, display_order = 8)]
     channel_swap: f64,
 
-    #[clap(short = 't', long, default_value_t = Options::default().channel_shift_rng, display_order = 8)]
+    #[clap(short = 't', long, default_value_t = Options::default().channel_shift_rng, display_order = 9)]
     channel_shift: f64,
-
-    #[clap(short, long, default_value_t = Options::default().pixelation, display_order = 9)]
-    pixelation: u8,
 
     #[clap(short, long, default_value_t = thread_rng().next_u64(),
            hide_default_value = true, display_order = 10)]

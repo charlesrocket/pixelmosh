@@ -22,6 +22,8 @@ pub struct Options {
     pub min_rate: u16,
     /// Maximal amount of chunks to process.
     pub max_rate: u16,
+    /// Pixelation's intensity.
+    pub pixelation: u8,
     /// Chance of line shift.
     pub line_shift_rng: f64,
     /// Chance of reverse.
@@ -32,8 +34,6 @@ pub struct Options {
     pub channel_swap_rng: f64,
     /// Chance of channel shift.
     pub channel_shift_rng: f64,
-    /// Pixelation's intensity.
-    pub pixelation: u8,
 }
 
 impl Default for Options {
@@ -41,12 +41,12 @@ impl Default for Options {
         Self {
             min_rate: 1,
             max_rate: 7,
+            pixelation: 10,
             line_shift_rng: 0.3,
             reverse_rng: 0.3,
             flip_rng: 0.3,
             channel_swap_rng: 0.3,
             channel_shift_rng: 0.3,
-            pixelation: 10,
         }
     }
 }
@@ -64,21 +64,21 @@ impl Default for Options {
 ///
 /// let min_rate = 5;
 /// let max_rate = 7;
+/// let pixelation = 10;
 /// let line_shift_rng = 0.8;
 /// let reverse_rng = 0.4;
 /// let flip_rng = 0.3;
 /// let channel_swap_rng = 0.9;
 /// let channel_shift_rng = 0.5;
-/// let pixelation = 10;
 /// let options = libmosh::Options {
 ///     min_rate,
 ///     max_rate,
+///     pixelation,
 ///     line_shift_rng,
 ///     reverse_rng,
 ///     flip_rng,
 ///     channel_swap_rng,
 ///     channel_shift_rng,
-///     pixelation,
 /// };
 ///
 /// let mut rng = ChaCha8Rng::seed_from_u64(42);
