@@ -3,7 +3,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
-use libmosh::{cli, Options};
+use libmosh::{cli, ops, Options};
 
 #[derive(Parser, Debug)]
 #[clap(version, author = cli::BANNER, about, long_about = None)]
@@ -96,7 +96,7 @@ fn main() {
     spinner.set_message("\x1b[36mreading input\x1b[0m");
 
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
-    let (mut buf, info) = match cli::read_file(args.file) {
+    let (mut buf, info) = match ops::read_file(args.file) {
         Ok((buf, info)) => (buf, info),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
@@ -114,7 +114,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[33mwriting output\x1b[0m");
-    match cli::write_file(&output, &buf, &info) {
+    match ops::write_file(&output, &buf, &info) {
         Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);

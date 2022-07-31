@@ -8,6 +8,7 @@ use resize::Type::Point;
 use rgb::FromSlice;
 
 pub mod cli;
+pub mod ops;
 
 /// Processing options
 ///
