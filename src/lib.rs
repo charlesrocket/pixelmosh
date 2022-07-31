@@ -7,6 +7,8 @@ use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
 
+pub mod cli;
+
 /// Processing options
 ///
 /// Minimal `pixelation` value is `1` (OFF).
@@ -287,3 +289,6 @@ impl Mosh for MoshLine {
         }
     }
 }
+
+#[cfg(test)]
+mod util;

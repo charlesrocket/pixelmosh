@@ -3,7 +3,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
-pub mod cli;
+use libmosh::cli;
 
 #[derive(Parser, Debug)]
 #[clap(version, author = cli::BANNER, about, long_about = None)]
@@ -122,6 +122,3 @@ fn main() {
         }
     };
 }
-
-#[cfg(test)]
-mod util;

@@ -1,5 +1,8 @@
-use super::{cli, ChaCha8Rng, SeedableRng};
 use adler::adler32;
+use rand::SeedableRng;
+use rand_chacha::ChaCha8Rng;
+
+use super::*;
 
 #[test]
 fn rgb() {
@@ -11,7 +14,7 @@ fn rgb() {
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
     let pixelation = 10;
-    let options = libmosh::Options {
+    let options = Options {
         min_rate,
         max_rate,
         line_shift_rng,
@@ -25,7 +28,7 @@ fn rgb() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test-rgb.png".to_string()).unwrap();
 
-    libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+    mosh(&info, &mut buf, &mut rng, &options).unwrap();
     cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
@@ -45,7 +48,7 @@ fn rgba() {
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
     let pixelation = 10;
-    let options = libmosh::Options {
+    let options = Options {
         min_rate,
         max_rate,
         line_shift_rng,
@@ -59,7 +62,7 @@ fn rgba() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
 
-    libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+    mosh(&info, &mut buf, &mut rng, &options).unwrap();
     cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
@@ -79,7 +82,7 @@ fn grayscale() {
     let channel_swap_rng = 0.9;
     let channel_shift_rng = 0.5;
     let pixelation = 10;
-    let options = libmosh::Options {
+    let options = Options {
         min_rate,
         max_rate,
         line_shift_rng,
@@ -93,7 +96,7 @@ fn grayscale() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
     let (mut buf, info) = cli::read_file("src/util/test-grayscale.png".to_string()).unwrap();
 
-    libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+    mosh(&info, &mut buf, &mut rng, &options).unwrap();
     cli::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
