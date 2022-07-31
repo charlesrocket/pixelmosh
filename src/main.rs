@@ -70,12 +70,12 @@ fn main() {
     let options = Options {
         min_rate,
         max_rate,
+        pixelation,
         line_shift_rng,
         reverse_rng,
         flip_rng,
         channel_swap_rng,
         channel_shift_rng,
-        pixelation,
     };
 
     let spinner_style = if cfg!(unix) {
