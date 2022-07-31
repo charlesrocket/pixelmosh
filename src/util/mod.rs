@@ -7,10 +7,10 @@ use super::*;
 #[test]
 fn rgb() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
-    let (mut buf, info) = cli::read_file("src/util/test-rgb.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-rgb.png".to_string()).unwrap();
 
     mosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
-    cli::write_file("moshed.png", &buf, &info).unwrap();
+    ops::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -22,10 +22,10 @@ fn rgb() {
 #[test]
 fn rgba() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
-    let (mut buf, info) = cli::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
 
     mosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
-    cli::write_file("moshed.png", &buf, &info).unwrap();
+    ops::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -37,10 +37,10 @@ fn rgba() {
 #[test]
 fn grayscale() {
     let mut rng = ChaCha8Rng::seed_from_u64(901_042_006);
-    let (mut buf, info) = cli::read_file("src/util/test-grayscale.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-grayscale.png".to_string()).unwrap();
 
     mosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
-    cli::write_file("moshed.png", &buf, &info).unwrap();
+    ops::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
