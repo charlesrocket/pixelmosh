@@ -32,6 +32,21 @@ pub struct Options {
     pub pixelation: u8,
 }
 
+impl Default for Options {
+    fn default() -> Options {
+        Options {
+            min_rate: 1,
+            max_rate: 7,
+            line_shift_rng: 0.3,
+            reverse_rng: 0.3,
+            flip_rng: 0.3,
+            channel_swap_rng: 0.3,
+            channel_shift_rng: 0.3,
+            pixelation: 10,
+        }
+    }
+}
+
 trait Mosh {
     fn run(&self, chunk: &mut [u8]);
 }
