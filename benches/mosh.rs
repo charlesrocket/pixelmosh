@@ -28,7 +28,6 @@ pub fn grayscale(seed: u64) {
     libmosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
 }
 
-
 #[cfg(test)]
 mod benches {
     use super::*;
