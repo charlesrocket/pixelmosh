@@ -6,7 +6,7 @@ pub const BANNER: &str = "┌─────────────────
                           │ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │\n\
                           └─────────────────────────────────────┘";
 
-/// TTY
+/// TTY animation
 pub const SPINNER_1: [&str; 7] = [
     "∙∙∙∙∙",
     "●∙∙∙∙",
@@ -17,7 +17,7 @@ pub const SPINNER_1: [&str; 7] = [
     "∙∙∙∙∙",
 ];
 
-/// Terminal
+/// Terminal animation
 pub const SPINNER_2: [&str; 7] = [
     "▱▱▱▱▱",
     "▰▱▱▱▱",
