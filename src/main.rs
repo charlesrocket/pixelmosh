@@ -67,7 +67,7 @@ fn main() {
         args.pixelation
     };
 
-    let options = libmosh::Options {
+    let options = Options {
         min_rate,
         max_rate,
         line_shift_rng,
