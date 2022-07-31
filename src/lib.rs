@@ -155,7 +155,7 @@ pub fn mosh(
     pixel_buffer: &mut [u8],
     rng: &mut impl rand::Rng,
     options: &Options,
-) -> Result<(), resize::Error> {
+) -> Result<(), Box<dyn std::error::Error>> {
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
     let (w2, h2) = (
         w1 / options.pixelation as usize,
