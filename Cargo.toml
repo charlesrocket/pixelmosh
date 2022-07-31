@@ -26,7 +26,7 @@ test = false
 
 [dependencies]
 clap = { version = "3", features = ["std", "derive"], default-features = false }
-indicatif = "~0.16"
+indicatif = "~0.17"
 png = "~0.17"
 rand = "~0.8"
 rand_chacha = "~0.3"
