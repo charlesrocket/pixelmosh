@@ -16,7 +16,6 @@ pub mod ops;
 /// Processing options
 ///
 /// Minimal `pixelation` value is `1` (OFF).
-#[derive(Debug, Clone, Copy)]
 pub struct Options {
     /// Minimal amount of chunks to process.
     pub min_rate: u16,
