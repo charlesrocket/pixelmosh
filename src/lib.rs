@@ -110,7 +110,6 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {}
-
         png::ColorType::Grayscale => {
             resize::new(w1, h1, w2, h2, Gray8, Point)?
                 .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
