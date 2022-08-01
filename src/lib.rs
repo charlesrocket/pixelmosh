@@ -110,7 +110,6 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
-            return Err(Box::from("Unsupported color type"));
         }
 
         png::ColorType::Grayscale => {
@@ -131,7 +130,7 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
-            unreachable!();
+            return Err(Box::from("Unsupported color type"));
         }
 
         png::ColorType::Grayscale => {
