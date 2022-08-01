@@ -48,3 +48,12 @@ fn grayscale() {
 
     assert_eq!(checksum, 376_952_495);
 }
+
+#[test]
+fn grayscale_alpha() {
+    let mut rng = ChaCha8Rng::seed_from_u64(42);
+    let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png".to_string()).unwrap();
+    let result = mosh(&info, &mut buf, &mut rng, &Options::default());
+
+    assert!(result.is_err());
+}
