@@ -110,14 +110,14 @@ pub fn mosh(
     }
 
     match image_info.color_type {
-        png::ColorType::Grayscale => {
-            resize::new(w1, h1, w2, h2, Gray8, Point)?
-                .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
-        }
-
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
             eprintln!("\x1b[1;31merror:\x1b[0m Unsupported color type");
             std::process::exit(1)
+        }
+
+        png::ColorType::Grayscale => {
+            resize::new(w1, h1, w2, h2, Gray8, Point)?
+                .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
         }
 
         png::ColorType::Rgb => {
@@ -132,13 +132,13 @@ pub fn mosh(
     };
 
     match image_info.color_type {
+        png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
+            unreachable!();
+        }
+
         png::ColorType::Grayscale => {
             resize::new(w2, h2, w1, h1, Gray8, Point)?
                 .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
-        }
-
-        png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
-            unreachable!();
         }
 
         png::ColorType::Rgb => {
