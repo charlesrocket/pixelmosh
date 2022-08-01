@@ -111,8 +111,7 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
-            eprintln!("\x1b[1;31merror:\x1b[0m Unsupported color type");
-            std::process::exit(1)
+            return Err(Box::from("Unsupported color type"));
         }
 
         png::ColorType::Grayscale => {
