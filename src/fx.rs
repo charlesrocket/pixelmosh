@@ -2,11 +2,13 @@ pub trait Mosh {
     fn run(&self, chunk: &mut [u8]);
 }
 
+/// Chunk mutations
 pub enum MoshChunk {
     ChannelSwap(usize, usize, usize),
     Flip,
 }
 
+/// Line mutations
 pub enum MoshLine {
     ChannelShift(usize, usize, usize),
     Shift(usize),
