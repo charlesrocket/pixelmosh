@@ -2,12 +2,13 @@ PREFIX=/usr/local
 INSTALL_DIR=$(PREFIX)/bin
 DEST=$(INSTALL_DIR)/pixelmosh
 BIN=target/release/pixelmosh
+SOURCE_FILES = $(shell test -e src/ && find src -type f)
 
 all: build
 
 build: $(BIN)
 
-$(BIN):
+$(BIN): $(SOURCE_FILES)
 	@cargo build --release
 
 test:
