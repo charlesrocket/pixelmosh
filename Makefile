@@ -3,6 +3,8 @@ INSTALL_DIR=$(PREFIX)/bin
 APP=$(INSTALL_DIR)/pixelmosh
 RELEASE=target/release/pixelmosh
 
+all: build
+
 build:
 	@cargo build --release
 
