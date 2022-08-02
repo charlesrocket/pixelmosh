@@ -11,32 +11,50 @@ struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
 
-    #[clap(short, long, default_value_t = MoshOptions::default().min_rate, display_order = 2)]
+    #[clap(short, long, display_order = 2,
+        default_value_t = MoshOptions::default().min_rate
+    )]
     min_rate: u16,
 
-    #[clap(short = 'n', long, default_value_t = MoshOptions::default().max_rate, display_order = 3)]
+    #[clap(short = 'n', long, display_order = 3,
+        default_value_t = MoshOptions::default().max_rate
+    )]
     max_rate: u16,
 
-    #[clap(short, long, default_value_t = MoshOptions::default().pixelation, display_order = 4)]
+    #[clap(short, long, display_order = 4,
+        default_value_t = MoshOptions::default().pixelation
+    )]
     pixelation: u8,
 
-    #[clap(short, long, default_value_t = MoshOptions::default().line_shift_rng, display_order = 5)]
+    #[clap(short, long, display_order = 5,
+        default_value_t = MoshOptions::default().line_shift_rng
+    )]
     line_shift: f64,
 
-    #[clap(short, long, default_value_t = MoshOptions::default().reverse_rng, display_order = 6)]
+    #[clap(short, long, display_order = 6,
+        default_value_t = MoshOptions::default().reverse_rng
+    )]
     reverse: f64,
 
-    #[clap(short, long, default_value_t = MoshOptions::default().flip_rng, display_order = 7)]
+    #[clap(short, long, display_order = 7,
+        default_value_t = MoshOptions::default().flip_rng
+    )]
     flip: f64,
 
-    #[clap(short, long, default_value_t = MoshOptions::default().channel_swap_rng, display_order = 8)]
+    #[clap(short, long, display_order = 8,
+        default_value_t = MoshOptions::default().channel_swap_rng
+    )]
     channel_swap: f64,
 
-    #[clap(short = 't', long, default_value_t = MoshOptions::default().channel_shift_rng, display_order = 9)]
+    #[clap(short = 't', long, display_order = 9,
+        default_value_t = MoshOptions::default().channel_shift_rng
+    )]
     channel_shift: f64,
 
-    #[clap(short, long, default_value_t = thread_rng().next_u64(),
-           hide_default_value = true, display_order = 10)]
+    #[clap(short, long, display_order = 10,
+        default_value_t = thread_rng().next_u64(),
+        hide_default_value = true
+    )]
     seed: u64,
 
     #[clap(
