@@ -22,6 +22,9 @@ lint:
 	@-rustup component add clippy 2> /dev/null
 	@cargo clippy --all-features --all -- -D clippy::all -D warnings
 
+bench:
+	@cargo bench
+
 install:
 	@rm -f $(DEST)
 	cp $(BIN) $(DEST)
@@ -33,4 +36,4 @@ clean:
 	@rm -f moshed.png test.png
 	@cargo clean && cargo clean -r
 
-.PHONY: test format-check lint install uninstall clean
+.PHONY: test format-check lint bench install uninstall clean
