@@ -1,11 +1,13 @@
 PREFIX=/usr/local
 INSTALL_DIR=$(PREFIX)/bin
-APP=$(INSTALL_DIR)/pixelmosh
-RELEASE=target/release/pixelmosh
+DEST=$(INSTALL_DIR)/pixelmosh
+BIN=target/release/pixelmosh
 
 all: build
 
-build:
+build: $(BIN)
+
+$(BIN):
 	@cargo build --release
 
 test:
@@ -20,14 +22,14 @@ lint:
 	@cargo clippy --all-features --all -- -D clippy::all -D warnings
 
 install:
-	@rm -f $(APP)
-	cp $(RELEASE) $(APP)
+	@rm -f $(DEST)
+	cp $(BIN) $(DEST)
 
 uninstall:
-	rm -f $(APP)
+	rm -f $(DEST)
 
 clean:
 	@rm -f moshed.png test.png
 	@cargo clean && cargo clean -r
 
-.PHONY: build test format-check lint install uninstall clean
+.PHONY: test format-check lint install uninstall clean
