@@ -1,9 +1,11 @@
-use assert_cmd::prelude::*;
-use predicates::prelude::*;
+use std::error::Error;
 use std::process::Command;
 
+use assert_cmd::prelude::*;
+use predicates::prelude::*;
+
 #[test]
-fn file_not_found() -> Result<(), Box<dyn std::error::Error>> {
+fn file_not_found() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
     cmd.arg("test/file/not/found");
@@ -24,7 +26,7 @@ fn file_not_found() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn invalid_sig() -> Result<(), Box<dyn std::error::Error>> {
+fn invalid_sig() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
     cmd.arg("README.md");
@@ -36,7 +38,7 @@ fn invalid_sig() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn unsupported_color_type() -> Result<(), Box<dyn std::error::Error>> {
+fn unsupported_color_type() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
     cmd.arg("src/util/test-grayscale-alpha.png");
@@ -48,7 +50,7 @@ fn unsupported_color_type() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
     cmd.arg("src/util/test-rgb.png")
