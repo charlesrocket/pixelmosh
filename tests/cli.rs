@@ -7,6 +7,7 @@ fn file_not_found() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
     cmd.arg("test/file/not/found");
+
     if cfg!(windows) {
         cmd.assert().failure().stderr(predicate::str::contains(
             "The system cannot find the path specified",
