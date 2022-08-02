@@ -3,7 +3,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
-use libmosh::{cli, ops, Options};
+use libmosh::{cli, ops, Options as MoshOptions};
 
 #[derive(Parser, Debug)]
 #[clap(version, author = cli::BANNER, about, long_about = None)]
@@ -11,28 +11,28 @@ struct Args {
     #[clap(required = true, display_order = 1)]
     file: String,
 
-    #[clap(short, long, default_value_t = Options::default().min_rate, display_order = 2)]
+    #[clap(short, long, default_value_t = MoshOptions::default().min_rate, display_order = 2)]
     min_rate: u16,
 
-    #[clap(short = 'n', long, default_value_t = Options::default().max_rate, display_order = 3)]
+    #[clap(short = 'n', long, default_value_t = MoshOptions::default().max_rate, display_order = 3)]
     max_rate: u16,
 
-    #[clap(short, long, default_value_t = Options::default().pixelation, display_order = 4)]
+    #[clap(short, long, default_value_t = MoshOptions::default().pixelation, display_order = 4)]
     pixelation: u8,
 
-    #[clap(short, long, default_value_t = Options::default().line_shift_rng, display_order = 5)]
+    #[clap(short, long, default_value_t = MoshOptions::default().line_shift_rng, display_order = 5)]
     line_shift: f64,
 
-    #[clap(short, long, default_value_t = Options::default().reverse_rng, display_order = 6)]
+    #[clap(short, long, default_value_t = MoshOptions::default().reverse_rng, display_order = 6)]
     reverse: f64,
 
-    #[clap(short, long, default_value_t = Options::default().flip_rng, display_order = 7)]
+    #[clap(short, long, default_value_t = MoshOptions::default().flip_rng, display_order = 7)]
     flip: f64,
 
-    #[clap(short, long, default_value_t = Options::default().channel_swap_rng, display_order = 8)]
+    #[clap(short, long, default_value_t = MoshOptions::default().channel_swap_rng, display_order = 8)]
     channel_swap: f64,
 
-    #[clap(short = 't', long, default_value_t = Options::default().channel_shift_rng, display_order = 9)]
+    #[clap(short = 't', long, default_value_t = MoshOptions::default().channel_shift_rng, display_order = 9)]
     channel_shift: f64,
 
     #[clap(short, long, default_value_t = thread_rng().next_u64(),
@@ -67,7 +67,7 @@ fn main() {
         args.pixelation
     };
 
-    let options = Options {
+    let options = MoshOptions {
         min_rate,
         max_rate,
         pixelation,
