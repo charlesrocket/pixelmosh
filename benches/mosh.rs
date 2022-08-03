@@ -1,36 +1,103 @@
 #![feature(test)]
 extern crate test;
 
-use rand_chacha::rand_core::SeedableRng;
-use rand_chacha::ChaCha8Rng;
 use test::black_box;
 
 use libmosh::{mosh as libmosh, ops, Options};
 
-pub fn rgb(seed: u64) {
-    let mut rng = ChaCha8Rng::seed_from_u64(seed);
+/// # Panics
+///
+/// TODO
+pub fn rgb(bench: u64) {
+     let min_rate = 5;
+     let max_rate = 7;
+     let pixelation = 10;
+     let line_shift_rng = 0.8;
+     let reverse_rng = 0.4;
+     let flip_rng = 0.3;
+     let channel_swap_rng = 0.9;
+     let channel_shift_rng = 0.5;
+     let seed = bench;
+     let options = Options {
+         min_rate,
+         max_rate,
+         pixelation,
+         line_shift_rng,
+         reverse_rng,
+         flip_rng,
+         channel_swap_rng,
+         channel_shift_rng,
+         seed,
+     };
+
     let (mut buf, info) = ops::read_file("src/util/bench-rgb.png".to_string()).unwrap();
 
-    libmosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
+    libmosh(&info, &mut buf, &options).unwrap();
 }
 
-pub fn rgba(seed: u64) {
-    let mut rng = ChaCha8Rng::seed_from_u64(seed);
+/// # Panics
+///
+/// TODO
+pub fn rgba(bench: u64) {
+    let min_rate = 5;
+    let max_rate = 7;
+    let pixelation = 10;
+    let line_shift_rng = 0.8;
+    let reverse_rng = 0.4;
+    let flip_rng = 0.3;
+    let channel_swap_rng = 0.9;
+    let channel_shift_rng = 0.5;
+    let seed = bench;
+    let options = Options {
+        min_rate,
+        max_rate,
+        pixelation,
+        line_shift_rng,
+        reverse_rng,
+        flip_rng,
+        channel_swap_rng,
+        channel_shift_rng,
+        seed,
+    };
+
     let (mut buf, info) = ops::read_file("src/util/bench-rgb-alpha.png".to_string()).unwrap();
 
-    libmosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
+    libmosh(&info, &mut buf, &options).unwrap();
 }
 
-pub fn grayscale(seed: u64) {
-    let mut rng = ChaCha8Rng::seed_from_u64(seed);
+/// # Panics
+///
+/// TODO
+pub fn grayscale(bench: u64) {
+    let min_rate = 5;
+    let max_rate = 7;
+    let pixelation = 10;
+    let line_shift_rng = 0.8;
+    let reverse_rng = 0.4;
+    let flip_rng = 0.3;
+    let channel_swap_rng = 0.9;
+    let channel_shift_rng = 0.5;
+    let seed = bench;
+    let options = Options {
+        min_rate,
+        max_rate,
+        pixelation,
+        line_shift_rng,
+        reverse_rng,
+        flip_rng,
+        channel_swap_rng,
+        channel_shift_rng,
+        seed,
+    };
+
     let (mut buf, info) = ops::read_file("src/util/bench-grayscale.png".to_string()).unwrap();
 
-    libmosh(&info, &mut buf, &mut rng, &Options::default()).unwrap();
+    libmosh(&info, &mut buf, &options).unwrap();
 }
 
 #[cfg(test)]
 mod benches {
-    use super::*;
+    use super::{black_box, grayscale, rgb, rgba, test};
 
     #[bench]
     fn bench_rgb(b: &mut test::Bencher) {
