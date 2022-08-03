@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: rustup component add clippy
-      - run: cargo clippy --all-targets --all-features -- -D clippy::all -D warnings
+      - run: cargo clippy --all-features -- -D clippy::all -D warnings
 
   codecov:
     strategy:
