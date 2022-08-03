@@ -2,8 +2,8 @@
 //!
 //! Glitch and pixelate PNG images.
 
-use rand::{RngCore, SeedableRng};
 use rand::distributions::{Distribution, Uniform};
+use rand::{RngCore, SeedableRng};
 use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
@@ -48,7 +48,11 @@ impl Default for Options {
             flip_rng: 0.3,
             channel_swap_rng: 0.3,
             channel_shift_rng: 0.3,
-            seed: if cfg!(test) { 901_042_006 } else { rand::thread_rng().next_u64() },
+            seed: if cfg!(test) {
+                901_042_006
+            } else {
+                rand::thread_rng().next_u64()
+            },
         }
     }
 }

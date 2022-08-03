@@ -9,26 +9,26 @@ use libmosh::{mosh as libmosh, ops, Options};
 ///
 /// TODO
 pub fn rgb(bench: u64) {
-     let min_rate = 5;
-     let max_rate = 7;
-     let pixelation = 10;
-     let line_shift_rng = 0.8;
-     let reverse_rng = 0.4;
-     let flip_rng = 0.3;
-     let channel_swap_rng = 0.9;
-     let channel_shift_rng = 0.5;
-     let seed = bench;
-     let options = Options {
-         min_rate,
-         max_rate,
-         pixelation,
-         line_shift_rng,
-         reverse_rng,
-         flip_rng,
-         channel_swap_rng,
-         channel_shift_rng,
-         seed,
-     };
+    let min_rate = 5;
+    let max_rate = 7;
+    let pixelation = 10;
+    let line_shift_rng = 0.8;
+    let reverse_rng = 0.4;
+    let flip_rng = 0.3;
+    let channel_swap_rng = 0.9;
+    let channel_shift_rng = 0.5;
+    let seed = bench;
+    let options = Options {
+        min_rate,
+        max_rate,
+        pixelation,
+        line_shift_rng,
+        reverse_rng,
+        flip_rng,
+        channel_swap_rng,
+        channel_shift_rng,
+        seed,
+    };
 
     let (mut buf, info) = ops::read_file("src/util/bench-rgb.png".to_string()).unwrap();
 
