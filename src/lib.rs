@@ -2,6 +2,7 @@
 //!
 //! Glitch and pixelate PNG images.
 
+use rand::{RngCore, SeedableRng};
 use rand::distributions::{Distribution, Uniform};
 use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
@@ -33,6 +34,7 @@ pub struct Options {
     pub channel_swap_rng: f64,
     /// Chance of channel shift.
     pub channel_shift_rng: f64,
+    pub seed: u64,
 }
 
 impl Default for Options {
@@ -46,6 +48,7 @@ impl Default for Options {
             flip_rng: 0.3,
             channel_swap_rng: 0.3,
             channel_shift_rng: 0.3,
+            seed: if cfg!(test) { 901_042_006 } else { rand::thread_rng().next_u64() },
         }
     }
 }
@@ -69,6 +72,7 @@ impl Default for Options {
 /// let flip_rng = 0.3;
 /// let channel_swap_rng = 0.9;
 /// let channel_shift_rng = 0.5;
+/// let seed = 42;
 /// let options = libmosh::Options {
 ///     min_rate,
 ///     max_rate,
@@ -78,20 +82,19 @@ impl Default for Options {
 ///     flip_rng,
 ///     channel_swap_rng,
 ///     channel_shift_rng,
+///     seed,
 /// };
 ///
-/// let mut rng = ChaCha8Rng::seed_from_u64(42);
 /// let decoder = png::Decoder::new(File::open("example/delorean.png").unwrap());
 /// let mut reader = decoder.read_info().unwrap();
 /// let mut buf = vec![0; reader.output_buffer_size()];
 /// let info = reader.next_frame(&mut buf).unwrap();
 ///
-/// libmosh::mosh(&info, &mut buf, &mut rng, &options).unwrap();
+/// libmosh::mosh(&info, &mut buf, &options).unwrap();
 /// ````
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
-    rng: &mut impl rand::Rng,
     options: &Options,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
@@ -100,12 +103,14 @@ pub fn mosh(
         h1 / options.pixelation as usize,
     );
 
-    let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
-    let mosh_rate = chunk_count_dist.sample(rng);
     let mut dest = vec![0u8; w2 * h2 * image_info.color_type.samples()];
+    let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
+
+    let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
+    let mosh_rate = chunk_count_dist.sample(&mut rng);
 
     for _ in 0..mosh_rate {
-        chunkmosh(image_info, pixel_buffer, rng, options);
+        chunkmosh(image_info, pixel_buffer, &mut rng, options);
     }
 
     match image_info.color_type {

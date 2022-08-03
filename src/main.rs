@@ -1,7 +1,5 @@
 use clap::Parser;
 use indicatif::{ProgressBar, ProgressStyle};
-use rand::prelude::*;
-use rand_chacha::ChaCha8Rng;
 
 use libmosh::{cli, ops, Options as MoshOptions};
 
@@ -52,7 +50,7 @@ struct Args {
     channel_shift: f64,
 
     #[clap(short, long, display_order = 10,
-        default_value_t = thread_rng().next_u64(),
+        default_value_t = MoshOptions::default().seed,
         hide_default_value = true
     )]
     seed: u64,
@@ -94,6 +92,7 @@ fn main() {
         flip_rng,
         channel_swap_rng,
         channel_shift_rng,
+        seed,
     };
 
     let spinner_style = if cfg!(unix) {
@@ -113,7 +112,6 @@ fn main() {
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
     spinner.set_message("\x1b[36mreading input\x1b[0m");
 
-    let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let (mut buf, info) = match ops::read_file(args.file) {
         Ok((buf, info)) => (buf, info),
         Err(error) => {
@@ -123,7 +121,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    match libmosh::mosh(&info, &mut buf, &mut rng, &options) {
+    match libmosh::mosh(&info, &mut buf, &options) {
         Ok(image) => (image),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
