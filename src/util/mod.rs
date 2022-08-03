@@ -1,6 +1,6 @@
 use adler::adler32;
 
-use super::*;
+use super::{Options, mosh, ops};
 
 #[test]
 fn rgb() {
