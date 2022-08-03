@@ -34,6 +34,7 @@ pub struct Options {
     pub channel_swap_rng: f64,
     /// Chance of channel shift.
     pub channel_shift_rng: f64,
+    /// Random seed.
     pub seed: u64,
 }
 
