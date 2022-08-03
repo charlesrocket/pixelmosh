@@ -20,7 +20,7 @@ format-check:
 
 lint:
 	@-rustup component add clippy 2> /dev/null
-	@cargo clippy --all-features --all -- -D clippy::all -D warnings
+	@cargo clippy --all-targets --all-features -- -D clippy::all -D warnings
 
 bench:
 	@cargo bench
