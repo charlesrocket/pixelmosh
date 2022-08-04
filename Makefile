@@ -36,4 +36,8 @@ clean:
 	@rm -f moshed.png test.png
 	@cargo clean && cargo clean -r
 
+help:
+	@echo "Available targets:"
+	@echo "build test format-check lint bench install uninstall clean"
+
 .PHONY: test format-check lint bench install uninstall clean
