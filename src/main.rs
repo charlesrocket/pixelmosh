@@ -69,30 +69,21 @@ fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
     let output = args.output;
-    let min_rate = args.min_rate;
-    let max_rate = args.max_rate;
-    let line_shift_rng = args.line_shift;
-    let reverse_rng = args.reverse;
-    let flip_rng = args.flip;
-    let channel_swap_rng = args.channel_swap;
-    let channel_shift_rng = args.channel_shift;
-    let seed = args.seed;
-    let pixelation = if args.pixelation == 0 {
-        1
-    } else {
-        args.pixelation
-    };
 
     let options = MoshOptions {
-        min_rate,
-        max_rate,
-        pixelation,
-        line_shift_rng,
-        reverse_rng,
-        flip_rng,
-        channel_swap_rng,
-        channel_shift_rng,
-        seed,
+        min_rate: args.min_rate,
+        max_rate: args.max_rate,
+        line_shift_rng: args.line_shift,
+        reverse_rng: args.reverse,
+        flip_rng: args.flip,
+        channel_swap_rng: args.channel_swap,
+        channel_shift_rng: args.channel_shift,
+        seed: args.seed,
+        pixelation: if args.pixelation == 0 {
+            1
+        } else {
+            args.pixelation
+        },
     };
 
     let spinner_style = if cfg!(unix) {
@@ -106,7 +97,7 @@ fn main() {
     };
 
     println!("file: {}", args.file);
-    println!("seed: \x1b[3m{}\x1b[0m", seed);
+    println!("seed: \x1b[3m{}\x1b[0m", args.seed);
 
     spinner.enable_steady_tick(std::time::Duration::from_millis(90));
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
