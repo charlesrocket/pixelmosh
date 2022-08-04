@@ -66,28 +66,17 @@ impl Default for Options {
 /// # Example
 /// ````
 /// use std::fs::File;
-/// use rand_chacha::ChaCha8Rng;
-/// use rand_chacha::rand_core::SeedableRng;
 ///
-/// let min_rate = 5;
-/// let max_rate = 7;
-/// let pixelation = 10;
-/// let line_shift_rng = 0.8;
-/// let reverse_rng = 0.4;
-/// let flip_rng = 0.3;
-/// let channel_swap_rng = 0.9;
-/// let channel_shift_rng = 0.5;
-/// let seed = 42;
 /// let options = libmosh::Options {
-///     min_rate,
-///     max_rate,
-///     pixelation,
-///     line_shift_rng,
-///     reverse_rng,
-///     flip_rng,
-///     channel_swap_rng,
-///     channel_shift_rng,
-///     seed,
+///     min_rate: 5,
+///     max_rate: 7,
+///     pixelation: 10,
+///     line_shift_rng: 0.7,
+///     reverse_rng: 0.4,
+///     flip_rng: 0.3,
+///     channel_swap_rng: 0.5,
+///     channel_shift_rng: 0.5,
+///     seed: 42,
 /// };
 ///
 /// let decoder = png::Decoder::new(File::open("example/delorean.png").unwrap());
