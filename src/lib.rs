@@ -71,11 +71,11 @@ impl Default for Options {
 ///     min_rate: 5,
 ///     max_rate: 7,
 ///     pixelation: 10,
-///     line_shift_rng: 0.7,
-///     reverse_rng: 0.4,
-///     flip_rng: 0.3,
-///     channel_swap_rng: 0.5,
-///     channel_shift_rng: 0.5,
+///     line_shift: 0.7,
+///     reverse: 0.4,
+///     flip: 0.3,
+///     channel_swap: 0.5,
+///     channel_shift: 0.5,
 ///     seed: 42,
 /// };
 ///
