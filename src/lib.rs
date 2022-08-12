@@ -25,15 +25,15 @@ pub struct Options {
     /// Pixelation's intensity.
     pub pixelation: u8,
     /// Chance of line shift.
-    pub line_shift_rng: f64,
+    pub line_shift: f64,
     /// Chance of reverse.
-    pub reverse_rng: f64,
+    pub reverse: f64,
     /// Chance of flip.
-    pub flip_rng: f64,
+    pub flip: f64,
     /// Chance of channel swap.
-    pub channel_swap_rng: f64,
+    pub channel_swap: f64,
     /// Chance of channel shift.
-    pub channel_shift_rng: f64,
+    pub channel_shift: f64,
     /// Random seed.
     pub seed: u64,
 }
@@ -44,11 +44,11 @@ impl Default for Options {
             min_rate: 1,
             max_rate: 7,
             pixelation: 10,
-            line_shift_rng: 0.3,
-            reverse_rng: 0.3,
-            flip_rng: 0.3,
-            channel_swap_rng: 0.3,
-            channel_shift_rng: 0.3,
+            line_shift: 0.3,
+            reverse: 0.3,
+            flip: 0.3,
+            channel_swap: 0.3,
+            channel_shift: 0.3,
             seed: if cfg!(test) {
                 901_042_006
             } else {
@@ -179,10 +179,10 @@ fn chunkmosh(
         first_line + chunk_size
     };
 
-    let reverse = rng.gen_bool(options.reverse_rng);
-    let flip = rng.gen_bool(options.flip_rng);
+    let reverse = rng.gen_bool(options.reverse);
+    let flip = rng.gen_bool(options.flip);
 
-    let line_shift = if rng.gen_bool(options.line_shift_rng) {
+    let line_shift = if rng.gen_bool(options.line_shift) {
         let line_shift_amount = line_shift_dist.sample(rng);
 
         Some(MoshLine::Shift(line_shift_amount))
@@ -190,7 +190,7 @@ fn chunkmosh(
         None
     };
 
-    let channel_shift = if rng.gen_bool(options.channel_shift_rng) {
+    let channel_shift = if rng.gen_bool(options.channel_shift) {
         let amount = line_shift_dist.sample(rng) / channel_count;
         let channel = channel_count_dist.sample(rng);
 
@@ -199,7 +199,7 @@ fn chunkmosh(
         None
     };
 
-    let channel_swap = if rng.gen_bool(options.channel_swap_rng) {
+    let channel_swap = if rng.gen_bool(options.channel_swap) {
         let channel_1 = channel_count_dist.sample(rng);
         let channel_2 = channel_count_dist.sample(rng);
 
