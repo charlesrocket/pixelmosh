@@ -25,27 +25,27 @@ struct Args {
     pixelation: u8,
 
     #[clap(short, long, display_order = 5,
-        default_value_t = MoshOptions::default().line_shift_rng
+        default_value_t = MoshOptions::default().line_shift
     )]
     line_shift: f64,
 
     #[clap(short, long, display_order = 6,
-        default_value_t = MoshOptions::default().reverse_rng
+        default_value_t = MoshOptions::default().reverse
     )]
     reverse: f64,
 
     #[clap(short, long, display_order = 7,
-        default_value_t = MoshOptions::default().flip_rng
+        default_value_t = MoshOptions::default().flip
     )]
     flip: f64,
 
     #[clap(short, long, display_order = 8,
-        default_value_t = MoshOptions::default().channel_swap_rng
+        default_value_t = MoshOptions::default().channel_swap
     )]
     channel_swap: f64,
 
     #[clap(short = 't', long, display_order = 9,
-        default_value_t = MoshOptions::default().channel_shift_rng
+        default_value_t = MoshOptions::default().channel_shift
     )]
     channel_shift: f64,
 
@@ -73,11 +73,11 @@ fn main() {
     let options = MoshOptions {
         min_rate: args.min_rate,
         max_rate: args.max_rate,
-        line_shift_rng: args.line_shift,
-        reverse_rng: args.reverse,
-        flip_rng: args.flip,
-        channel_swap_rng: args.channel_swap,
-        channel_shift_rng: args.channel_shift,
+        line_shift: args.line_shift,
+        reverse: args.reverse,
+        flip: args.flip,
+        channel_swap: args.channel_swap,
+        channel_shift: args.channel_shift,
         seed: args.seed,
         pixelation: if args.pixelation == 0 {
             1
