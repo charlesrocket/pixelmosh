@@ -79,11 +79,7 @@ fn main() {
         channel_swap: args.channel_swap,
         channel_shift: args.channel_shift,
         seed: args.seed,
-        pixelation: if args.pixelation == 0 {
-            1
-        } else {
-            args.pixelation
-        },
+        pixelation: args.pixelation.clamp(1, 255),
     };
 
     let spinner_style = if cfg!(unix) {
