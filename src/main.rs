@@ -73,13 +73,13 @@ fn main() {
     let options = MoshOptions {
         min_rate: args.min_rate,
         max_rate: args.max_rate,
+        pixelation: args.pixelation.clamp(1, 255),
         line_shift: args.line_shift,
         reverse: args.reverse,
         flip: args.flip,
         channel_swap: args.channel_swap,
         channel_shift: args.channel_shift,
         seed: args.seed,
-        pixelation: args.pixelation.clamp(1, 255),
     };
 
     let spinner_style = if cfg!(unix) {
