@@ -109,7 +109,7 @@ fn main() {
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
     match libmosh::mosh(&info, &mut buf, &options) {
-        Ok(image) => (image),
+        Ok(image) => image,
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
@@ -118,7 +118,7 @@ fn main() {
 
     spinner.set_message("\x1b[33mwriting output\x1b[0m");
     match ops::write_file(&output, &buf, &info) {
-        Ok(()) => (spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m")),
+        Ok(()) => spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m"),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
             std::process::exit(1)
