@@ -21,7 +21,7 @@ pub fn rgb(bench: u64) {
         seed: bench,
     };
 
-    let (mut buf, info) = ops::read_file("src/util/bench-rgb.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("benches/bench-rgb.png".to_string()).unwrap();
 
     libmosh(&info, &mut buf, &options).unwrap();
 }
@@ -42,7 +42,7 @@ pub fn rgba(bench: u64) {
         seed: bench,
     };
 
-    let (mut buf, info) = ops::read_file("src/util/bench-rgb-alpha.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("benches/bench-rgb-alpha.png".to_string()).unwrap();
 
     libmosh(&info, &mut buf, &options).unwrap();
 }
@@ -63,7 +63,7 @@ pub fn grayscale(bench: u64) {
         seed: bench,
     };
 
-    let (mut buf, info) = ops::read_file("src/util/bench-grayscale.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("benches/bench-grayscale.png".to_string()).unwrap();
 
     libmosh(&info, &mut buf, &options).unwrap();
 }
