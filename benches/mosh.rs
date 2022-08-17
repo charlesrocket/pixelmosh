@@ -10,8 +10,8 @@ use libmosh::{mosh as libmosh, ops, Options};
 /// TODO
 pub fn rgb(bench: u64) {
     let options = Options {
-        min_rate: 5,
-        max_rate: 7,
+        min_rate: 2,
+        max_rate: 2,
         pixelation: 10,
         line_shift: 0.8,
         reverse: 0.4,
@@ -31,8 +31,8 @@ pub fn rgb(bench: u64) {
 /// TODO
 pub fn rgba(bench: u64) {
     let options = Options {
-        min_rate: 5,
-        max_rate: 7,
+        min_rate: 2,
+        max_rate: 2,
         pixelation: 10,
         line_shift: 0.8,
         reverse: 0.4,
@@ -52,8 +52,8 @@ pub fn rgba(bench: u64) {
 /// TODO
 pub fn grayscale(bench: u64) {
     let options = Options {
-        min_rate: 5,
-        max_rate: 7,
+        min_rate: 2,
+        max_rate: 2,
         pixelation: 10,
         line_shift: 0.8,
         reverse: 0.4,
