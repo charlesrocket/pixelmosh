@@ -5,67 +5,37 @@ use test::black_box;
 
 use libmosh::{mosh as libmosh, ops, Options};
 
-/// # Panics
-///
-/// TODO
-pub fn rgb(bench: u64) {
-    let options = Options {
-        min_rate: 5,
-        max_rate: 7,
-        pixelation: 10,
-        line_shift: 0.8,
-        reverse: 0.4,
-        flip: 0.3,
-        channel_swap: 0.9,
-        channel_shift: 0.5,
-        seed: bench,
-    };
+struct Bench {}
+impl Bench {
+    fn bench_image(input: u64, image: String) {
+        let options = Options {
+            min_rate: 2,
+            max_rate: 2,
+            pixelation: 10,
+            line_shift: 0.8,
+            reverse: 0.4,
+            flip: 0.3,
+            channel_swap: 0.9,
+            channel_shift: 0.5,
+            seed: input,
+        };
 
-    let (mut buf, info) = ops::read_file("benches/bench-rgb.png".to_string()).unwrap();
+        let (mut buf, info) = ops::read_file(image).unwrap();
 
-    libmosh(&info, &mut buf, &options).unwrap();
+        libmosh(&info, &mut buf, &options).unwrap();
+    }
 }
 
-/// # Panics
-///
-/// TODO
-pub fn rgba(bench: u64) {
-    let options = Options {
-        min_rate: 5,
-        max_rate: 7,
-        pixelation: 10,
-        line_shift: 0.8,
-        reverse: 0.4,
-        flip: 0.3,
-        channel_swap: 0.9,
-        channel_shift: 0.5,
-        seed: bench,
-    };
-
-    let (mut buf, info) = ops::read_file("benches/bench-rgb-alpha.png".to_string()).unwrap();
-
-    libmosh(&info, &mut buf, &options).unwrap();
+fn rgb(value: u64) {
+    Bench::bench_image(value, "benches/bench-rgb.png".to_string());
 }
 
-/// # Panics
-///
-/// TODO
-pub fn grayscale(bench: u64) {
-    let options = Options {
-        min_rate: 5,
-        max_rate: 7,
-        pixelation: 10,
-        line_shift: 0.8,
-        reverse: 0.4,
-        flip: 0.3,
-        channel_swap: 0.9,
-        channel_shift: 0.5,
-        seed: bench,
-    };
+fn rgba(value: u64) {
+    Bench::bench_image(value, "benches/bench-rgb-alpha.png".to_string());
+}
 
-    let (mut buf, info) = ops::read_file("benches/bench-grayscale.png".to_string()).unwrap();
-
-    libmosh(&info, &mut buf, &options).unwrap();
+fn grayscale(value: u64) {
+    Bench::bench_image(value, "benches/bench-grayscale.png".to_string());
 }
 
 #[cfg(test)]
