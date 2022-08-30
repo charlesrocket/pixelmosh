@@ -1,4 +1,4 @@
-# pixelmosh
+# `pixelmosh`
 [![Crates.io](https://img.shields.io/crates/v/pixelmosh)](https://crates.io/crates/pixelmosh)
 [![Tests](https://github.com/charlesrocket/pixelmosh/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/charlesrocket/pixelmosh/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/charlesrocket/pixelmosh/branch/master/graph/badge.svg)](https://codecov.io/gh/charlesrocket/pixelmosh)
@@ -39,3 +39,5 @@ OPTIONS:
     -h, --help                             Print help information
     -V, --version                          Print version information
 ```
+## `libmosh`
+Follow this [example](https://docs.rs/pixelmosh/latest/libmosh/fn.mosh.html#example) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
