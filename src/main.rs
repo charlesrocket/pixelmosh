@@ -69,7 +69,6 @@ fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
     let output = args.output;
-
     let options = MoshOptions {
         min_rate: args.min_rate,
         max_rate: args.max_rate,
