@@ -3,12 +3,12 @@ extern crate test;
 
 use test::black_box;
 
-use libmosh::{mosh as libmosh, ops, Options};
+use libmosh::{mosh as libmosh, ops, MoshOptions};
 
 struct Bench {}
 impl Bench {
     fn bench_image(input: u64, image: String) {
-        let options = Options {
+        let options = MoshOptions {
             min_rate: 2,
             max_rate: 2,
             pixelation: 10,

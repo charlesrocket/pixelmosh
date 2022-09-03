@@ -17,7 +17,7 @@ pub mod ops;
 /// Processing options
 ///
 /// Minimal `pixelation` value is `1` (OFF).
-pub struct Options {
+pub struct MoshOptions {
     /// Minimal amount of chunks to process.
     pub min_rate: u16,
     /// Maximal amount of chunks to process.
@@ -38,7 +38,7 @@ pub struct Options {
     pub seed: u64,
 }
 
-impl Default for Options {
+impl Default for MoshOptions {
     fn default() -> Self {
         Self {
             min_rate: 1,
@@ -67,7 +67,7 @@ impl Default for Options {
 /// ````
 /// use std::fs::File;
 ///
-/// let options = libmosh::Options {
+/// let options = libmosh::MoshOptions {
 ///     min_rate: 5,
 ///     max_rate: 7,
 ///     pixelation: 10,
@@ -89,7 +89,7 @@ impl Default for Options {
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
-    options: &Options,
+    options: &MoshOptions,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
     let (w2, h2) = (
@@ -157,7 +157,7 @@ fn chunkmosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
     rng: &mut impl rand::Rng,
-    options: &Options,
+    options: &MoshOptions,
 ) {
     let line_count = pixel_buffer.len() / image_info.line_size;
     let channel_count = match image_info.color_type {

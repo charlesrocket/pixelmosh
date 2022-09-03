@@ -1,7 +1,7 @@
 use clap::Parser;
 use indicatif::{ProgressBar, ProgressStyle};
 
-use libmosh::{cli, ops, Options as MoshOptions};
+use libmosh::{cli, ops, MoshOptions};
 
 #[derive(Parser, Debug)]
 #[clap(version, author = cli::BANNER, about, long_about = None)]

@@ -1,12 +1,12 @@
 use adler::adler32;
 
-use super::{mosh, ops, Options};
+use super::{mosh, ops, MoshOptions};
 
 #[test]
 fn rgb() {
     let (mut buf, info) = ops::read_file("src/util/test-rgb.png".to_string()).unwrap();
 
-    mosh(&info, &mut buf, &Options::default()).unwrap();
+    mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     ops::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
@@ -20,7 +20,7 @@ fn rgb() {
 fn rgba() {
     let (mut buf, info) = ops::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
 
-    mosh(&info, &mut buf, &Options::default()).unwrap();
+    mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     ops::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
@@ -34,7 +34,7 @@ fn rgba() {
 fn grayscale() {
     let (mut buf, info) = ops::read_file("src/util/test-grayscale.png".to_string()).unwrap();
 
-    mosh(&info, &mut buf, &Options::default()).unwrap();
+    mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     ops::write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
@@ -47,7 +47,7 @@ fn grayscale() {
 #[test]
 fn grayscale_alpha() {
     let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png".to_string()).unwrap();
-    let result = mosh(&info, &mut buf, &Options::default());
+    let result = mosh(&info, &mut buf, &MoshOptions::default());
 
     assert!(result.is_err());
 }
