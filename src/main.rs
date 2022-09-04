@@ -6,50 +6,50 @@ use libmosh::{cli, ops, MoshOptions};
 #[derive(Parser, Debug)]
 #[clap(version, author = cli::BANNER, about, long_about = None)]
 struct Args {
-    #[clap(required = true, display_order = 1)]
+    #[clap(required = true, display_order = 1, help = "File path")]
     file: String,
 
-    #[clap(short, long, display_order = 2,
+    #[clap(short, long, display_order = 2, help = "Minimum chunks to process",
         default_value_t = MoshOptions::default().min_rate
     )]
     min_rate: u16,
 
-    #[clap(short = 'n', long, display_order = 3,
+    #[clap(short = 'n', long, display_order = 3, help = "Maximum chunks to process",
         default_value_t = MoshOptions::default().max_rate
     )]
     max_rate: u16,
 
-    #[clap(short, long, display_order = 4,
+    #[clap(short, long, display_order = 4, help = "Pixelation rate",
         default_value_t = MoshOptions::default().pixelation
     )]
     pixelation: u8,
 
-    #[clap(short, long, display_order = 5,
+    #[clap(short, long, display_order = 5, help = "Line shift rate",
         default_value_t = MoshOptions::default().line_shift
     )]
     line_shift: f64,
 
-    #[clap(short, long, display_order = 6,
+    #[clap(short, long, display_order = 6, help = "Reverse rate",
         default_value_t = MoshOptions::default().reverse
     )]
     reverse: f64,
 
-    #[clap(short, long, display_order = 7,
+    #[clap(short, long, display_order = 7, help = "Flip rate",
         default_value_t = MoshOptions::default().flip
     )]
     flip: f64,
 
-    #[clap(short, long, display_order = 8,
+    #[clap(short, long, display_order = 8, help = "Channel swap rate",
         default_value_t = MoshOptions::default().channel_swap
     )]
     channel_swap: f64,
 
-    #[clap(short = 't', long, display_order = 9,
+    #[clap(short = 't', long, display_order = 9, help = "Channel shift rate",
         default_value_t = MoshOptions::default().channel_shift
     )]
     channel_shift: f64,
 
-    #[clap(short, long, display_order = 10,
+    #[clap(short, long, display_order = 10, help = "Random seed",
         default_value_t = MoshOptions::default().seed,
         hide_default_value = true
     )]
@@ -58,9 +58,10 @@ struct Args {
     #[clap(
         short,
         long,
+        display_order = 11,
+        help = "Output file",
         default_value = "moshed.png",
-        hide_default_value = true,
-        display_order = 11
+        hide_default_value = true
     )]
     output: String,
 }
