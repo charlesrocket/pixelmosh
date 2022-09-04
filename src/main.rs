@@ -60,8 +60,7 @@ struct Args {
         long,
         display_order = 11,
         help = "Output file",
-        default_value = "moshed.png",
-        hide_default_value = true
+        default_value = "moshed.png"
     )]
     output: String,
 }
