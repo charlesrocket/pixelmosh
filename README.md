@@ -5,7 +5,7 @@
 
 ### Compilation
 
-```shell
+```
 make
 sudo make install
 ```
@@ -45,5 +45,6 @@ OPTIONS:
     -h, --help                             Print help information
     -V, --version                          Print version information
 ```
+
 ## `libmosh`
 Follow this [example](https://docs.rs/pixelmosh/latest/libmosh/fn.mosh.html#example) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
