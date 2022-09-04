@@ -10,7 +10,13 @@ make
 sudo make install
 ```
 
-### Usage
+### Basic usage
+
+```
+pixelmosh foo.png
+```
+
+### Options
 
 ```
 ┌─────────────────────────────────────┐
