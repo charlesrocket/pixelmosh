@@ -16,27 +16,6 @@ pub mod cli;
 pub mod fx;
 pub mod ops;
 
-#[derive(Debug)]
-pub enum Error {
-    PixelationFailed,
-    UnsupportedColorType,
-}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(match self {
-            Self::PixelationFailed => "Pixelation failed",
-            Self::UnsupportedColorType => "Unsupported color type",
-        })
-    }
-}
-
-impl From<resize::Error> for Error {
-    fn from(_: resize::Error) -> Self {
-        Self::PixelationFailed
-    }
-}
-
 /// Processing options
 ///
 /// Minimal `pixelation` value is `1` (OFF).
@@ -259,6 +238,27 @@ fn chunkmosh(
     if flip {
         MoshChunk::Flip.run(chunk);
     };
+}
+
+#[derive(Debug)]
+pub enum Error {
+    PixelationFailed,
+    UnsupportedColorType,
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(match self {
+            Self::PixelationFailed => "Pixelation failed",
+            Self::UnsupportedColorType => "Unsupported color type",
+        })
+    }
+}
+
+impl From<resize::Error> for Error {
+    fn from(_: resize::Error) -> Self {
+        Self::PixelationFailed
+    }
 }
 
 #[cfg(test)]
