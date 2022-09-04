@@ -50,6 +50,21 @@ fn unsupported_color_type() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+fn pixelation() -> Result<(), Box<dyn Error>> {
+    let mut cmd = Command::cargo_bin("pixelmosh")?;
+
+    cmd.arg("src/util/test-pixelation.png")
+        .arg("--pixelation")
+        .arg("255");
+
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("Pixelation failed"));
+
+    Ok(())
+}
+
+#[test]
 fn main() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 

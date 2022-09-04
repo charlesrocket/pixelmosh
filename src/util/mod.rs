@@ -51,23 +51,3 @@ fn grayscale_alpha() {
 
     assert!(result.is_err());
 }
-
-#[test]
-fn pixelation() {
-    let options = MoshOptions {
-        min_rate: 1,
-        max_rate: 1,
-        pixelation: 255,
-        line_shift: 1.0,
-        reverse: 1.0,
-        flip: 1.0,
-        channel_swap: 1.0,
-        channel_shift: 1.0,
-        seed: 42,
-    };
-
-    let (mut buf, info) = ops::read_file("src/util/test-pixelation.png".to_string()).unwrap();
-    let result = mosh(&info, &mut buf, &options);
-
-    assert!(result.is_err());
-}
