@@ -23,19 +23,19 @@ USAGE:
     pixelmosh [OPTIONS] <FILE>
 
 ARGS:
-    <FILE>
+    <FILE>    File path
 
 OPTIONS:
-    -m, --min-rate <MIN_RATE>              [default: 1]
-    -n, --max-rate <MAX_RATE>              [default: 7]
-    -p, --pixelation <PIXELATION>          [default: 10]
-    -l, --line-shift <LINE_SHIFT>          [default: 0.3]
-    -r, --reverse <REVERSE>                [default: 0.3]
-    -f, --flip <FLIP>                      [default: 0.3]
-    -c, --channel-swap <CHANNEL_SWAP>      [default: 0.3]
-    -t, --channel-shift <CHANNEL_SHIFT>    [default: 0.3]
-    -s, --seed <SEED>
-    -o, --output <OUTPUT>
+    -m, --min-rate <MIN_RATE>              Minimum chunks to process [default: 1]
+    -n, --max-rate <MAX_RATE>              Maximum chunks to process [default: 7]
+    -p, --pixelation <PIXELATION>          Pixelation rate [default: 10]
+    -l, --line-shift <LINE_SHIFT>          Line shift rate [default: 0.3]
+    -r, --reverse <REVERSE>                Reverse rate [default: 0.3]
+    -f, --flip <FLIP>                      Flip rate [default: 0.3]
+    -c, --channel-swap <CHANNEL_SWAP>      Channel swap rate [default: 0.3]
+    -t, --channel-shift <CHANNEL_SHIFT>    Channel shift rate [default: 0.3]
+    -s, --seed <SEED>                      Random seed
+    -o, --output <OUTPUT>                  Output file [default: moshed.png]
     -h, --help                             Print help information
     -V, --version                          Print version information
 ```
