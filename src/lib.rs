@@ -242,22 +242,30 @@ fn chunkmosh(
 
 #[derive(Debug)]
 pub enum Error {
-    PixelationFailed,
+    InvalidParameters,
+    OutOfMemory,
     UnsupportedColorType,
 }
+
+impl std::error::Error for Error {}
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(match self {
-            Self::PixelationFailed => "Pixelation failed",
+            Self::InvalidParameters => "Invalid parameters",
+            Self::OutOfMemory => "Out of memory",
             Self::UnsupportedColorType => "Unsupported color type",
         })
     }
 }
 
 impl From<resize::Error> for Error {
-    fn from(_: resize::Error) -> Self {
-        Self::PixelationFailed
+    fn from(error: resize::Error) -> Self {
+        use resize::Error::{InvalidParameters, OutOfMemory};
+        match error {
+            InvalidParameters => Self::InvalidParameters,
+            OutOfMemory => Self::OutOfMemory,
+        }
     }
 }
 

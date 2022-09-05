@@ -59,7 +59,7 @@ fn pixelation() -> Result<(), Box<dyn Error>> {
 
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("Pixelation failed"));
+        .stderr(predicate::str::contains("Invalid parameters"));
 
     Ok(())
 }
