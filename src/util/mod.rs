@@ -45,9 +45,8 @@ fn grayscale() {
 }
 
 #[test]
+#[should_panic(expected = "UnsupportedColorType")]
 fn grayscale_alpha() {
     let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png".to_string()).unwrap();
-    let result = mosh(&info, &mut buf, &MoshOptions::default());
-
-    assert!(result.is_err());
+    mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
 }
