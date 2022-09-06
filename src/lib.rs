@@ -260,9 +260,9 @@ impl fmt::Display for Error {
 }
 
 impl From<resize::Error> for Error {
-    fn from(error: resize::Error) -> Self {
+    fn from(e: resize::Error) -> Self {
         use resize::Error::{InvalidParameters, OutOfMemory};
-        match error {
+        match e {
             InvalidParameters => Self::InvalidParameters,
             OutOfMemory => Self::OutOfMemory,
         }
