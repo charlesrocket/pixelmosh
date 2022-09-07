@@ -8,11 +8,11 @@ use resize::Pixel::{Gray8, RGB8, RGBA8};
 use resize::Type::Point;
 use rgb::FromSlice;
 
-use std::fmt;
-
+use crate::err::MoshError;
 use crate::fx::{Mosh, MoshChunk, MoshLine};
 
 pub mod cli;
+pub mod err;
 pub mod fx;
 pub mod ops;
 
@@ -92,7 +92,7 @@ pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
     options: &MoshOptions,
-) -> Result<(), Error> {
+) -> Result<(), MoshError> {
     let (w1, h1) = (image_info.width as usize, image_info.height as usize);
     let (w2, h2) = (
         w1 / options.pixelation as usize,
@@ -129,7 +129,7 @@ pub fn mosh(
 
     match image_info.color_type {
         png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
-            return Err(Error::UnsupportedColorType);
+            return Err(MoshError::UnsupportedColorType);
         }
 
         png::ColorType::Grayscale => {
@@ -238,27 +238,6 @@ fn chunkmosh(
     if flip {
         MoshChunk::Flip.run(chunk);
     };
-}
-
-#[derive(Debug)]
-pub enum Error {
-    PixelationFailed,
-    UnsupportedColorType,
-}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(match self {
-            Self::PixelationFailed => "Pixelation failed",
-            Self::UnsupportedColorType => "Unsupported color type",
-        })
-    }
-}
-
-impl From<resize::Error> for Error {
-    fn from(_: resize::Error) -> Self {
-        Self::PixelationFailed
-    }
 }
 
 #[cfg(test)]
