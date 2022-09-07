@@ -13,7 +13,7 @@ fn rgb() {
     let mut file = std::io::BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 2_675_922_770);
+    assert_eq!(checksum, 2_285_399_975);
 }
 
 #[test]
@@ -27,7 +27,7 @@ fn rgba() {
     let mut file = std::io::BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 3_414_819_387);
+    assert_eq!(checksum, 105_467_096);
 }
 
 #[test]
@@ -41,7 +41,7 @@ fn grayscale() {
     let mut file = std::io::BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 376_952_495);
+    assert_eq!(checksum, 1_718_963_212);
 }
 
 #[test]
