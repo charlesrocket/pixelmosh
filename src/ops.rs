@@ -1,10 +1,12 @@
 use std::fs::File;
-use std::io::{BufWriter, Error};
+use std::io::BufWriter;
 use std::path::Path;
+
+use crate::MoshError;
 
 /// # Errors
 /// TODO
-pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), Error> {
+pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), MoshError> {
     let input = File::open(file)?;
     let decoder = png::Decoder::new(input);
     let mut reader = decoder.read_info()?;
@@ -16,7 +18,7 @@ pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), E
 
 /// # Errors
 /// TODO
-pub fn write_file(dest: &str, buf: &[u8], info: &png::OutputInfo) -> Result<(), Error> {
+pub fn write_file(dest: &str, buf: &[u8], info: &png::OutputInfo) -> Result<(), MoshError> {
     let path = Path::new(&dest);
     let output = File::create(path)?;
     let buf_writer = &mut BufWriter::new(output);
