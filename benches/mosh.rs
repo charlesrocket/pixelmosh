@@ -7,7 +7,7 @@ use libmosh::{mosh as libmosh, ops, MoshOptions};
 
 struct Bench {}
 impl Bench {
-    fn bench_image(input: u64, image: String) {
+    fn bench_image(input: u64, image: &str) {
         let options = MoshOptions {
             min_rate: 1,
             max_rate: 1,
@@ -27,15 +27,15 @@ impl Bench {
 }
 
 fn rgb(value: u64) {
-    Bench::bench_image(value, "benches/bench-rgb.png".to_string());
+    Bench::bench_image(value, "benches/bench-rgb.png");
 }
 
 fn rgba(value: u64) {
-    Bench::bench_image(value, "benches/bench-rgb-alpha.png".to_string());
+    Bench::bench_image(value, "benches/bench-rgb-alpha.png");
 }
 
 fn grayscale(value: u64) {
-    Bench::bench_image(value, "benches/bench-grayscale.png".to_string());
+    Bench::bench_image(value, "benches/bench-grayscale.png");
 }
 
 #[cfg(test)]
