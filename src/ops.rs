@@ -4,7 +4,7 @@ use std::path::Path;
 
 /// # Errors
 /// TODO
-pub fn read_file(file: String) -> Result<(Vec<u8>, png::OutputInfo), Error> {
+pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), Error> {
     let input = File::open(file)?;
     let decoder = png::Decoder::new(input);
     let mut reader = decoder.read_info()?;
