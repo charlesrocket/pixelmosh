@@ -4,7 +4,7 @@ use super::{mosh, ops, MoshOptions};
 
 #[test]
 fn rgb() {
-    let (mut buf, info) = ops::read_file("src/util/test-rgb.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-rgb.png").unwrap();
 
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     ops::write_file("moshed.png", &buf, &info).unwrap();
@@ -18,7 +18,7 @@ fn rgb() {
 
 #[test]
 fn rgba() {
-    let (mut buf, info) = ops::read_file("src/util/test-rgb-alpha.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-rgb-alpha.png").unwrap();
 
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     ops::write_file("moshed.png", &buf, &info).unwrap();
@@ -32,7 +32,7 @@ fn rgba() {
 
 #[test]
 fn grayscale() {
-    let (mut buf, info) = ops::read_file("src/util/test-grayscale.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-grayscale.png").unwrap();
 
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     ops::write_file("moshed.png", &buf, &info).unwrap();
@@ -47,6 +47,6 @@ fn grayscale() {
 #[test]
 #[should_panic(expected = "UnsupportedColorType")]
 fn grayscale_alpha() {
-    let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png".to_string()).unwrap();
+    let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png").unwrap();
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
 }
