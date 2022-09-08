@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, io};
 
 #[derive(Debug)]
 pub enum MoshError {
@@ -23,8 +23,8 @@ impl fmt::Display for MoshError {
     }
 }
 
-impl From<std::io::Error> for MoshError {
-    fn from(e: std::io::Error) -> Self {
+impl From<io::Error> for MoshError {
+    fn from(e: io::Error) -> Self {
         Self::IoError(e.to_string())
     }
 }
