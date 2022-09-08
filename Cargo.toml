@@ -25,7 +25,7 @@ path = "src/main.rs"
 test = false
 
 [dependencies]
-clap = { version = "3", features = ["std", "derive"], default-features = false }
+clap = { version = "3.2", features = ["std", "derive"], default-features = false }
 indicatif = "0.17"
 png = "0.17"
 rand = "0.8"
