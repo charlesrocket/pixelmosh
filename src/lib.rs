@@ -109,44 +109,46 @@ pub fn mosh(
         chunkmosh(image_info, pixel_buffer, &mut rng, options);
     }
 
-    match image_info.color_type {
-        png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {}
-        png::ColorType::Grayscale => {
-            resize::new(w1, h1, w2, h2, Gray8, Point)?
-                .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
-        }
+    if options.pixelation > 1 {
+        match image_info.color_type {
+            png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {}
+            png::ColorType::Grayscale => {
+                resize::new(w1, h1, w2, h2, Gray8, Point)?
+                    .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
+            }
 
-        png::ColorType::Rgb => {
-            resize::new(w1, h1, w2, h2, RGB8, Point)?
-                .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
-        }
+            png::ColorType::Rgb => {
+                resize::new(w1, h1, w2, h2, RGB8, Point)?
+                    .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
+            }
 
-        png::ColorType::Rgba => {
-            resize::new(w1, h1, w2, h2, RGBA8, Point)?
-                .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
-        }
-    };
+            png::ColorType::Rgba => {
+                resize::new(w1, h1, w2, h2, RGBA8, Point)?
+                    .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
+            }
+        };
 
-    match image_info.color_type {
-        png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
-            return Err(MoshError::UnsupportedColorType);
-        }
+        match image_info.color_type {
+            png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
+                return Err(MoshError::UnsupportedColorType);
+            }
 
-        png::ColorType::Grayscale => {
-            resize::new(w2, h2, w1, h1, Gray8, Point)?
-                .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
-        }
+            png::ColorType::Grayscale => {
+                resize::new(w2, h2, w1, h1, Gray8, Point)?
+                    .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
+            }
 
-        png::ColorType::Rgb => {
-            resize::new(w2, h2, w1, h1, RGB8, Point)?
-                .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
-        }
+            png::ColorType::Rgb => {
+                resize::new(w2, h2, w1, h1, RGB8, Point)?
+                    .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
+            }
 
-        png::ColorType::Rgba => {
-            resize::new(w2, h2, w1, h1, RGBA8, Point)?
-                .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
-        }
-    };
+            png::ColorType::Rgba => {
+                resize::new(w2, h2, w1, h1, RGBA8, Point)?
+                    .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
+            }
+        };
+    }
 
     Ok(())
 }
