@@ -26,6 +26,21 @@ fn file_not_found() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+fn invalid_parameters() -> Result<(), Box<dyn Error>> {
+    let mut cmd = Command::cargo_bin("pixelmosh")?;
+
+    cmd.arg("src/util/test-pixelation.png")
+        .arg("--pixelation")
+        .arg("255");
+
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("Invalid parameters"));
+
+    Ok(())
+}
+
+#[test]
 fn invalid_sig() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
@@ -45,21 +60,6 @@ fn unsupported_color_type() -> Result<(), Box<dyn Error>> {
     cmd.assert()
         .failure()
         .stderr(predicate::str::contains("Unsupported color type"));
-
-    Ok(())
-}
-
-#[test]
-fn pixelation() -> Result<(), Box<dyn Error>> {
-    let mut cmd = Command::cargo_bin("pixelmosh")?;
-
-    cmd.arg("src/util/test-pixelation.png")
-        .arg("--pixelation")
-        .arg("255");
-
-    cmd.assert()
-        .failure()
-        .stderr(predicate::str::contains("Invalid parameters"));
 
     Ok(())
 }
