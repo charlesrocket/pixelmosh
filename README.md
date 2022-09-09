@@ -47,4 +47,4 @@ OPTIONS:
 ```
 
 ## `libmosh`
-Follow this [example](https://docs.rs/pixelmosh/latest/libmosh/fn.mosh.html#example) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
+Follow the [example](https://docs.rs/pixelmosh/latest/libmosh/fn.mosh.html#example) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
