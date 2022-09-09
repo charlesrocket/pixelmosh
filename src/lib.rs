@@ -65,6 +65,10 @@ impl Default for MoshOptions {
 /// # Errors
 /// Pixelation may run out of memory.
 ///
+/// * [`InvalidParameters`]
+/// * [`OutOfMemory`]
+/// * [`UnsupportedColorType`]
+///
 /// # Example
 /// ````
 /// use std::fs::File;
@@ -88,6 +92,10 @@ impl Default for MoshOptions {
 ///
 /// libmosh::mosh(&info, &mut buf, &options).unwrap();
 /// ````
+///
+/// [`InvalidParameters`]: crate::err::MoshError::InvalidParameters
+/// [`OutOfMemory`]: crate::err::MoshError::OutOfMemory
+/// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
 pub fn mosh(
     image_info: &png::OutputInfo,
     pixel_buffer: &mut [u8],
