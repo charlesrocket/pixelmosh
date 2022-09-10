@@ -1,5 +1,6 @@
 //! Effects
 
+/// Mutates provided bytes
 pub trait Mosh {
     fn run(&self, value: &mut [u8]);
 }
@@ -10,7 +11,7 @@ pub enum MoshChunk {
     Flip,
 }
 
-/// Line mutations
+/// Line mutations within a chunk
 pub enum MoshLine {
     ChannelShift(usize, usize, usize),
     Shift(usize),
