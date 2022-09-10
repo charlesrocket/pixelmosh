@@ -6,6 +6,7 @@ use test::black_box;
 use libmosh::{mosh as libmosh, ops, MoshOptions};
 
 struct Bench {}
+
 impl Bench {
     fn bench_image(input: u64, image: &str) {
         let options = MoshOptions {
