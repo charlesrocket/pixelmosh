@@ -63,11 +63,10 @@ impl Default for MoshOptions {
 /// Processes provided image data.
 ///
 /// # Errors
-/// Pixelation may run out of memory.
 ///
-/// * [`InvalidParameters`]
-/// * [`OutOfMemory`]
-/// * [`UnsupportedColorType`]
+/// * [`InvalidParameters`]: e.g., when pixelation value is more than `image_info.width`.
+/// * [`OutOfMemory`]: `resize` may run out of memory.
+/// * [`UnsupportedColorType`]: `ColorType::GrayscaleAlpha` is not supported.
 ///
 /// # Example
 /// ````
