@@ -30,7 +30,7 @@ pub const SPINNER_2: [&str; 7] = [
     "▰▰▰▰▰",
 ];
 
-/// Checks for TTY.
+/// Checks for TTY
 ///
 /// Returns `true` if a terminal emulator is detected.
 #[must_use]
