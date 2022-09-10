@@ -6,8 +6,11 @@ use std::path::Path;
 
 use crate::MoshError;
 
+/// Reads provided file
+///
 /// # Errors
-/// TODO
+///
+/// It may fail if input format is not supported.
 pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), MoshError> {
     let input = File::open(file)?;
     let decoder = png::Decoder::new(input);
@@ -18,8 +21,11 @@ pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), M
     Ok((buf, info))
 }
 
+/// Writes a new file from the provided buffer
+///
 /// # Errors
-/// TODO
+///
+/// It may fail if parameters are invalid or due I/O error.
 pub fn write_file(dest: &str, buf: &[u8], info: &png::OutputInfo) -> Result<(), MoshError> {
     let path = Path::new(&dest);
     let output = File::create(path)?;
