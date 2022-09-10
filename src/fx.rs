@@ -1,3 +1,5 @@
+//! Effects
+
 pub trait Mosh {
     fn run(&self, chunk: &mut [u8]);
 }

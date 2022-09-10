@@ -1,3 +1,5 @@
+//! CLI
+
 use std::env;
 
 /// Logo

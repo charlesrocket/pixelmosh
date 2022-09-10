@@ -1,12 +1,20 @@
+//! Errors
+
 use std::{fmt, io};
 
 #[derive(Debug)]
 pub enum MoshError {
+    /// Data format is not supported.
     DecodingError(String),
+    /// i.e. wrong data size/formatter failure.
     EncodingError(String),
+    /// e.g. `image_info.width` can't be `0`.
     InvalidParameters,
+    /// I/O errors.
     IoError(String),
+    /// Allocation failed.
     OutOfMemory,
+    /// Unsupported color type.
     UnsupportedColorType,
 }
 
