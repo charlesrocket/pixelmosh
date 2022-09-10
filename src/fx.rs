@@ -1,7 +1,7 @@
 //! Effects
 
 pub trait Mosh {
-    fn run(&self, chunk: &mut [u8]);
+    fn run(&self, value: &mut [u8]);
 }
 
 /// Chunk mutations
