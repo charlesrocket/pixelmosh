@@ -10,6 +10,8 @@ make
 sudo make install
 ```
 
+### Cargo
+
 ```
 cargo install --locked pixelmosh
 ```
