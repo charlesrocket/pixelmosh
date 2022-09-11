@@ -60,7 +60,7 @@ impl Default for MoshOptions {
     }
 }
 
-/// Processes provided image data.
+/// Processes provided image data
 ///
 /// # Errors
 ///
