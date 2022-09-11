@@ -10,6 +10,10 @@ make
 sudo make install
 ```
 
+```
+cargo install --locked pixelmosh
+```
+
 ### Basic usage
 
 ```
