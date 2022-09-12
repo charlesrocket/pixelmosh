@@ -1,4 +1,4 @@
-//! CLI
+//! Command-line interface
 
 use std::env;
 
