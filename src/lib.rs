@@ -2,6 +2,7 @@
 //!
 //! Glitch and pixelate PNG images.
 
+use png::{ColorType, OutputInfo};
 use rand::distributions::{Distribution, Uniform};
 use rand::{RngCore, SeedableRng};
 use resize::Pixel::{Gray8, RGB8, RGBA8};
@@ -96,7 +97,7 @@ impl Default for MoshOptions {
 /// [`OutOfMemory`]: crate::err::MoshError::OutOfMemory
 /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
 pub fn mosh(
-    image_info: &png::OutputInfo,
+    image_info: &OutputInfo,
     pixel_buffer: &mut [u8],
     options: &MoshOptions,
 ) -> Result<(), MoshError> {
@@ -118,39 +119,39 @@ pub fn mosh(
 
     if options.pixelation > 1 {
         match image_info.color_type {
-            png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {}
-            png::ColorType::Grayscale => {
+            ColorType::GrayscaleAlpha | ColorType::Indexed => {}
+            ColorType::Grayscale => {
                 resize::new(w1, h1, w2, h2, Gray8, Point)?
                     .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
             }
 
-            png::ColorType::Rgb => {
+            ColorType::Rgb => {
                 resize::new(w1, h1, w2, h2, RGB8, Point)?
                     .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
             }
 
-            png::ColorType::Rgba => {
+            ColorType::Rgba => {
                 resize::new(w1, h1, w2, h2, RGBA8, Point)?
                     .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
             }
         };
 
         match image_info.color_type {
-            png::ColorType::GrayscaleAlpha | png::ColorType::Indexed => {
+            ColorType::GrayscaleAlpha | ColorType::Indexed => {
                 return Err(MoshError::UnsupportedColorType);
             }
 
-            png::ColorType::Grayscale => {
+            ColorType::Grayscale => {
                 resize::new(w2, h2, w1, h1, Gray8, Point)?
                     .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
             }
 
-            png::ColorType::Rgb => {
+            ColorType::Rgb => {
                 resize::new(w2, h2, w1, h1, RGB8, Point)?
                     .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
             }
 
-            png::ColorType::Rgba => {
+            ColorType::Rgba => {
                 resize::new(w2, h2, w1, h1, RGBA8, Point)?
                     .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
             }
@@ -165,17 +166,17 @@ pub fn mosh(
 // TODO
 // Add more `rng` to `chunk_size`?
 fn chunkmosh(
-    image_info: &png::OutputInfo,
+    image_info: &OutputInfo,
     pixel_buffer: &mut [u8],
     rng: &mut impl rand::Rng,
     options: &MoshOptions,
 ) {
     let line_count = pixel_buffer.len() / image_info.line_size;
     let channel_count = match image_info.color_type {
-        png::ColorType::Grayscale | png::ColorType::Indexed => 1,
-        png::ColorType::GrayscaleAlpha => 2,
-        png::ColorType::Rgb => 3,
-        png::ColorType::Rgba => 4,
+        ColorType::Grayscale | ColorType::Indexed => 1,
+        ColorType::GrayscaleAlpha => 2,
+        ColorType::Rgb => 3,
+        ColorType::Rgba => 4,
     };
 
     let line_shift_dist = Uniform::from(0..image_info.line_size);
