@@ -4,58 +4,58 @@ use indicatif::{ProgressBar, ProgressStyle};
 use libmosh::{cli, ops, MoshOptions};
 
 #[derive(Parser, Debug)]
-#[clap(version, author = cli::BANNER, about, long_about = None)]
+#[command(before_help = cli::BANNER, about, author, version, long_about = None)]
 struct Args {
-    #[clap(required = true, display_order = 1, help = "File path")]
+    #[arg(display_order = 1, help = "File path")]
     file: String,
 
-    #[clap(short, long, display_order = 2, help = "Minimum chunks to process",
+    #[arg(short, long, display_order = 2, help = "Minimum chunks to process",
         default_value_t = MoshOptions::default().min_rate
     )]
     min_rate: u16,
 
-    #[clap(short = 'n', long, display_order = 3, help = "Maximum chunks to process",
+    #[arg(short = 'n', long, display_order = 3, help = "Maximum chunks to process",
         default_value_t = MoshOptions::default().max_rate
     )]
     max_rate: u16,
 
-    #[clap(short, long, display_order = 4, help = "Pixelation rate",
+    #[arg(short, long, display_order = 4, help = "Pixelation rate",
         default_value_t = MoshOptions::default().pixelation
     )]
     pixelation: u8,
 
-    #[clap(short, long, display_order = 5, help = "Line shift rate",
+    #[arg(short, long, display_order = 5, help = "Line shift rate",
         default_value_t = MoshOptions::default().line_shift
     )]
     line_shift: f64,
 
-    #[clap(short, long, display_order = 6, help = "Reverse rate",
+    #[arg(short, long, display_order = 6, help = "Reverse rate",
         default_value_t = MoshOptions::default().reverse
     )]
     reverse: f64,
 
-    #[clap(short, long, display_order = 7, help = "Flip rate",
+    #[arg(short, long, display_order = 7, help = "Flip rate",
         default_value_t = MoshOptions::default().flip
     )]
     flip: f64,
 
-    #[clap(short, long, display_order = 8, help = "Channel swap rate",
+    #[arg(short, long, display_order = 8, help = "Channel swap rate",
         default_value_t = MoshOptions::default().channel_swap
     )]
     channel_swap: f64,
 
-    #[clap(short = 't', long, display_order = 9, help = "Channel shift rate",
+    #[arg(short = 't', long, display_order = 9, help = "Channel shift rate",
         default_value_t = MoshOptions::default().channel_shift
     )]
     channel_shift: f64,
 
-    #[clap(short, long, display_order = 10, help = "Random seed",
+    #[arg(short, long, display_order = 10, help = "Random seed",
         default_value_t = MoshOptions::default().seed,
         hide_default_value = true
     )]
     seed: u64,
 
-    #[clap(
+    #[arg(
         short,
         long,
         display_order = 11,
