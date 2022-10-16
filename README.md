@@ -4,14 +4,6 @@
 [![codecov](https://codecov.io/gh/charlesrocket/pixelmosh/branch/master/graph/badge.svg)](https://codecov.io/gh/charlesrocket/pixelmosh)
 
 ### Compilation
-#### Source
-
-```
-make
-sudo make install
-```
-
-#### Cargo
 
 ```
 cargo install --locked pixelmosh
