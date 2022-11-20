@@ -101,7 +101,7 @@ fn main() {
     let (mut buf, info) = match ops::read_file(args.file) {
         Ok((buf, info)) => (buf, info),
         Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
+            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
             std::process::exit(1)
         }
     };
@@ -110,7 +110,7 @@ fn main() {
     match libmosh::mosh(&info, &mut buf, &options) {
         Ok(image) => image,
         Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
+            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
             std::process::exit(1)
         }
     };
@@ -119,7 +119,7 @@ fn main() {
     match ops::write_file(&output, &buf, &info) {
         Ok(()) => spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m"),
         Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {}", error);
+            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
             std::process::exit(1)
         }
     };
