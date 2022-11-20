@@ -1,10 +1,12 @@
 use clap::Parser;
 use indicatif::{ProgressBar, ProgressStyle};
 
-use libmosh::{cli, ops, MoshOptions};
+use std::env;
+
+use libmosh::{ops, MoshOptions};
 
 #[derive(Parser, Debug)]
-#[command(before_help = cli::BANNER, about, author, version, long_about = None)]
+#[command(before_help = BANNER, about, author, version, long_about = None)]
 struct Args {
     #[arg(display_order = 1, help = "File path")]
     file: String,
@@ -65,6 +67,42 @@ struct Args {
     output: String,
 }
 
+/// Logo
+const BANNER: &str = "┌─────────────────────────────────────┐\n\
+                      │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\
+                      │ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │\n\
+                      └─────────────────────────────────────┘";
+
+/// TTY animation
+const SPINNER_1: [&str; 7] = [
+    "∙∙∙∙∙",
+    "●∙∙∙∙",
+    "∙●∙∙∙",
+    "∙∙●∙∙",
+    "∙∙∙●∙",
+    "∙∙∙∙●",
+    "∙∙∙∙∙",
+];
+
+/// Terminal animation
+const SPINNER_2: [&str; 7] = [
+    "▱▱▱▱▱",
+    "▰▱▱▱▱",
+    "▱▰▱▱▱",
+    "▱▱▰▱▱",
+    "▱▱▱▰▱",
+    "▱▱▱▱▰",
+    "▰▰▰▰▰",
+];
+
+/// Checks for TTY
+///
+/// Returns `true` if a terminal emulator is detected.
+#[must_use]
+fn display_var() -> bool {
+    matches!(env::var("DISPLAY"), Ok(_))
+}
+
 fn main() {
     let spinner = ProgressBar::new_spinner();
     let args = Args::parse();
@@ -82,13 +120,13 @@ fn main() {
     };
 
     let spinner_style = if cfg!(unix) {
-        if cli::display_var() | cfg!(target_os = "macos") {
-            cli::SPINNER_2
+        if display_var() | cfg!(target_os = "macos") {
+            SPINNER_2
         } else {
-            cli::SPINNER_1
+            SPINNER_1
         }
     } else {
-        cli::SPINNER_1
+        SPINNER_1
     };
 
     println!("file: {}", args.file);

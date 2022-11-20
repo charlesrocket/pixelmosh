@@ -12,7 +12,6 @@ use rgb::FromSlice;
 use crate::err::MoshError;
 use crate::fx::{Mosh, MoshChunk, MoshLine};
 
-pub mod cli;
 pub mod err;
 pub mod fx;
 pub mod ops;
