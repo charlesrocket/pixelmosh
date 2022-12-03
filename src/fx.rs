@@ -2,7 +2,7 @@
 
 /// Mutates provided bytes
 pub trait Mosh {
-    fn run(&self, value: &mut [u8]);
+    fn glitch(&self, value: &mut [u8]);
 }
 
 /// Chunk mutations
@@ -19,7 +19,7 @@ pub enum MoshLine {
 }
 
 impl Mosh for MoshChunk {
-    fn run(&self, chunk: &mut [u8]) {
+    fn glitch(&self, chunk: &mut [u8]) {
         match self {
             Self::ChannelSwap(channel_1, channel_2, channel_count) => {
                 let chunk_length = chunk.len();
@@ -44,7 +44,7 @@ impl Mosh for MoshChunk {
 }
 
 impl Mosh for MoshLine {
-    fn run(&self, line: &mut [u8]) {
+    fn glitch(&self, line: &mut [u8]) {
         match self {
             Self::ChannelShift(amount, channel, channel_count) => {
                 let line_length = line.len();
