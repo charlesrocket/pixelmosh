@@ -225,14 +225,14 @@ fn chunkmosh(
         let line = &mut pixel_buffer[line_start..line_end];
 
         if let Some(channel_shift) = &channel_shift {
-            channel_shift.run(line);
+            channel_shift.glitch(line);
         }
 
         if let Some(line_shift) = &line_shift {
-            line_shift.run(line);
+            line_shift.glitch(line);
         }
         if reverse {
-            MoshLine::Reverse.run(line);
+            MoshLine::Reverse.glitch(line);
         }
     }
 
@@ -241,11 +241,11 @@ fn chunkmosh(
     let chunk = &mut pixel_buffer[chunk_start..chunk_end];
 
     if let Some(channel_swap) = channel_swap {
-        channel_swap.run(chunk);
+        channel_swap.glitch(chunk);
     };
 
     if flip {
-        MoshChunk::Flip.run(chunk);
+        MoshChunk::Flip.glitch(chunk);
     };
 }
 
