@@ -109,8 +109,8 @@ pub fn mosh(
     let mut dest = vec![0u8; w2 * h2 * image_info.color_type.samples()];
     let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
 
-    let chunk_count_dist = Uniform::from(options.min_rate..=options.max_rate);
-    let mosh_rate = chunk_count_dist.sample(&mut rng);
+    let chunk_count_distrib = Uniform::from(options.min_rate..=options.max_rate);
+    let mosh_rate = chunk_count_distrib.sample(&mut rng);
 
     for _ in 0..mosh_rate {
         chunkmosh(image_info, pixel_buffer, &mut rng, options);
@@ -178,12 +178,12 @@ fn chunkmosh(
         ColorType::Rgba => 4,
     };
 
-    let line_shift_dist = Uniform::from(0..image_info.line_size);
-    let line_number_dist = Uniform::from(0..line_count);
-    let channel_count_dist = Uniform::from(0..channel_count);
+    let line_shift_distrib = Uniform::from(0..image_info.line_size);
+    let line_number_distrib = Uniform::from(0..line_count);
+    let channel_count_distrib = Uniform::from(0..channel_count);
 
-    let first_line = line_number_dist.sample(rng);
-    let chunk_size = line_number_dist.sample(rng) / 2;
+    let first_line = line_number_distrib.sample(rng);
+    let chunk_size = line_number_distrib.sample(rng) / 2;
     let last_line = if (first_line + chunk_size) > line_count {
         line_count
     } else {
@@ -194,7 +194,7 @@ fn chunkmosh(
     let flip = rng.gen_bool(options.flip);
 
     let line_shift = if rng.gen_bool(options.line_shift) {
-        let line_shift_amount = line_shift_dist.sample(rng);
+        let line_shift_amount = line_shift_distrib.sample(rng);
 
         Some(MoshLine::Shift(line_shift_amount))
     } else {
@@ -202,8 +202,8 @@ fn chunkmosh(
     };
 
     let channel_shift = if rng.gen_bool(options.channel_shift) {
-        let amount = line_shift_dist.sample(rng) / channel_count;
-        let channel = channel_count_dist.sample(rng);
+        let amount = line_shift_distrib.sample(rng) / channel_count;
+        let channel = channel_count_distrib.sample(rng);
 
         Some(MoshLine::ChannelShift(amount, channel, channel_count))
     } else {
@@ -211,8 +211,8 @@ fn chunkmosh(
     };
 
     let channel_swap = if rng.gen_bool(options.channel_swap) {
-        let channel_1 = channel_count_dist.sample(rng);
-        let channel_2 = channel_count_dist.sample(rng);
+        let channel_1 = channel_count_distrib.sample(rng);
+        let channel_2 = channel_count_distrib.sample(rng);
 
         Some(MoshChunk::ChannelSwap(channel_1, channel_2, channel_count))
     } else {
