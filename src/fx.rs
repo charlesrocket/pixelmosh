@@ -1,4 +1,4 @@
-//! Effects
+//! Effects for `chunkmosh`
 
 /// Mutates provided bytes
 pub trait Mosh {
