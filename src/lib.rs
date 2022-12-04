@@ -84,7 +84,7 @@ impl Default for MoshOptions {
 ///     seed: 42,
 /// };
 ///
-/// let decoder = png::Decoder::new(File::open("example/delorean.png").unwrap());
+/// let decoder = png::Decoder::new(File::open("src/util/test-grayscale.png").unwrap());
 /// let mut reader = decoder.read_info().unwrap();
 /// let mut buf = vec![0; reader.output_buffer_size()];
 /// let info = reader.next_frame(&mut buf).unwrap();
