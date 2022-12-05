@@ -50,3 +50,18 @@ fn grayscale_alpha() {
     let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png").unwrap();
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
 }
+
+#[test]
+#[should_panic(expected = "EncodingError")]
+fn encoding() {
+    let buf = vec![0u8];
+    let info = png::OutputInfo {
+        width: 400,
+        height: 400,
+        color_type: png::ColorType::Rgba,
+        bit_depth: png::BitDepth::Eight,
+        line_size: 1600,
+    };
+
+    ops::write_file("moshed.png", &buf, &info).unwrap();
+}
