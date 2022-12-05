@@ -67,13 +67,13 @@ struct Args {
     output: String,
 }
 
-/// Logo
+// Logo
 const BANNER: &str = "┌─────────────────────────────────────┐\n\
                       │ █▀▄ █ ▀▄▀ ██▀ █   █▄ ▄█ ▄▀▄ ▄▀▀ █▄█ │\n\
                       │ █▀  █ █ █ █▄▄ █▄▄ █ ▀ █ ▀▄▀ ▄██ █ █ │\n\
                       └─────────────────────────────────────┘";
 
-/// TTY animation
+// TTY animation
 const SPINNER_1: [&str; 7] = [
     "∙∙∙∙∙",
     "●∙∙∙∙",
@@ -84,7 +84,7 @@ const SPINNER_1: [&str; 7] = [
     "∙∙∙∙∙",
 ];
 
-/// Terminal animation
+// Terminal animation
 const SPINNER_2: [&str; 7] = [
     "▱▱▱▱▱",
     "▰▱▱▱▱",
@@ -95,9 +95,7 @@ const SPINNER_2: [&str; 7] = [
     "▰▰▰▰▰",
 ];
 
-/// Checks for TTY
-///
-/// Returns `true` if a terminal emulator is detected.
+// Checks for TTY
 #[must_use]
 fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
