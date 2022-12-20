@@ -100,13 +100,13 @@ pub fn mosh(
     pixel_buffer: &mut [u8],
     options: &MoshOptions,
 ) -> Result<(), MoshError> {
-    let (w1, h1) = (image_info.width as usize, image_info.height as usize);
-    let (w2, h2) = (
-        w1 / options.pixelation as usize,
-        h1 / options.pixelation as usize,
+    let (orig_width, orig_height) = (image_info.width as usize, image_info.height as usize);
+    let (dest_width, dest_height) = (
+        orig_width / options.pixelation as usize,
+        orig_height / options.pixelation as usize,
     );
 
-    let mut dest = vec![0u8; w2 * h2 * image_info.color_type.samples()];
+    let mut dest = vec![0u8; dest_width * dest_height * image_info.color_type.samples()];
     let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
 
     let chunk_count_distrib = Uniform::from(options.min_rate..=options.max_rate);
@@ -120,18 +120,39 @@ pub fn mosh(
         match image_info.color_type {
             ColorType::GrayscaleAlpha | ColorType::Indexed => {}
             ColorType::Grayscale => {
-                resize::new(w1, h1, w2, h2, Gray8, Point)?
-                    .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
+                resize::new(
+                    orig_width,
+                    orig_height,
+                    dest_width,
+                    dest_height,
+                    Gray8,
+                    Point,
+                )?
+                .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
             }
 
             ColorType::Rgb => {
-                resize::new(w1, h1, w2, h2, RGB8, Point)?
-                    .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
+                resize::new(
+                    orig_width,
+                    orig_height,
+                    dest_width,
+                    dest_height,
+                    RGB8,
+                    Point,
+                )?
+                .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
             }
 
             ColorType::Rgba => {
-                resize::new(w1, h1, w2, h2, RGBA8, Point)?
-                    .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
+                resize::new(
+                    orig_width,
+                    orig_height,
+                    dest_width,
+                    dest_height,
+                    RGBA8,
+                    Point,
+                )?
+                .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
             }
         };
 
@@ -141,18 +162,39 @@ pub fn mosh(
             }
 
             ColorType::Grayscale => {
-                resize::new(w2, h2, w1, h1, Gray8, Point)?
-                    .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
+                resize::new(
+                    dest_width,
+                    dest_height,
+                    orig_width,
+                    orig_height,
+                    Gray8,
+                    Point,
+                )?
+                .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
             }
 
             ColorType::Rgb => {
-                resize::new(w2, h2, w1, h1, RGB8, Point)?
-                    .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
+                resize::new(
+                    dest_width,
+                    dest_height,
+                    orig_width,
+                    orig_height,
+                    RGB8,
+                    Point,
+                )?
+                .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
             }
 
             ColorType::Rgba => {
-                resize::new(w2, h2, w1, h1, RGBA8, Point)?
-                    .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
+                resize::new(
+                    dest_width,
+                    dest_height,
+                    orig_width,
+                    orig_height,
+                    RGBA8,
+                    Point,
+                )?
+                .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
             }
         };
     }
