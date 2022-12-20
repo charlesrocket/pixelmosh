@@ -28,11 +28,8 @@ impl Mosh for MoshChunk {
                 for i in 0..channel_value_count {
                     let channel_1_index = (i * channel_count) + channel_1;
                     let channel_2_index = (i * channel_count) + channel_2;
-                    let channel_1_value = chunk[channel_1_index];
-                    let channel_2_value = chunk[channel_2_index];
 
-                    chunk[channel_1_index] = channel_2_value;
-                    chunk[channel_2_index] = channel_1_value;
+                    chunk.swap(channel_1_index, channel_2_index);
                 }
             }
 
@@ -51,8 +48,11 @@ impl Mosh for MoshLine {
                 let channel_value_count = line_length / channel_count;
 
                 for i in 0..channel_value_count {
-                    line[(i * channel_count + channel) % line_length] =
-                        line[(i * channel_count + channel + (channel + 1) * amount) % line_length];
+                    let current_index = (i * channel_count + channel) % line_length;
+                    let target_index =
+                        (i * channel_count + channel + (channel + 1) * amount) % line_length;
+
+                    line.swap(current_index, target_index);
                 }
             }
 
