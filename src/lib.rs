@@ -52,7 +52,7 @@ impl Default for MoshOptions {
             channel_swap: 0.3,
             channel_shift: 0.3,
             seed: if cfg!(test) {
-                901_042_006
+                TEST_SEED
             } else {
                 rand::thread_rng().next_u64()
             },
@@ -290,6 +290,8 @@ fn chunkmosh(
         MoshChunk::Flip.glitch(chunk);
     };
 }
+
+const TEST_SEED: u64 = 901_042_006;
 
 #[cfg(test)]
 mod util;
