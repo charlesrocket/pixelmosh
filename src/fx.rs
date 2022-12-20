@@ -33,9 +33,7 @@ impl Mosh for MoshChunk {
                 }
             }
 
-            Self::Flip => {
-                chunk.reverse();
-            }
+            Self::Flip => chunk.reverse(),
         }
     }
 }
@@ -56,13 +54,8 @@ impl Mosh for MoshLine {
                 }
             }
 
-            Self::Shift(amount) => {
-                line.rotate_left(*amount);
-            }
-
-            Self::Reverse => {
-                line.reverse();
-            }
+            Self::Shift(amount) => line.rotate_left(*amount),
+            Self::Reverse => line.reverse(),
         }
     }
 }
