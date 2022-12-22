@@ -1,4 +1,4 @@
-use clap::{value_parser, Arg, ArgAction, Command};
+use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
 use indicatif::{ProgressBar, ProgressStyle};
 
 use std::env;
@@ -45,7 +45,7 @@ fn defaults() -> MoshOptions {
     MoshOptions::default()
 }
 
-fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
+fn arg_matches() -> ArgMatches {
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
@@ -116,9 +116,12 @@ fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
             .value_name("OUTPUT")
             .help("Output filename")
             .hide_default_value(true)
-            .default_value("moshed.png"),)
-        .get_matches();
+            .default_value("moshed.png"),);
+    matches.get_matches()
+}
 
+fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
+    let matches = arg_matches();
     let input = matches
         .get_one::<PathBuf>("file")
         .ok_or(MoshError::InvalidParameters)?;
