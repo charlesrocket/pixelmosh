@@ -73,7 +73,7 @@ fn arg_matches() -> ArgMatches {
             .long("pixelation")
             .value_name("PIXELATION")
             .help("Pixelation rate")
-            .value_parser(value_parser!(u8)))
+            .value_parser(value_parser!(u8).range(1..)))
         .arg(Arg::new("line-shift")
             .short('l')
             .long("line-shift")
