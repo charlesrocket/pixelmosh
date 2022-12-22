@@ -117,6 +117,7 @@ fn arg_matches() -> ArgMatches {
             .long("seed")
             .value_name("SEED")
             .help("Random seed")
+            .hide_default_value(true)
             .value_parser(value_parser!(u64))
             .default_value(defaults().seed.to_string()))
         .arg(Arg::new("output")
