@@ -40,8 +40,11 @@ fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
 
+fn defaults() -> MoshOptions {
+    MoshOptions::default()
+}
+
 fn args() -> (PathBuf, String, MoshOptions) {
-    let defaults = MoshOptions::default();
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
@@ -120,27 +123,27 @@ fn args() -> (PathBuf, String, MoshOptions) {
     let options = MoshOptions {
         min_rate: *matches
             .get_one::<u16>("min-rate")
-            .unwrap_or(&defaults.min_rate),
+            .unwrap_or(&defaults().min_rate),
         max_rate: *matches
             .get_one::<u16>("max-rate")
-            .unwrap_or(&defaults.max_rate),
+            .unwrap_or(&defaults().max_rate),
         pixelation: *matches
             .get_one::<u8>("pixelation")
-            .unwrap_or(&defaults.pixelation),
+            .unwrap_or(&defaults().pixelation),
         line_shift: *matches
             .get_one::<f64>("line-shift")
-            .unwrap_or(&defaults.line_shift),
+            .unwrap_or(&defaults().line_shift),
         reverse: *matches
             .get_one::<f64>("reverse")
-            .unwrap_or(&defaults.reverse),
-        flip: *matches.get_one::<f64>("flip").unwrap_or(&defaults.flip),
+            .unwrap_or(&defaults().reverse),
+        flip: *matches.get_one::<f64>("flip").unwrap_or(&defaults().flip),
         channel_swap: *matches
             .get_one::<f64>("channel-swap")
-            .unwrap_or(&defaults.channel_swap),
+            .unwrap_or(&defaults().channel_swap),
         channel_shift: *matches
             .get_one::<f64>("channel-shift")
-            .unwrap_or(&defaults.channel_shift),
-        seed: *matches.get_one::<u64>("seed").unwrap_or(&defaults.seed),
+            .unwrap_or(&defaults().channel_shift),
+        seed: *matches.get_one::<u64>("seed").unwrap_or(&defaults().seed),
     };
 
     (input.clone(), output.to_string(), options)
