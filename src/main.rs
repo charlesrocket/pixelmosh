@@ -40,7 +40,7 @@ fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
 
-fn main() {
+fn args() -> (PathBuf, String, MoshOptions) {
     let defaults = MoshOptions::default();
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
@@ -114,7 +114,6 @@ fn main() {
             .value_parser(value_parser!(u64)),)
         .get_matches();
 
-    let spinner = ProgressBar::new_spinner();
     let input = matches.get_one::<PathBuf>("file").unwrap();
     let output = matches.get_one::<String>("output").unwrap();
     let options = MoshOptions {
@@ -143,6 +142,11 @@ fn main() {
         seed: *matches.get_one::<u64>("seed").unwrap_or(&defaults.seed),
     };
 
+    (input.clone(), output.to_string(), options)
+}
+
+fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
+    let spinner = ProgressBar::new_spinner();
     let spinner_style = if cfg!(unix) {
         if display_var() | cfg!(target_os = "macos") {
             SPINNER_2
@@ -169,7 +173,7 @@ fn main() {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    match libmosh::mosh(&info, &mut buf, &options) {
+    match libmosh::mosh(&info, &mut buf, options) {
         Ok(image) => image,
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
@@ -185,4 +189,9 @@ fn main() {
             std::process::exit(1)
         }
     };
+}
+
+fn main() {
+    let (input, output, options) = args();
+    cli(input, &output, &options);
 }
