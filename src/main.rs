@@ -53,7 +53,7 @@ fn args() -> (PathBuf, String, MoshOptions) {
         .arg(Arg::new("file")
             .action(ArgAction::Set)
             .value_name("FILE")
-            .help("Path to target")
+            .help("File path")
             .required(true).value_parser(value_parser!(PathBuf)),)
         .arg(Arg::new("min-rate")
             .short('n')
