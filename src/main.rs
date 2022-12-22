@@ -52,12 +52,6 @@ fn args() -> (PathBuf, String, MoshOptions) {
             .value_name("FILE")
             .help("Path to target")
             .required(true).value_parser(value_parser!(PathBuf)),)
-        .arg(Arg::new("output")
-            .short('o')
-            .long("output")
-            .value_name("OUTPUT")
-            .help("Output filename")
-            .default_value("moshed.png"),)
         .arg(Arg::new("min-rate")
             .short('n')
             .long("min-rate")
@@ -112,6 +106,13 @@ fn args() -> (PathBuf, String, MoshOptions) {
             .value_name("SEED")
             .help("Random seed")
             .value_parser(value_parser!(u64)),)
+        .arg(Arg::new("output")
+            .short('o')
+            .long("output")
+            .value_name("OUTPUT")
+            .help("Output filename")
+            .hide_default_value(true)
+            .default_value("moshed.png"),)
         .get_matches();
 
     let input = matches.get_one::<PathBuf>("file").unwrap();
