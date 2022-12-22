@@ -61,55 +61,64 @@ fn arg_matches() -> ArgMatches {
             .long("min-rate")
             .value_name("MIN RATE")
             .help("Minimum chunks to process")
-            .value_parser(value_parser!(u16)))
+            .value_parser(value_parser!(u16))
+            .default_value(defaults().min_rate.to_string()))
         .arg(Arg::new("max-rate")
             .short('m')
             .long("max-rate")
             .value_name("MAX RATE")
             .help("Maximum chunks to process")
-            .value_parser(value_parser!(u16)))
+            .value_parser(value_parser!(u16))
+            .default_value(defaults().max_rate.to_string()))
         .arg(Arg::new("pixelation")
             .short('p')
             .long("pixelation")
             .value_name("PIXELATION")
             .help("Pixelation rate")
-            .value_parser(value_parser!(u8).range(1..)))
+            .value_parser(value_parser!(u8).range(1..))
+            .default_value(defaults().pixelation.to_string()))
         .arg(Arg::new("line-shift")
             .short('l')
             .long("line-shift")
             .value_name("LINE SHIFT")
             .help("Line shift rate")
-            .value_parser(value_parser!(f64)))
+            .value_parser(value_parser!(f64))
+            .default_value(defaults().line_shift.to_string()))
         .arg(Arg::new("reverse")
             .short('r')
             .long("reverse")
             .value_name("REVERSE")
             .help("Reverse rate")
-            .value_parser(value_parser!(f64)))
+            .value_parser(value_parser!(f64))
+            .default_value(defaults().reverse.to_string()))
         .arg(Arg::new("flip")
             .short('f')
             .long("flip")
             .value_name("FLIP")
             .help("Flip rate")
-            .value_parser(value_parser!(f64)))
+            .value_parser(value_parser!(f64))
+            .default_value(defaults().flip.to_string()))
         .arg(Arg::new("channel-swap")
             .short('c')
             .long("channel-swap")
             .value_name("CHANNEL SWAP")
             .help("Channel swap rate")
-            .value_parser(value_parser!(f64)))
+            .value_parser(value_parser!(f64))
+            .default_value(defaults().channel_swap.to_string()))
         .arg(Arg::new("channel-shift")
             .short('t')
             .long("channel-shift")
             .value_name("CHANNEL SHIFT")
             .help("Channel shift rate")
-            .value_parser(value_parser!(f64)))
+            .value_parser(value_parser!(f64))
+            .default_value(defaults().channel_shift.to_string()))
         .arg(Arg::new("seed")
             .short('s')
             .long("seed")
             .value_name("SEED")
             .help("Random seed")
-            .value_parser(value_parser!(u64)))
+            .value_parser(value_parser!(u64))
+            .default_value(defaults().seed.to_string()))
         .arg(Arg::new("output")
             .short('o')
             .long("output")
@@ -132,27 +141,31 @@ fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
     let options = MoshOptions {
         min_rate: *matches
             .get_one::<u16>("min-rate")
-            .unwrap_or(&defaults().min_rate),
+            .ok_or(MoshError::InvalidParameters)?,
         max_rate: *matches
             .get_one::<u16>("max-rate")
-            .unwrap_or(&defaults().max_rate),
+            .ok_or(MoshError::InvalidParameters)?,
         pixelation: *matches
             .get_one::<u8>("pixelation")
-            .unwrap_or(&defaults().pixelation),
+            .ok_or(MoshError::InvalidParameters)?,
         line_shift: *matches
             .get_one::<f64>("line-shift")
-            .unwrap_or(&defaults().line_shift),
+            .ok_or(MoshError::InvalidParameters)?,
         reverse: *matches
             .get_one::<f64>("reverse")
-            .unwrap_or(&defaults().reverse),
-        flip: *matches.get_one::<f64>("flip").unwrap_or(&defaults().flip),
+            .ok_or(MoshError::InvalidParameters)?,
+        flip: *matches
+            .get_one::<f64>("flip")
+            .ok_or(MoshError::InvalidParameters)?,
         channel_swap: *matches
             .get_one::<f64>("channel-swap")
-            .unwrap_or(&defaults().channel_swap),
+            .ok_or(MoshError::InvalidParameters)?,
         channel_shift: *matches
             .get_one::<f64>("channel-shift")
-            .unwrap_or(&defaults().channel_shift),
-        seed: *matches.get_one::<u64>("seed").unwrap_or(&defaults().seed),
+            .ok_or(MoshError::InvalidParameters)?,
+        seed: *matches
+            .get_one::<u64>("seed")
+            .ok_or(MoshError::InvalidParameters)?,
     };
 
     Ok((input.clone(), output.to_string(), options))
