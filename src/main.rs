@@ -4,6 +4,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use std::env;
 use std::path::PathBuf;
 
+use libmosh::err::MoshError;
 use libmosh::{ops, MoshOptions};
 
 // Logo
@@ -44,7 +45,7 @@ fn defaults() -> MoshOptions {
     MoshOptions::default()
 }
 
-fn args() -> (PathBuf, String, MoshOptions) {
+fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
@@ -118,8 +119,12 @@ fn args() -> (PathBuf, String, MoshOptions) {
             .default_value("moshed.png"),)
         .get_matches();
 
-    let input = matches.get_one::<PathBuf>("file").unwrap();
-    let output = matches.get_one::<String>("output").unwrap();
+    let input = matches
+        .get_one::<PathBuf>("file")
+        .ok_or(MoshError::InvalidParameters)?;
+    let output = matches
+        .get_one::<String>("output")
+        .ok_or(MoshError::InvalidParameters)?;
     let options = MoshOptions {
         min_rate: *matches
             .get_one::<u16>("min-rate")
@@ -146,7 +151,7 @@ fn args() -> (PathBuf, String, MoshOptions) {
         seed: *matches.get_one::<u64>("seed").unwrap_or(&defaults().seed),
     };
 
-    (input.clone(), output.to_string(), options)
+    Ok((input.clone(), output.to_string(), options))
 }
 
 fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
@@ -196,6 +201,13 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
 }
 
 fn main() {
-    let (input, output, options) = args();
+    let (input, output, options) = match args() {
+        Ok((input, output, options)) => (input, output, options),
+        Err(error) => {
+            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
+            std::process::exit(1)
+        }
+    };
+
     cli(input, &output, &options);
 }
