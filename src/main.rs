@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 use libmosh::err::MoshError;
 use libmosh::err::MoshError::InvalidParameters;
-use libmosh::{ops, MoshOptions};
+use libmosh::{mosh, ops, MoshOptions};
 
 // Logo
 const BANNER: &str = "┌─────────────────────────────────────┐\n\
@@ -185,7 +185,7 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
     };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    match libmosh::mosh(&info, &mut buf, options) {
+    match mosh(&info, &mut buf, options) {
         Ok(image) => image,
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
