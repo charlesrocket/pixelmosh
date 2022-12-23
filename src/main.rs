@@ -5,6 +5,7 @@ use std::env;
 use std::path::PathBuf;
 
 use libmosh::err::MoshError;
+use libmosh::err::MoshError::InvalidParameters;
 use libmosh::{ops, MoshOptions};
 
 // Logo
@@ -135,38 +136,32 @@ fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
     let matches = arg_matches();
     let input = matches
         .get_one::<PathBuf>("file")
-        .ok_or(MoshError::InvalidParameters)?;
+        .ok_or(InvalidParameters)?;
     let output = matches
         .get_one::<String>("output")
-        .ok_or(MoshError::InvalidParameters)?;
+        .ok_or(InvalidParameters)?;
     let options = MoshOptions {
         min_rate: *matches
             .get_one::<u16>("min-rate")
-            .ok_or(MoshError::InvalidParameters)?,
+            .ok_or(InvalidParameters)?,
         max_rate: *matches
             .get_one::<u16>("max-rate")
-            .ok_or(MoshError::InvalidParameters)?,
+            .ok_or(InvalidParameters)?,
         pixelation: *matches
             .get_one::<u8>("pixelation")
-            .ok_or(MoshError::InvalidParameters)?,
+            .ok_or(InvalidParameters)?,
         line_shift: *matches
             .get_one::<f64>("line-shift")
-            .ok_or(MoshError::InvalidParameters)?,
-        reverse: *matches
-            .get_one::<f64>("reverse")
-            .ok_or(MoshError::InvalidParameters)?,
-        flip: *matches
-            .get_one::<f64>("flip")
-            .ok_or(MoshError::InvalidParameters)?,
+            .ok_or(InvalidParameters)?,
+        reverse: *matches.get_one::<f64>("reverse").ok_or(InvalidParameters)?,
+        flip: *matches.get_one::<f64>("flip").ok_or(InvalidParameters)?,
         channel_swap: *matches
             .get_one::<f64>("channel-swap")
-            .ok_or(MoshError::InvalidParameters)?,
+            .ok_or(InvalidParameters)?,
         channel_shift: *matches
             .get_one::<f64>("channel-shift")
-            .ok_or(MoshError::InvalidParameters)?,
-        seed: *matches
-            .get_one::<u64>("seed")
-            .ok_or(MoshError::InvalidParameters)?,
+            .ok_or(InvalidParameters)?,
+        seed: *matches.get_one::<u64>("seed").ok_or(InvalidParameters)?,
     };
 
     Ok((input.clone(), output.to_string(), options))
