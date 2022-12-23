@@ -140,6 +140,8 @@ fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
     let output = matches
         .get_one::<String>("output")
         .ok_or(InvalidParameters)?;
+    // TODO
+    // Rename values
     let options = MoshOptions {
         min_rate: *matches.get_one::<u16>("mnrate").ok_or(InvalidParameters)?,
         max_rate: *matches.get_one::<u16>("mxrate").ok_or(InvalidParameters)?,
