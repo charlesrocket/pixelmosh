@@ -1,13 +1,14 @@
 use adler::adler32;
 
-use super::{mosh, ops, MoshOptions};
+use super::ops::{read_file, write_file};
+use super::{mosh, MoshOptions};
 
 #[test]
 fn rgb() {
-    let (mut buf, info) = ops::read_file("src/util/test-rgb.png").unwrap();
+    let (mut buf, info) = read_file("src/util/test-rgb.png").unwrap();
 
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
-    ops::write_file("moshed.png", &buf, &info).unwrap();
+    write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -18,10 +19,10 @@ fn rgb() {
 
 #[test]
 fn rgba() {
-    let (mut buf, info) = ops::read_file("src/util/test-rgb-alpha.png").unwrap();
+    let (mut buf, info) = read_file("src/util/test-rgb-alpha.png").unwrap();
 
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
-    ops::write_file("moshed.png", &buf, &info).unwrap();
+    write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -32,10 +33,10 @@ fn rgba() {
 
 #[test]
 fn grayscale() {
-    let (mut buf, info) = ops::read_file("src/util/test-grayscale.png").unwrap();
+    let (mut buf, info) = read_file("src/util/test-grayscale.png").unwrap();
 
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
-    ops::write_file("moshed.png", &buf, &info).unwrap();
+    write_file("moshed.png", &buf, &info).unwrap();
 
     let output = std::fs::File::open("moshed.png").unwrap();
     let mut file = std::io::BufReader::new(output);
@@ -47,7 +48,7 @@ fn grayscale() {
 #[test]
 #[should_panic(expected = "UnsupportedColorType")]
 fn grayscale_alpha() {
-    let (mut buf, info) = ops::read_file("src/util/test-grayscale-alpha.png").unwrap();
+    let (mut buf, info) = read_file("src/util/test-grayscale-alpha.png").unwrap();
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
 }
 
@@ -63,5 +64,5 @@ fn encoding() {
         line_size: 1600,
     };
 
-    ops::write_file("moshed.png", &buf, &info).unwrap();
+    write_file("moshed.png", &buf, &info).unwrap();
 }

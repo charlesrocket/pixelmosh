@@ -6,7 +6,8 @@ use std::path::PathBuf;
 
 use libmosh::err::MoshError;
 use libmosh::err::MoshError::InvalidParameters;
-use libmosh::{mosh, ops, MoshOptions};
+use libmosh::ops::{read_file, write_file};
+use libmosh::{mosh, MoshOptions};
 
 // Logo
 const BANNER: &str = "┌─────────────────────────────────────┐\n\
@@ -176,7 +177,7 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
     spinner.set_message("\x1b[36mreading input\x1b[0m");
 
-    let (mut buf, info) = match ops::read_file(input) {
+    let (mut buf, info) = match read_file(input) {
         Ok((buf, info)) => (buf, info),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
@@ -194,7 +195,7 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
     };
 
     spinner.set_message("\x1b[33mwriting output\x1b[0m");
-    match ops::write_file(output, &buf, &info) {
+    match write_file(output, &buf, &info) {
         Ok(()) => spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m"),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
