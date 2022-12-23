@@ -89,7 +89,6 @@ impl Default for MoshOptions {
 ///
 /// mosh(&info, &mut buf, &options)?;
 /// # Ok::<(), MoshError>(())
-///
 /// ````
 ///
 /// [`InvalidParameters`]: crate::err::MoshError::InvalidParameters
