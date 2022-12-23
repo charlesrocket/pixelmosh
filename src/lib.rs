@@ -106,7 +106,7 @@ pub fn mosh(
         orig_height / options.pixelation as usize,
     );
 
-    let mut dest = vec![0u8; dest_width * dest_height * image_info.color_type.samples()];
+    let mut dest = vec![0_u8; dest_width * dest_height * image_info.color_type.samples()];
     let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
 
     let chunk_count_distrib = Uniform::from(options.min_rate..=options.max_rate);

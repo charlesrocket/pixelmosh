@@ -15,7 +15,7 @@ pub fn read_file(file: impl AsRef<Path>) -> Result<(Vec<u8>, png::OutputInfo), M
     let input = File::open(file)?;
     let decoder = png::Decoder::new(input);
     let mut reader = decoder.read_info()?;
-    let mut buf = vec![0; reader.output_buffer_size()];
+    let mut buf = vec![0_u8; reader.output_buffer_size()];
     let info = reader.next_frame(&mut buf)?;
 
     Ok((buf, info))

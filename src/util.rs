@@ -54,7 +54,7 @@ fn grayscale_alpha() {
 #[test]
 #[should_panic(expected = "EncodingError")]
 fn encoding() {
-    let buf = vec![0u8];
+    let buf = vec![0_u8];
     let info = png::OutputInfo {
         width: 400,
         height: 400,
