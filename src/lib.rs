@@ -70,12 +70,12 @@ impl Default for MoshOptions {
 ///
 /// # Example
 /// ````
-/// use libmosh::{ops, MoshOptions};
+/// use libmosh::{mosh, ops, MoshOptions};
 /// use libmosh::err::MoshError;
 /// use std::fs::File;
 ///
 /// let (mut buf, info) = ops::read_file("src/util/test-grayscale.png")?;
-/// let options = libmosh::MoshOptions {
+/// let options = MoshOptions {
 ///     min_rate: 5,
 ///     max_rate: 7,
 ///     pixelation: 10,
@@ -87,7 +87,7 @@ impl Default for MoshOptions {
 ///     seed: 42,
 /// };
 ///
-/// libmosh::mosh(&info, &mut buf, &options)?;
+/// mosh(&info, &mut buf, &options)?;
 /// # Ok::<(), MoshError>(())
 ///
 /// ````
