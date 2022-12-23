@@ -74,7 +74,6 @@ impl Default for MoshOptions {
 /// use libmosh::err::MoshError;
 /// use std::fs::File;
 ///
-/// # fn main() -> Result<(), MoshError> {
 /// let (mut buf, info) = ops::read_file("src/util/test-grayscale.png")?;
 /// let options = libmosh::MoshOptions {
 ///     min_rate: 5,
@@ -89,8 +88,8 @@ impl Default for MoshOptions {
 /// };
 ///
 /// libmosh::mosh(&info, &mut buf, &options)?;
-/// # Ok(())
-/// # }
+/// # Ok::<(), MoshError>(())
+///
 /// ````
 ///
 /// [`InvalidParameters`]: crate::err::MoshError::InvalidParameters
