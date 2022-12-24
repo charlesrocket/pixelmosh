@@ -4,8 +4,6 @@ use indicatif::{ProgressBar, ProgressStyle};
 use std::env;
 use std::path::PathBuf;
 
-use libmosh::err::MoshError;
-use libmosh::err::MoshError::InvalidParameters;
 use libmosh::ops::{read_file, write_file};
 use libmosh::{mosh, MoshOptions};
 
@@ -58,35 +56,35 @@ fn arg_matches() -> ArgMatches {
             .value_name("FILE")
             .help("File path")
             .required(true).value_parser(value_parser!(PathBuf)))
-        .arg(Arg::new("mnrate")
+        .arg(Arg::new("minrate")
             .short('n')
             .long("min-rate")
             .value_name("MIN_RATE")
             .help("Minimum chunks to process")
             .value_parser(value_parser!(u16))
             .default_value(defaults().min_rate.to_string()))
-        .arg(Arg::new("mxrate")
+        .arg(Arg::new("maxrate")
             .short('m')
             .long("max-rate")
             .value_name("MAX_RATE")
             .help("Maximum chunks to process")
             .value_parser(value_parser!(u16))
             .default_value(defaults().max_rate.to_string()))
-        .arg(Arg::new("pixel")
+        .arg(Arg::new("pixelation")
             .short('p')
             .long("pixelation")
             .value_name("PIXELATION")
             .help("Pixelation rate")
             .value_parser(value_parser!(u8).range(1..))
             .default_value(defaults().pixelation.to_string()))
-        .arg(Arg::new("lnsft")
+        .arg(Arg::new("lineshift")
             .short('l')
             .long("line-shift")
             .value_name("LINE_SHIFT")
             .help("Line shift rate")
             .value_parser(value_parser!(f64))
             .default_value(defaults().line_shift.to_string()))
-        .arg(Arg::new("revrs")
+        .arg(Arg::new("reverse")
             .short('r')
             .long("reverse")
             .value_name("REVERSE")
@@ -100,14 +98,14 @@ fn arg_matches() -> ArgMatches {
             .help("Flip rate")
             .value_parser(value_parser!(f64))
             .default_value(defaults().flip.to_string()))
-        .arg(Arg::new("cswp")
+        .arg(Arg::new("channelswap")
             .short('c')
             .long("channel-swap")
             .value_name("CHANNEL_SWAP")
             .help("Channel swap rate")
             .value_parser(value_parser!(f64))
             .default_value(defaults().channel_swap.to_string()))
-        .arg(Arg::new("cft")
+        .arg(Arg::new("channelshift")
             .short('t')
             .long("channel-shift")
             .value_name("CHANNEL_SHIFT")
@@ -133,29 +131,23 @@ fn arg_matches() -> ArgMatches {
     matches.get_matches()
 }
 
-fn args() -> Result<(PathBuf, String, MoshOptions), MoshError> {
+fn args() -> (PathBuf, String, MoshOptions) {
     let matches = arg_matches();
-    let input = matches
-        .get_one::<PathBuf>("file")
-        .ok_or(InvalidParameters)?;
-    let output = matches
-        .get_one::<String>("output")
-        .ok_or(InvalidParameters)?;
-    // TODO
-    // Rename values
+    let input = matches.get_one::<PathBuf>("file").unwrap();
+    let output = matches.get_one::<String>("output").unwrap();
     let options = MoshOptions {
-        min_rate: *matches.get_one::<u16>("mnrate").ok_or(InvalidParameters)?,
-        max_rate: *matches.get_one::<u16>("mxrate").ok_or(InvalidParameters)?,
-        pixelation: *matches.get_one::<u8>("pixel").ok_or(InvalidParameters)?,
-        line_shift: *matches.get_one::<f64>("lnsft").ok_or(InvalidParameters)?,
-        reverse: *matches.get_one::<f64>("revrs").ok_or(InvalidParameters)?,
-        flip: *matches.get_one::<f64>("flip").ok_or(InvalidParameters)?,
-        channel_swap: *matches.get_one::<f64>("cswp").ok_or(InvalidParameters)?,
-        channel_shift: *matches.get_one::<f64>("cft").ok_or(InvalidParameters)?,
-        seed: *matches.get_one::<u64>("seed").ok_or(InvalidParameters)?,
+        min_rate: *matches.get_one::<u16>("minrate").unwrap(),
+        max_rate: *matches.get_one::<u16>("maxrate").unwrap(),
+        pixelation: *matches.get_one::<u8>("pixelation").unwrap(),
+        line_shift: *matches.get_one::<f64>("lineshift").unwrap(),
+        reverse: *matches.get_one::<f64>("reverse").unwrap(),
+        flip: *matches.get_one::<f64>("flip").unwrap(),
+        channel_swap: *matches.get_one::<f64>("channelswap").unwrap(),
+        channel_shift: *matches.get_one::<f64>("channelshift").unwrap(),
+        seed: *matches.get_one::<u64>("seed").unwrap(),
     };
 
-    Ok((input.clone(), output.to_string(), options))
+    (input.clone(), output.to_string(), options)
 }
 
 fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
@@ -205,13 +197,6 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
 }
 
 fn main() {
-    let (input, output, options) = match args() {
-        Ok((input, output, options)) => (input, output, options),
-        Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
-            std::process::exit(1)
-        }
-    };
-
+    let (input, output, options) = args();
     cli(input, &output, &options);
 }
