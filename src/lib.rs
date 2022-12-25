@@ -286,7 +286,6 @@ fn chunkmosh(
     };
 }
 
-/// Test seed for unit testing
 const TEST_SEED: u64 = 901_042_006;
 
 #[cfg(test)]
