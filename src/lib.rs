@@ -89,7 +89,7 @@ impl Default for MoshOptions {
 /// };
 ///
 /// mosh(&info, &mut buf, &options)?;
-/// ops::write_file(output, &buf, &info);
+/// ops::write_file(output, &buf, &info)?;
 /// # Ok::<(), MoshError>(())
 /// ````
 ///
