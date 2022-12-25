@@ -101,6 +101,10 @@ pub fn mosh(
     pixel_buffer: &mut [u8],
     options: &MoshOptions,
 ) -> Result<(), MoshError> {
+    if options.pixelation == 0 {
+        return Err(MoshError::InvalidParameters);
+    }
+
     let (orig_width, orig_height) = (image_info.width as usize, image_info.height as usize);
     let (dest_width, dest_height) = (
         orig_width / options.pixelation as usize,

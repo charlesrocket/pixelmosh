@@ -66,3 +66,22 @@ fn encoding() {
 
     write_file("moshed.png", &buf, &info).unwrap();
 }
+
+#[test]
+#[should_panic(expected = "InvalidParameters")]
+fn pixelation() {
+    let (mut buf, info) = read_file("src/util/test-grayscale.png").unwrap();
+    let options = MoshOptions {
+        min_rate: 3,
+        max_rate: 5,
+        pixelation: 0,
+        line_shift: 0.5,
+        reverse: 0.4,
+        flip: 0.3,
+        channel_swap: 0.2,
+        channel_shift: 0.1,
+        seed: 42,
+    };
+
+    mosh(&info, &mut buf, &options).unwrap();
+}
