@@ -1,4 +1,8 @@
 use adler::adler32;
+use png::{BitDepth, ColorType, OutputInfo};
+
+use std::fs::File;
+use std::io::BufReader;
 
 use super::ops::{read_file, write_file};
 use super::{mosh, MoshOptions};
@@ -10,8 +14,8 @@ fn rgb() {
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     write_file("moshed.png", &buf, &info).unwrap();
 
-    let output = std::fs::File::open("moshed.png").unwrap();
-    let mut file = std::io::BufReader::new(output);
+    let output = File::open("moshed.png").unwrap();
+    let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
     assert_eq!(checksum, 2_285_399_975);
@@ -24,8 +28,8 @@ fn rgba() {
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     write_file("moshed.png", &buf, &info).unwrap();
 
-    let output = std::fs::File::open("moshed.png").unwrap();
-    let mut file = std::io::BufReader::new(output);
+    let output = File::open("moshed.png").unwrap();
+    let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
     assert_eq!(checksum, 105_467_096);
@@ -38,8 +42,8 @@ fn grayscale() {
     mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
     write_file("moshed.png", &buf, &info).unwrap();
 
-    let output = std::fs::File::open("moshed.png").unwrap();
-    let mut file = std::io::BufReader::new(output);
+    let output = File::open("moshed.png").unwrap();
+    let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
     assert_eq!(checksum, 1_718_963_212);
@@ -55,11 +59,11 @@ fn grayscale_alpha() {
 #[test]
 #[should_panic(expected = "EncodingError")]
 fn encoding() {
-    let info = png::OutputInfo {
+    let info = OutputInfo {
         width: 400,
         height: 400,
-        color_type: png::ColorType::Rgba,
-        bit_depth: png::BitDepth::Eight,
+        color_type: ColorType::Rgba,
+        bit_depth: BitDepth::Eight,
         line_size: 1600,
     };
 
@@ -69,11 +73,11 @@ fn encoding() {
 #[test]
 #[should_panic(expected = "InvalidParameters")]
 fn pixelation() {
-    let info = png::OutputInfo {
+    let info = OutputInfo {
         width: 1,
         height: 1,
-        color_type: png::ColorType::Rgba,
-        bit_depth: png::BitDepth::Eight,
+        color_type: ColorType::Rgba,
+        bit_depth: BitDepth::Eight,
         line_size: 1,
     };
 
