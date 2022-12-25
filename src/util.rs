@@ -67,7 +67,7 @@ fn encoding() {
         line_size: 1600,
     };
 
-    write_file("moshed.png", &mut [0_u8], &info).unwrap();
+    write_file("moshed.png", &[0_u8], &info).unwrap();
 }
 
 #[test]
