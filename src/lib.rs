@@ -75,6 +75,7 @@ impl Default for MoshOptions {
 /// use std::fs::File;
 ///
 /// let (mut buf, info) = ops::read_file("src/util/test-grayscale.png")?;
+/// let output = "test.png";
 /// let options = MoshOptions {
 ///     min_rate: 5,
 ///     max_rate: 7,
@@ -88,6 +89,7 @@ impl Default for MoshOptions {
 /// };
 ///
 /// mosh(&info, &mut buf, &options)?;
+/// ops::write_file(output, &buf, &info);
 /// # Ok::<(), MoshError>(())
 /// ````
 ///
