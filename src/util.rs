@@ -55,7 +55,6 @@ fn grayscale_alpha() {
 #[test]
 #[should_panic(expected = "EncodingError")]
 fn encoding() {
-    let buf = vec![0_u8];
     let info = png::OutputInfo {
         width: 400,
         height: 400,
@@ -64,7 +63,7 @@ fn encoding() {
         line_size: 1600,
     };
 
-    write_file("moshed.png", &buf, &info).unwrap();
+    write_file("moshed.png", &mut [0_u8], &info).unwrap();
 }
 
 #[test]
