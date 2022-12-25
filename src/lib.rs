@@ -234,31 +234,25 @@ fn chunkmosh(
     let reverse = rng.gen_bool(options.reverse);
     let flip = rng.gen_bool(options.flip);
 
-    let line_shift = if rng.gen_bool(options.line_shift) {
+    let line_shift = rng.gen_bool(options.line_shift).then(|| {
         let line_shift_amount = line_shift_distrib.sample(rng);
 
-        Some(MoshLine::Shift(line_shift_amount))
-    } else {
-        None
-    };
+        MoshLine::Shift(line_shift_amount)
+    });
 
-    let channel_shift = if rng.gen_bool(options.channel_shift) {
+    let channel_shift = rng.gen_bool(options.channel_shift).then(|| {
         let amount = line_shift_distrib.sample(rng) / channel_count;
         let channel = channel_count_distrib.sample(rng);
 
-        Some(MoshLine::ChannelShift(amount, channel, channel_count))
-    } else {
-        None
-    };
+        MoshLine::ChannelShift(amount, channel, channel_count)
+    });
 
-    let channel_swap = if rng.gen_bool(options.channel_swap) {
+    let channel_swap = rng.gen_bool(options.channel_swap).then(|| {
         let channel_1 = channel_count_distrib.sample(rng);
         let channel_2 = channel_count_distrib.sample(rng);
 
-        Some(MoshChunk::ChannelSwap(channel_1, channel_2, channel_count))
-    } else {
-        None
-    };
+        MoshChunk::ChannelSwap(channel_1, channel_2, channel_count)
+    });
 
     for line_number in first_line..last_line {
         let line_start = line_number * image_info.line_size;
