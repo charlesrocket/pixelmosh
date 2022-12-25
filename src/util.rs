@@ -70,7 +70,14 @@ fn encoding() {
 #[test]
 #[should_panic(expected = "InvalidParameters")]
 fn pixelation() {
-    let (mut buf, info) = read_file("src/util/test-grayscale.png").unwrap();
+    let info = png::OutputInfo {
+        width: 1,
+        height: 1,
+        color_type: png::ColorType::Rgba,
+        bit_depth: png::BitDepth::Eight,
+        line_size: 1,
+    };
+
     let options = MoshOptions {
         min_rate: 3,
         max_rate: 5,
@@ -83,5 +90,5 @@ fn pixelation() {
         seed: 42,
     };
 
-    mosh(&info, &mut buf, &options).unwrap();
+    mosh(&info, &mut [0_u8], &options).unwrap();
 }
