@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="PixelmoshWindow" parent="GtkApplicationWindow">
+    <property name="title">PIXELMOSH</property>
+    <child>
+      <object class="GtkButton" id="button">
+        <property name="label">Press me!</property>
+        <property name="margin-top">50</property>
+        <property name="margin-bottom">50</property>
+        <property name="margin-start">50</property>
+        <property name="margin-end">50</property>
+      </object>
+    </child>
+  </template>
+</interface>
