@@ -1,5 +1,5 @@
 use glib::Object;
-use gtk::{gio, glib, Application};
+use gtk::{gio, glib};
 
 mod imp;
 
@@ -11,7 +11,7 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new(app: &Application) -> Self {
+    pub fn new(app: &adw::Application) -> Self {
         Object::new(&[("application", app)])
     }
 }
