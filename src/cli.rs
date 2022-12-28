@@ -50,7 +50,7 @@ fn arg_matches() -> ArgMatches {
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
         .version(env!("CARGO_PKG_VERSION"))
-        .help_template("{about-with-newline}PNG corrupter\n\n{usage-heading} {usage}\n\n{all-args}{after-help}")
+        .help_template("{name} v{version} CLI\n{about-with-newline}PNG corrupter\n\n{usage-heading} {usage}\n\n{all-args}{after-help}")
         .arg(Arg::new("file")
             .action(ArgAction::Set)
             .value_name("FILE")
