@@ -1,6 +1,6 @@
+use adw::prelude::*;
+use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
-use gtk::prelude::*;
-use gtk::subclass::prelude::*;
 use gtk::{glib, Button, CompositeTemplate};
 
 #[derive(CompositeTemplate, Default)]

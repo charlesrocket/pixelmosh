@@ -1,5 +1,5 @@
-use gtk::gio;
-use gtk::prelude::*;
+use adw::gio;
+use adw::prelude::*;
 use window::Window;
 
 mod window;
