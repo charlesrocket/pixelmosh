@@ -4,7 +4,7 @@ use window::Window;
 
 mod window;
 
-const APP_ID: &str = "org.hellbyte.PIXELMOSH";
+const APP_ID: &str = "org.hellbyte.pixelmosh";
 
 pub fn start() {
     gio::resources_register_include!("pixelmosh.gresource").expect("Failed to register resources.");

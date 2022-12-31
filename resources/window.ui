@@ -1,15 +1,205 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="PixelmoshWindow" parent="GtkApplicationWindow">
-    <property name="title">PIXELMOSH</property>
-    <child>
-      <object class="GtkButton" id="button">
-        <property name="label">Press me!</property>
-        <property name="margin-top">50</property>
-        <property name="margin-bottom">50</property>
-        <property name="margin-start">50</property>
-        <property name="margin-end">50</property>
+  <template class="PixelmoshWindow" parent="AdwApplicationWindow">
+    <property name="title" translatable="yes">PIXELMOSH</property>
+    <property name="default_width">650</property>
+    <property name="default_height">420</property>
+    <property name="content">
+      <object class="GtkStack" id="stack">
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">placeholder</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkHeaderBar">
+                    <style>
+                      <class name="flat" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkWindowHandle">
+                    <property name="vexpand">True</property>
+                    <property name="child">
+                      <object class="AdwStatusPage">
+                        <property name="icon-name">insert-image-symbolic</property>
+                        <property name="title" translatable="yes">Select a PNG file to start</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="label" translatable="yes">_Start</property>
+                            <property name="use-underline">True</property>
+                            <property name="halign">center</property>
+                            <property name="action-name">win.new-image</property>
+                            <style>
+                              <class name="pill" />
+                              <class name="suggested-action"/>
+                            </style>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">main</property>
+            <property name="child">
+              <object class="GtkBox">
+               <property name="orientation">vertical</property>
+               <child>
+                 <object class="GtkHeaderBar" id="header_bar">
+                   <property name="title-widget">
+                       <object class="GtkLabel"/>
+                   </property>
+                   <style>
+                       <class name="flat"/>
+                       <class name="title"/>
+                   </style>
+                   <child type="start">
+                     <object class="GtkToggleButton" id="toggle_pane_button">
+                         <property name="icon-name">sidebar-show-symbolic</property>
+                         <property name="active">True</property>
+                     </object>
+                   </child>
+                 </object>
+               </child>
+               <child>
+                 <object class="AdwFlap">
+                   <property name="reveal-flap"
+                             bind-source="toggle_pane_button"
+                             bind-property="active"
+                             bind-flags="sync-create|bidirectional"/>
+                   <property name="fold-policy">never</property>
+                   <property name="flap">
+                       <object class="GtkBox">
+                           <property name="valign">center</property>
+                           <property name="orientation">vertical</property>
+                           <property name="vexpand">True</property>
+                           <property name="margin-end">40</property>
+                           <property name="margin-start">40</property>
+                           <property name="spacing">5</property>
+                           <child>
+                             <object class="GtkButton" id="button1">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button2">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button3">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button4">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button5">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button6">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button7">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                           <child>
+                             <object class="GtkButton" id="button8">
+                               <signal name="clicked" handler="handle_seed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">5</property>
+                               <property name="margin-bottom">5</property>
+                               <property name="margin-start">5</property>
+                               <property name="margin-end">5</property>
+                             </object>
+                           </child>
+                       </object>
+                   </property>
+                   <property name="separator">
+                       <object class="GtkSeparator">
+                           <property name="margin-bottom">15</property>
+                           <property name="margin-top">15</property>
+                       </object>
+                   </property>
+                   <property name="content">
+                       <object class="GtkBox">
+                           <property name="halign">center</property>
+                           <property name="valign">center</property>
+                           <property name="vexpand">True</property>
+                           <property name="margin-end">10</property>
+                           <property name="margin-start">10</property>
+                           <property name="spacing">10</property>
+                           <child>
+                             <object class="GtkButton" id="button">
+                               <signal name="clicked" handler="handle_moshed" />
+                               <property name="label">TEST</property>
+                               <property name="margin-top">50</property>
+                               <property name="margin-bottom">50</property>
+                               <property name="margin-start">50</property>
+                               <property name="margin-end">50</property>
+                             </object>
+                           </child>
+                       </object>
+                   </property>
+                 </object>
+               </child>
+             </object>
+            </property>
+          </object>
+        </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>
