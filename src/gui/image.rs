@@ -15,6 +15,9 @@ pub struct Image {
     pub texture: gdk::Texture,
 }
 
+#[derive(Default)]
+pub struct Options(MoshOptions);
+
 impl Image {
     pub fn new() -> Self {
         Self {
@@ -91,10 +94,10 @@ impl Image {
         Ok(())
     }
 
-    pub fn mosh(&mut self, options: &MoshOptions) {
+    pub fn mosh(&mut self, options: &Options) {
         self.buf_new.clear();
         let mut buf = self.buf.clone();
-        mosh(&self.info, &mut buf, options).unwrap();
+        mosh(&self.info, &mut buf, &options.0).unwrap();
         self.set_texture(Self::generate_texture(&self.info, &buf).upcast());
     }
 
@@ -112,6 +115,80 @@ impl Image {
 
     pub fn set_texture(&mut self, value: gdk::Texture) {
         self.texture = value;
+    }
+}
+
+impl Options {
+    pub fn min_rate(&self) -> u16 {
+        self.0.min_rate
+    }
+
+    pub fn max_rate(&self) -> u16 {
+        self.0.max_rate
+    }
+
+    pub fn pixelation(&self) -> u8 {
+        self.0.pixelation
+    }
+
+    pub fn line_shift(&self) -> f64 {
+        self.0.line_shift
+    }
+
+    pub fn reverse(&self) -> f64 {
+        self.0.reverse
+    }
+
+    pub fn flip(&self) -> f64 {
+        self.0.flip
+    }
+
+    pub fn channel_swap(&self) -> f64 {
+        self.0.channel_swap
+    }
+
+    pub fn channel_shift(&self) -> f64 {
+        self.0.channel_shift
+    }
+
+    pub fn seed(&self) -> u64 {
+        self.0.seed
+    }
+
+    pub fn set_min_rate(&mut self, value: u16) {
+        self.0.min_rate = value;
+    }
+
+    pub fn set_max_rate(&mut self, value: u16) {
+        self.0.max_rate = value;
+    }
+
+    pub fn set_pixelation(&mut self, value: u8) {
+        self.0.pixelation = value;
+    }
+
+    pub fn set_line_shift(&mut self, value: f64) {
+        self.0.line_shift = value;
+    }
+
+    pub fn set_reverse(&mut self, value: f64) {
+        self.0.reverse = value;
+    }
+
+    pub fn set_flip(&mut self, value: f64) {
+        self.0.flip = value;
+    }
+
+    pub fn set_channel_swap(&mut self, value: f64) {
+        self.0.channel_swap = value;
+    }
+
+    pub fn set_channel_shift(&mut self, value: f64) {
+        self.0.channel_shift = value;
+    }
+
+    pub fn set_seed(&mut self, value: u64) {
+        self.0.seed = value;
     }
 }
 

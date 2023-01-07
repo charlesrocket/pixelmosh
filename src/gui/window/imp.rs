@@ -4,11 +4,8 @@ use glib::subclass::InitializingObject;
 use gtk::{glib, CompositeTemplate, ResponseType, SpinButton, Stack};
 
 use std::cell::RefCell;
-use std::thread;
 
-use libmosh::ops::{read_file, write_file};
-use libmosh::{mosh, MoshOptions};
-
+use crate::gui::image::Options;
 use crate::gui::window::Image;
 
 #[derive(CompositeTemplate)]
@@ -32,7 +29,7 @@ pub struct Window {
     pub btn_channel_shift: TemplateChild<SpinButton>,
     pub dialog: gtk::FileChooserNative,
     pub image: RefCell<Image>,
-    pub options: MoshOptions,
+    pub options: RefCell<Options>,
     #[template_child]
     pub picture: TemplateChild<gtk::Picture>,
     #[template_child]
@@ -70,7 +67,7 @@ impl ObjectSubclass for Window {
             btn_channel_shift: TemplateChild::default(),
             dialog,
             image: RefCell::new(Image::default()),
-            options: MoshOptions::default(),
+            options: RefCell::new(Options::default()),
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
         }
@@ -112,17 +109,49 @@ impl ObjectImpl for Window {
 #[gtk::template_callbacks]
 impl Window {
     #[template_callback]
-    fn handle_moshed() {
-        thread::spawn(move || {
-            let (mut buf, info) = read_file("src/util/test-rgb.png").unwrap();
-            mosh(&info, &mut buf, &MoshOptions::default()).unwrap();
-            write_file("test-output.png", &buf, &info).unwrap();
-        });
+    fn handle_min_rate(&self, button: &gtk::SpinButton) {
+        self.options
+            .borrow_mut()
+            .set_min_rate(button.value() as u16);
     }
 
     #[template_callback]
-    fn handle_seed() {
-        dbg!("fOO");
+    fn handle_max_rate(&self, button: &gtk::SpinButton) {
+        self.options
+            .borrow_mut()
+            .set_max_rate(button.value() as u16);
+    }
+
+    #[template_callback]
+    fn handle_pixelation(&self, button: &gtk::SpinButton) {
+        self.options
+            .borrow_mut()
+            .set_pixelation(button.value() as u8);
+    }
+
+    #[template_callback]
+    fn handle_line_shift(&self, button: &gtk::SpinButton) {
+        self.options.borrow_mut().set_line_shift(button.value());
+    }
+
+    #[template_callback]
+    fn handle_reverse(&self, button: &gtk::SpinButton) {
+        self.options.borrow_mut().set_reverse(button.value());
+    }
+
+    #[template_callback]
+    fn handle_flip(&self, button: &gtk::SpinButton) {
+        self.options.borrow_mut().set_flip(button.value());
+    }
+
+    #[template_callback]
+    fn handle_channel_swap(&self, button: &gtk::SpinButton) {
+        self.options.borrow_mut().set_channel_swap(button.value());
+    }
+
+    #[template_callback]
+    fn handle_channel_shift(&self, button: &gtk::SpinButton) {
+        self.options.borrow_mut().set_channel_shift(button.value());
     }
 }
 

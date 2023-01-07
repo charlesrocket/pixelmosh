@@ -5,7 +5,7 @@ use gtk::{gio, glib};
 
 use libmosh::err::MoshError;
 
-use crate::gui::image::Image;
+use crate::gui::image::{Image, Options};
 
 mod imp;
 
@@ -43,7 +43,14 @@ impl Window {
     }
 
     fn mosh(&self) {
-        self.imp().image.borrow_mut().mosh(&self.imp().options);
+        self.imp()
+            .options
+            .borrow_mut()
+            .set_seed(Options::default().seed());
+        self.imp()
+            .image
+            .borrow_mut()
+            .mosh(&self.imp().options.borrow_mut());
         self.imp()
             .picture
             .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
@@ -54,7 +61,10 @@ impl Window {
             .image
             .borrow_mut()
             .open_file(&file.path().unwrap())?;
-        self.imp().image.borrow_mut().mosh(&self.imp().options);
+        self.imp()
+            .image
+            .borrow_mut()
+            .mosh(&self.imp().options.borrow_mut());
         self.imp()
             .picture
             .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
