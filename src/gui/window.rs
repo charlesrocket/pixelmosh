@@ -59,6 +59,7 @@ impl Window {
             .picture
             .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
         self.skip_placeholder();
+
         Ok(())
     }
 }

@@ -87,6 +87,7 @@ impl Image {
         self.set_buf(img_buf);
         self.set_info(img_info);
         self.set_texture(img_texture.upcast());
+
         Ok(())
     }
 
