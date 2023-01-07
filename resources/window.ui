@@ -66,24 +66,28 @@
                       <object class="GtkToggleButton" id="toggle_pane_button">
                         <property name="icon-name">sidebar-show-symbolic</property>
                         <property name="active">True</property>
+                        <property name="tooltip-text">Options</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkButton">
                         <property name="action-name">win.open-file</property>
                         <property name="icon-name">document-open-symbolic</property>
+                        <property name="tooltip-text">Open new image</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkButton">
                         <property name="action-name">win.mosh-file</property>
                         <property name="icon-name">view-refresh-symbolic</property>
+                        <property name="tooltip-text">Process</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkButton">
                         <property name="action-name">win.save-file</property>
                         <property name="icon-name">document-save-symbolic</property>
+                        <property name="tooltip-text">Save to file</property>
                       </object>
                     </child>
                   </object>
@@ -116,6 +120,7 @@
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
                             <property name="value">1.0</property>
+                            <property name="tooltip-text">Minimum chunks to process</property>
                           </object>
                         </child>
                         <child>
@@ -131,6 +136,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Maximum chunks to process</property>
                           </object>
                         </child>
                         <child>
@@ -146,6 +152,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Pixelation rate</property>
                           </object>
                         </child>
                         <child>
@@ -162,6 +169,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Line shift rate</property>
                           </object>
                         </child>
                         <child>
@@ -178,6 +186,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Reverse rate</property>
                           </object>
                         </child>
                         <child>
@@ -194,6 +203,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Flip rate</property>
                           </object>
                         </child>
                         <child>
@@ -210,6 +220,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Channel swap rate</property>
                           </object>
                         </child>
                         <child>
@@ -226,6 +237,7 @@
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
+                            <property name="tooltip-text">Channel shift rate</property>
                           </object>
                         </child>
                       </object>
