@@ -3,6 +3,10 @@ use adw::subclass::prelude::*;
 use glib::{clone, Object};
 use gtk::{gio, glib};
 
+use libmosh::err::MoshError;
+
+use crate::gui::image::Image;
+
 mod imp;
 
 glib::wrapper! {
@@ -18,12 +22,12 @@ impl Window {
     }
 
     fn setup_actions(&self) {
-        let action_new_image = gio::SimpleAction::new("new-image", None);
-        action_new_image.connect_activate(clone!(@weak self as window => move |_, _| {
-            window.skip_placeholder();
+        let action_mosh_image = gio::SimpleAction::new("mosh-file", None);
+        action_mosh_image.connect_activate(clone!(@weak self as window => move |_, _| {
+            window.mosh();
         }));
 
-        self.add_action(&action_new_image);
+        self.add_action(&action_mosh_image);
     }
 
     fn setup_callbacks(&self) {
@@ -36,5 +40,25 @@ impl Window {
 
     fn set_stack(&self) {
         self.imp().stack.set_visible_child_name("placeholder");
+    }
+
+    fn mosh(&self) {
+        self.imp().image.borrow_mut().mosh(&self.imp().options);
+        self.imp()
+            .picture
+            .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+    }
+
+    fn set_file(&self, file: &gio::File) -> Result<(), MoshError> {
+        self.imp()
+            .image
+            .borrow_mut()
+            .open_file(&file.path().unwrap())?;
+        self.imp().image.borrow_mut().mosh(&self.imp().options);
+        self.imp()
+            .picture
+            .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+        self.skip_placeholder();
+        Ok(())
     }
 }
