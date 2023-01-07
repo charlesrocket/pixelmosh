@@ -1,7 +1,7 @@
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
-use gtk::{glib, Button, CompositeTemplate, ResponseType, Stack};
+use gtk::{glib, CompositeTemplate, ResponseType, SpinButton, Stack};
 
 use std::cell::RefCell;
 use std::thread;
@@ -15,19 +15,21 @@ use crate::gui::window::Image;
 #[template(resource = "/pixelmosh/window.ui")]
 pub struct Window {
     #[template_child]
-    pub button1: TemplateChild<Button>,
+    pub btn_min_rate: TemplateChild<SpinButton>,
     #[template_child]
-    pub button2: TemplateChild<Button>,
+    pub btn_max_rate: TemplateChild<SpinButton>,
     #[template_child]
-    pub button3: TemplateChild<Button>,
+    pub btn_pixelation: TemplateChild<SpinButton>,
     #[template_child]
-    pub button4: TemplateChild<Button>,
+    pub btn_line_shift: TemplateChild<SpinButton>,
     #[template_child]
-    pub button5: TemplateChild<Button>,
+    pub btn_reverse: TemplateChild<SpinButton>,
     #[template_child]
-    pub button6: TemplateChild<Button>,
+    pub btn_flip: TemplateChild<SpinButton>,
     #[template_child]
-    pub button7: TemplateChild<Button>,
+    pub btn_channel_swap: TemplateChild<SpinButton>,
+    #[template_child]
+    pub btn_channel_shift: TemplateChild<SpinButton>,
     pub dialog: gtk::FileChooserNative,
     pub image: RefCell<Image>,
     pub options: MoshOptions,
@@ -58,13 +60,14 @@ impl ObjectSubclass for Window {
         dialog.add_filter(&png_filter);
 
         Self {
-            button1: TemplateChild::default(),
-            button2: TemplateChild::default(),
-            button3: TemplateChild::default(),
-            button4: TemplateChild::default(),
-            button5: TemplateChild::default(),
-            button6: TemplateChild::default(),
-            button7: TemplateChild::default(),
+            btn_min_rate: TemplateChild::default(),
+            btn_max_rate: TemplateChild::default(),
+            btn_pixelation: TemplateChild::default(),
+            btn_line_shift: TemplateChild::default(),
+            btn_reverse: TemplateChild::default(),
+            btn_flip: TemplateChild::default(),
+            btn_channel_swap: TemplateChild::default(),
+            btn_channel_shift: TemplateChild::default(),
             dialog,
             image: RefCell::new(Image::default()),
             options: MoshOptions::default(),

@@ -2,8 +2,8 @@
 <interface>
   <template class="PixelmoshWindow" parent="AdwApplicationWindow">
     <property name="title" translatable="yes">PIXELMOSH</property>
-    <property name="default_width">650</property>
-    <property name="default_height">420</property>
+    <property name="default_width">765</property>
+    <property name="default_height">540</property>
     <property name="content">
       <object class="GtkStack" id="stack">
         <property name="transition-type">crossfade</property>
@@ -104,9 +104,29 @@
                         <property name="margin-start">40</property>
                         <property name="spacing">5</property>
                         <child>
-                          <object class="GtkButton" id="button1">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="min_rate_adj">
+                            <property name="page-increment">5.0</property>
+                            <property name="step-increment">1.0</property>
+                            <property name="upper">65535.0</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_min_rate">
+                            <property name="adjustment">min_rate_adj</property>
+                            <property name="margin-top">5</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="value">1.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="max_rate_adj">
+                            <property name="page-increment">5.0</property>
+                            <property name="step-increment">1.0</property>
+                            <property name="upper">65535.0</property>
+                            <property name="value">7.0</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_max_rate">
+                            <property name="adjustment">max_rate_adj</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -114,9 +134,14 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button2">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="pixelation_adj">
+                            <property name="page-increment">3.0</property>
+                            <property name="step-increment">1.0</property>
+                            <property name="upper">255.0</property>
+                            <property name="value">10.0</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_pixelation">
+                            <property name="adjustment">pixelation_adj</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -124,9 +149,15 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button3">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="line_shift_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_line_shift">
+                            <property name="adjustment">line_shift_adj</property>
+                            <property name="digits">2</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -134,9 +165,15 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button4">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="reverse_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_reverse">
+                            <property name="adjustment">reverse_adj</property>
+                            <property name="digits">2</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -144,9 +181,15 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button5">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="flip_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_flip">
+                            <property name="adjustment">flip_adj</property>
+                            <property name="digits">2</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -154,9 +197,15 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button6">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="channel_swap_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_channel_swap">
+                            <property name="adjustment">channel_swap_adj</property>
+                            <property name="digits">2</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -164,9 +213,15 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button7">
-                            <signal name="clicked" handler="handle_seed" />
-                            <property name="label">TEST</property>
+                          <object class="GtkAdjustment" id="channel_shift_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_channel_shift">
+                            <property name="adjustment">channel_shift_adj</property>
+                            <property name="digits">2</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
