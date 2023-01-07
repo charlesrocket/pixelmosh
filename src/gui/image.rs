@@ -1,12 +1,13 @@
 use glib::Cast;
 use gtk::{gdk, glib};
-use png::{BitDepth, ColorType, Decoder, OutputInfo};
+use png::{BitDepth, ColorType, OutputInfo};
 
-use std::fs::File;
 use std::path::PathBuf;
 
 use libmosh::err::MoshError;
 use libmosh::{mosh, MoshOptions};
+
+use libmosh::ops::read_file;
 
 pub struct Image {
     pub buf: Vec<u8>,
@@ -80,16 +81,12 @@ impl Image {
     }
 
     pub fn open_file(&mut self, file: &PathBuf) -> Result<(), MoshError> {
-        let input = File::open(file)?;
-        let decoder = Decoder::new(input);
-        let mut reader = decoder.read_info()?;
-        let mut img_buf = vec![0_u8; reader.output_buffer_size()];
-        let img_info = reader.next_frame(&mut img_buf)?;
-        let img_texture = Self::generate_texture(&img_info, &img_buf);
+        let (buf, info) = read_file(file)?;
+        let texture = Self::generate_texture(&info, &buf);
 
-        self.set_buf(img_buf);
-        self.set_info(img_info);
-        self.set_texture(img_texture.upcast());
+        self.buf = buf;
+        self.info = info;
+        self.texture = texture.upcast();
 
         Ok(())
     }
@@ -98,23 +95,11 @@ impl Image {
         self.buf_new.clear();
         let mut buf = self.buf.clone();
         mosh(&self.info, &mut buf, &options.0).unwrap();
-        self.set_texture(Self::generate_texture(&self.info, &buf).upcast());
+        self.texture = Self::generate_texture(&self.info, &buf).upcast();
     }
 
     pub fn get_texture(&mut self) -> gdk::Texture {
         self.texture.clone()
-    }
-
-    pub fn set_buf(&mut self, value: Vec<u8>) {
-        self.buf = value;
-    }
-
-    pub fn set_info(&mut self, value: OutputInfo) {
-        self.info = value;
-    }
-
-    pub fn set_texture(&mut self, value: gdk::Texture) {
-        self.texture = value;
     }
 }
 
