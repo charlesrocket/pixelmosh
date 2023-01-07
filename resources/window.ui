@@ -104,9 +104,18 @@
                         <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <property name="vexpand">True</property>
-                        <property name="margin-end">40</property>
-                        <property name="margin-start">40</property>
+                        <property name="margin-top">30</property>
+                        <property name="margin-bottom">30</property>
+                        <property name="margin-end">30</property>
+                        <property name="margin-start">30</property>
                         <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Min rate</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
                         <child>
                           <object class="GtkAdjustment" id="min_rate_adj">
                             <property name="page-increment">5.0</property>
@@ -121,6 +130,13 @@
                             <property name="margin-end">5</property>
                             <property name="value">1.0</property>
                             <property name="tooltip-text">Minimum chunks to process</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Max rate</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
                           </object>
                         </child>
                         <child>
@@ -140,6 +156,13 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkLabel">
+                            <property name="label">Pixelation</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkAdjustment" id="pixelation_adj">
                             <property name="page-increment">3.0</property>
                             <property name="step-increment">1.0</property>
@@ -153,6 +176,13 @@
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
                             <property name="tooltip-text">Pixelation rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Line Shift</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
                           </object>
                         </child>
                         <child>
@@ -173,6 +203,13 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkLabel">
+                            <property name="label">Reverse</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkAdjustment" id="reverse_adj">
                             <property name="page-increment">0.2</property>
                             <property name="step-increment">0.1</property>
@@ -187,6 +224,13 @@
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
                             <property name="tooltip-text">Reverse rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Flip</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
                           </object>
                         </child>
                         <child>
@@ -207,6 +251,13 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkLabel">
+                            <property name="label">Channel Swap</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkAdjustment" id="channel_swap_adj">
                             <property name="page-increment">0.2</property>
                             <property name="step-increment">0.1</property>
@@ -221,6 +272,13 @@
                             <property name="margin-start">5</property>
                             <property name="margin-end">5</property>
                             <property name="tooltip-text">Channel swap rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Channel shift</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
                           </object>
                         </child>
                         <child>
@@ -262,10 +320,10 @@
                             <property name="valign">center</property>
                             <property name="hexpand">true</property>
                             <property name="vexpand">true</property>
-                            <property name="margin-top">23</property>
-                            <property name="margin-bottom">23</property>
-                            <property name="margin-start">23</property>
-                            <property name="margin-end">23</property>
+                            <property name="margin-top">30</property>
+                            <property name="margin-bottom">30</property>
+                            <property name="margin-start">30</property>
+                            <property name="margin-end">30</property>
                           </object>
                         </child>
                       </object>
