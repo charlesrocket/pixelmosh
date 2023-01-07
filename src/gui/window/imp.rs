@@ -27,7 +27,7 @@ pub struct Window {
     pub btn_channel_swap: TemplateChild<SpinButton>,
     #[template_child]
     pub btn_channel_shift: TemplateChild<SpinButton>,
-    pub dialog: gtk::FileChooserNative,
+    pub dialog_open: gtk::FileChooserNative,
     pub image: RefCell<Image>,
     pub options: RefCell<Options>,
     #[template_child]
@@ -44,7 +44,7 @@ impl ObjectSubclass for Window {
 
     fn new() -> Self {
         let png_filter = gtk::FileFilter::new();
-        let dialog = gtk::FileChooserNative::builder()
+        let dialog_open = gtk::FileChooserNative::builder()
             .title("Open File")
             .action(gtk::FileChooserAction::Open)
             .accept_label("Open")
@@ -54,7 +54,7 @@ impl ObjectSubclass for Window {
 
         png_filter.add_mime_type("image/png");
         png_filter.set_name(Some("PNG image"));
-        dialog.add_filter(&png_filter);
+        dialog_open.add_filter(&png_filter);
 
         Self {
             btn_min_rate: TemplateChild::default(),
@@ -65,7 +65,7 @@ impl ObjectSubclass for Window {
             btn_flip: TemplateChild::default(),
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
-            dialog,
+            dialog_open,
             image: RefCell::new(Image::default()),
             options: RefCell::new(Options::default()),
             picture: TemplateChild::default(),
@@ -80,10 +80,10 @@ impl ObjectSubclass for Window {
             "win.open-file",
             None,
             |win, _action_name, _action_target| async move {
-                let dialog = &win.imp().dialog;
+                let dialog = &win.imp().dialog_open;
                 dialog.set_transient_for(Some(&win));
                 if dialog.run_future().await == ResponseType::Accept {
-                    if let Err(error) = win.set_file(&dialog.file().unwrap()) {
+                    if let Err(error) = win.load_file(&dialog.file().unwrap()) {
                         println!("Error loading the image: {error}");
                     }
                 }

@@ -56,7 +56,7 @@ impl Window {
             .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
     }
 
-    fn set_file(&self, file: &gio::File) -> Result<(), MoshError> {
+    fn load_file(&self, file: &gio::File) -> Result<(), MoshError> {
         self.imp()
             .image
             .borrow_mut()
