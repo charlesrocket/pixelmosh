@@ -125,6 +125,7 @@
                           <object class="GtkSpinButton" id="btn_min_rate">
                             <signal name="value-changed" handler="handle_min_rate" swapped="true"/>
                             <property name="adjustment">min_rate_adj</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -150,6 +151,7 @@
                           <object class="GtkSpinButton" id="btn_max_rate">
                             <signal name="value-changed" handler="handle_max_rate" swapped="true"/>
                             <property name="adjustment">max_rate_adj</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -175,6 +177,7 @@
                           <object class="GtkSpinButton" id="btn_pixelation">
                             <signal name="value-changed" handler="handle_pixelation" swapped="true"/>
                             <property name="adjustment">pixelation_adj</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -199,7 +202,8 @@
                           <object class="GtkSpinButton" id="btn_line_shift">
                             <signal name="value-changed" handler="handle_line_shift" swapped="true"/>
                             <property name="adjustment">line_shift_adj</property>
-                            <property name="digits">2</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -224,7 +228,8 @@
                           <object class="GtkSpinButton" id="btn_reverse">
                             <signal name="value-changed" handler="handle_reverse" swapped="true"/>
                             <property name="adjustment">reverse_adj</property>
-                            <property name="digits">2</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -249,7 +254,8 @@
                           <object class="GtkSpinButton" id="btn_flip">
                             <signal name="value-changed" handler="handle_flip" swapped="true"/>
                             <property name="adjustment">flip_adj</property>
-                            <property name="digits">2</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -274,7 +280,8 @@
                           <object class="GtkSpinButton" id="btn_channel_swap">
                             <signal name="value-changed" handler="handle_channel_swap" swapped="true"/>
                             <property name="adjustment">channel_swap_adj</property>
-                            <property name="digits">2</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
@@ -299,7 +306,8 @@
                           <object class="GtkSpinButton" id="btn_channel_shift">
                             <signal name="value-changed" handler="handle_channel_shift" swapped="true"/>
                             <property name="adjustment">channel_shift_adj</property>
-                            <property name="digits">2</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
                             <property name="margin-top">5</property>
                             <property name="margin-bottom">5</property>
                             <property name="margin-start">5</property>
