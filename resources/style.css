@@ -5,5 +5,5 @@ picture {
 
 #moshbutton:hover {
   color: @red_2;
-  background: @card_bg_color;
+  background: @headerbar_bg_color;
 }
