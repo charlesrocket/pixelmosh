@@ -1,0 +1,4 @@
+#moshbutton:hover {
+  color: @red_2;
+  background: @card_bg_color;
+}
