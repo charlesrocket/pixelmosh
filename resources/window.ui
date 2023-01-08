@@ -319,8 +319,9 @@
                     </property>
                     <property name="separator">
                       <object class="GtkSeparator">
-                        <property name="margin-bottom">15</property>
-                        <property name="margin-top">15</property>
+                        <property name="margin-bottom">25</property>
+                        <property name="margin-top">25</property>
+                        <property name="opacity">0.6</property>
                       </object>
                     </property>
                     <property name="content">
