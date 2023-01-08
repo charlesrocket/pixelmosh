@@ -1,3 +1,8 @@
+picture {
+  box-shadow: rgba(15, 15, 25, 0.1) 0px 5px 17px, rgba(15, 15, 25, 0.1) 0px 9px 23px, rgba(15, 15, 25, 0.1) 0px 16px 55px;
+  border-radius: 3px;
+}
+
 #moshbutton:hover {
   color: @red_2;
   background: @card_bg_color;
