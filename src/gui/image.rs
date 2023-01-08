@@ -5,9 +5,8 @@ use png::{BitDepth, ColorType, OutputInfo};
 use std::path::{Path, PathBuf};
 
 use libmosh::err::MoshError;
-use libmosh::{mosh, MoshOptions};
-
 use libmosh::ops::{read_file, write_file};
+use libmosh::{mosh, MoshOptions};
 
 pub struct Image {
     pub buf: Vec<u8>,
