@@ -81,6 +81,7 @@
                         <property name="action-name">win.mosh-file</property>
                         <property name="icon-name">view-refresh-symbolic</property>
                         <property name="tooltip-text">Process</property>
+                        <property name="name">moshbutton</property>
                       </object>
                     </child>
                     <child>
