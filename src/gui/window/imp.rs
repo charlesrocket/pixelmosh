@@ -28,6 +28,7 @@ pub struct Window {
     #[template_child]
     pub btn_channel_shift: TemplateChild<SpinButton>,
     pub dialog_open: gtk::FileChooserNative,
+    pub dialog_save: gtk::FileChooserNative,
     pub image: RefCell<Image>,
     pub options: RefCell<Options>,
     #[template_child]
@@ -45,9 +46,17 @@ impl ObjectSubclass for Window {
     fn new() -> Self {
         let png_filter = gtk::FileFilter::new();
         let dialog_open = gtk::FileChooserNative::builder()
-            .title("Open File")
+            .title("Open file")
             .action(gtk::FileChooserAction::Open)
             .accept_label("Open")
+            .cancel_label("Cancel")
+            .modal(true)
+            .build();
+
+        let dialog_save = gtk::FileChooserNative::builder()
+            .title("Save file")
+            .action(gtk::FileChooserAction::Save)
+            .accept_label("Save")
             .cancel_label("Cancel")
             .modal(true)
             .build();
@@ -66,6 +75,7 @@ impl ObjectSubclass for Window {
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
             dialog_open,
+            dialog_save,
             image: RefCell::new(Image::default()),
             options: RefCell::new(Options::default()),
             picture: TemplateChild::default(),
@@ -85,6 +95,20 @@ impl ObjectSubclass for Window {
                 if dialog.run_future().await == ResponseType::Accept {
                     if let Err(error) = win.load_file(&dialog.file().unwrap()) {
                         println!("Error loading the image: {error}");
+                    }
+                }
+            },
+        );
+
+        klass.install_action_async(
+            "win.save-file",
+            None,
+            |win, _action_name, _action_target| async move {
+                let dialog = &win.imp().dialog_save;
+                dialog.set_transient_for(Some(&win));
+                if dialog.run_future().await == ResponseType::Accept {
+                    if let Err(error) = win.save_file(&dialog.file().unwrap()) {
+                        println!("Error saving the image: {error}");
                     }
                 }
             },

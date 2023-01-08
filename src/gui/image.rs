@@ -2,12 +2,12 @@ use glib::Cast;
 use gtk::{gdk, glib};
 use png::{BitDepth, ColorType, OutputInfo};
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use libmosh::err::MoshError;
 use libmosh::{mosh, MoshOptions};
 
-use libmosh::ops::read_file;
+use libmosh::ops::{read_file, write_file};
 
 pub struct Image {
     pub buf: Vec<u8>,
@@ -91,11 +91,19 @@ impl Image {
         Ok(())
     }
 
+    pub fn save_file(&mut self, file: &Path) -> Result<(), MoshError> {
+        write_file(file.to_str().unwrap(), &self.buf_new, &self.info)?;
+
+        Ok(())
+    }
+
     pub fn mosh(&mut self, options: &Options) {
         self.buf_new.clear();
         let mut buf = self.buf.clone();
         mosh(&self.info, &mut buf, &options.0).unwrap();
+
         self.texture = Self::generate_texture(&self.info, &buf).upcast();
+        self.buf_new = buf;
     }
 
     pub fn get_texture(&mut self) -> gdk::Texture {

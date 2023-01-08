@@ -72,4 +72,13 @@ impl Window {
 
         Ok(())
     }
+
+    fn save_file(&self, file: &gio::File) -> Result<(), MoshError> {
+        self.imp()
+            .image
+            .borrow_mut()
+            .save_file(&file.path().unwrap())?;
+
+        Ok(())
+    }
 }
