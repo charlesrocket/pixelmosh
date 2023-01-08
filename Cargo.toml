@@ -9,6 +9,7 @@ categories = ["command-line-utilities", "multimedia::images"]
 keywords = ["glitch"]
 license = "MIT"
 readme = "README.md"
+build = "build.rs"
 
 [profile.release]
 debug = 0
@@ -24,8 +25,14 @@ name = "pixelmosh"
 path = "src/main.rs"
 test = false
 
+[features]
+gui = ["dep:adw", "dep:glib", "dep:gtk"]
+
 [dependencies]
+adw = { version = "0.2", package = "libadwaita", optional = true }
 clap = { version = "4", features = ["string"] }
+glib = { version = "0.16", optional = true }
+gtk = { version = "0.5", package = "gtk4", optional = true }
 indicatif = "0.17"
 png = "0.17"
 rand = "0.8"
@@ -37,3 +44,6 @@ rgb = "0.8"
 adler = "1"
 assert_cmd = "2"
 predicates = "2"
+
+[build-dependencies]
+glib-build-tools = "0.16.3"

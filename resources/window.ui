@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="PixelmoshWindow" parent="AdwApplicationWindow">
+    <property name="title" translatable="yes">PIXELMOSH</property>
+    <property name="default_width">765</property>
+    <property name="default_height">540</property>
+    <property name="content">
+      <object class="GtkStack" id="stack">
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">placeholder</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkHeaderBar">
+                    <style>
+                      <class name="flat" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkWindowHandle">
+                    <property name="vexpand">True</property>
+                    <property name="child">
+                      <object class="AdwStatusPage">
+                        <property name="icon-name">insert-image-symbolic</property>
+                        <property name="title" translatable="yes">Select a PNG file to start</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="label" translatable="yes">_Start</property>
+                            <property name="use-underline">True</property>
+                            <property name="halign">center</property>
+                            <property name="action-name">win.open-file</property>
+                            <style>
+                              <class name="pill" />
+                              <class name="suggested-action"/>
+                            </style>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">main</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkHeaderBar" id="header_bar">
+                    <property name="title-widget">
+                      <object class="GtkLabel"/>
+                    </property>
+                    <style>
+                      <class name="flat"/>
+                      <class name="title"/>
+                    </style>
+                    <child type="start">
+                      <object class="GtkToggleButton" id="toggle_pane_button">
+                        <property name="icon-name">sidebar-show-symbolic</property>
+                        <property name="active">True</property>
+                        <property name="tooltip-text">Options</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="action-name">win.open-file</property>
+                        <property name="icon-name">document-open-symbolic</property>
+                        <property name="tooltip-text">Open new image</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="action-name">win.mosh-file</property>
+                        <property name="icon-name">view-refresh-symbolic</property>
+                        <property name="tooltip-text">Process</property>
+                        <property name="name">moshbutton</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="action-name">win.save-file</property>
+                        <property name="icon-name">document-save-symbolic</property>
+                        <property name="tooltip-text">Save to file</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwFlap">
+                    <property name="reveal-flap"
+                              bind-source="toggle_pane_button"
+                              bind-property="active"
+                              bind-flags="sync-create|bidirectional"/>
+                    <property name="fold-policy">never</property>
+                    <property name="flap">
+                      <object class="GtkBox">
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <property name="vexpand">True</property>
+                        <property name="margin-top">30</property>
+                        <property name="margin-bottom">30</property>
+                        <property name="margin-end">30</property>
+                        <property name="margin-start">30</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Min rate</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="min_rate_adj">
+                            <property name="page-increment">5.0</property>
+                            <property name="step-increment">1.0</property>
+                            <property name="upper">65535.0</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_min_rate">
+                            <signal name="value-changed" handler="handle_min_rate" swapped="true"/>
+                            <property name="adjustment">min_rate_adj</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="value">1.0</property>
+                            <property name="tooltip-text">Minimum chunks to process</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Max rate</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="max_rate_adj">
+                            <property name="page-increment">5.0</property>
+                            <property name="step-increment">1.0</property>
+                            <property name="upper">65535.0</property>
+                            <property name="value">7.0</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_max_rate">
+                            <signal name="value-changed" handler="handle_max_rate" swapped="true"/>
+                            <property name="adjustment">max_rate_adj</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Maximum chunks to process</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Pixelation</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="pixelation_adj">
+                            <property name="page-increment">3.0</property>
+                            <property name="step-increment">1.0</property>
+                            <property name="upper">255.0</property>
+                            <property name="lower">1.0</property>
+                            <property name="value">10.0</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_pixelation">
+                            <signal name="value-changed" handler="handle_pixelation" swapped="true"/>
+                            <property name="adjustment">pixelation_adj</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Pixelation rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Line Shift</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="line_shift_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_line_shift">
+                            <signal name="value-changed" handler="handle_line_shift" swapped="true"/>
+                            <property name="adjustment">line_shift_adj</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Line shift rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Reverse</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="reverse_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_reverse">
+                            <signal name="value-changed" handler="handle_reverse" swapped="true"/>
+                            <property name="adjustment">reverse_adj</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Reverse rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Flip</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="flip_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_flip">
+                            <signal name="value-changed" handler="handle_flip" swapped="true"/>
+                            <property name="adjustment">flip_adj</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Flip rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Channel Swap</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="channel_swap_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_channel_swap">
+                            <signal name="value-changed" handler="handle_channel_swap" swapped="true"/>
+                            <property name="adjustment">channel_swap_adj</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Channel swap rate</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Channel shift</property>
+                            <property name="margin-end">5</property>
+                            <property name="margin-start">5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkAdjustment" id="channel_shift_adj">
+                            <property name="page-increment">0.2</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="upper">1.0</property>
+                            <property name="value">0.3</property>
+                          </object>
+                          <object class="GtkSpinButton" id="btn_channel_shift">
+                            <signal name="value-changed" handler="handle_channel_shift" swapped="true"/>
+                            <property name="adjustment">channel_shift_adj</property>
+                            <property name="digits">1</property>
+                            <property name="xalign">0.5</property>
+                            <property name="margin-top">1</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="margin-start">5</property>
+                            <property name="margin-end">5</property>
+                            <property name="tooltip-text">Channel shift rate</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="separator">
+                      <object class="GtkSeparator">
+                        <property name="margin-bottom">25</property>
+                        <property name="margin-top">25</property>
+                        <property name="opacity">0.6</property>
+                      </object>
+                    </property>
+                    <property name="content">
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-start">10</property>
+                        <property name="spacing">10</property>
+                        <child>
+                          <object class="GtkPicture" id="picture">
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="hexpand">true</property>
+                            <property name="vexpand">true</property>
+                            <property name="margin-top">30</property>
+                            <property name="margin-bottom">30</property>
+                            <property name="margin-start">30</property>
+                            <property name="margin-end">30</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
