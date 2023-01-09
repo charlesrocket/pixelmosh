@@ -73,7 +73,7 @@
                       <object class="GtkButton">
                         <property name="action-name">win.open-file</property>
                         <property name="icon-name">document-open-symbolic</property>
-                        <property name="tooltip-text">Open new image</property>
+                        <property name="tooltip-text">New image</property>
                       </object>
                     </child>
                     <child>
