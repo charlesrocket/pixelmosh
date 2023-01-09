@@ -1,6 +1,13 @@
 picture {
-  box-shadow: rgba(15, 15, 25, 0.1) 0px 5px 17px, rgba(15, 15, 25, 0.1) 0px 9px 23px, rgba(15, 15, 25, 0.1) 0px 16px 55px;
+  box-shadow: rgba(42, 65, 20, 0.2) 0px 7px 32px 0px;
   border-radius: 3px;
+  transition-duration: 0.2s;
+}
+
+picture:hover {
+  box-shadow: rgba(255, 23, 23, 0.2) 0px 7px 29px 0px;
+  border-radius: 1px;
+  transition-duration: 1s;
 }
 
 #moshbutton:hover {
