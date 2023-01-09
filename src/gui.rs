@@ -23,7 +23,7 @@ fn build_ui(app: &adw::Application) {
     let style_manager = adw::StyleManager::default();
     let window = Window::new(app);
 
-    style_manager.set_color_scheme(adw::ColorScheme::ForceDark);
+    style_manager.set_color_scheme(adw::ColorScheme::PreferDark);
     window.present();
 }
 
