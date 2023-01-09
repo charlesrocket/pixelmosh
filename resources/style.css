@@ -14,3 +14,8 @@ picture:hover {
   color: @red_2;
   background: @headerbar_bg_color;
 }
+
+#start:hover {
+  color: @red_2;
+  box-shadow: rgba(255, 23, 23, 0.4) 2px 3px 37px 3px;
+}

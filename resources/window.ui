@@ -33,9 +33,9 @@
                             <property name="use-underline">True</property>
                             <property name="halign">center</property>
                             <property name="action-name">win.open-file</property>
+                            <property name="name">start</property>
                             <style>
                               <class name="pill" />
-                              <class name="suggested-action"/>
                             </style>
                           </object>
                         </property>
