@@ -101,20 +101,28 @@ pub fn mosh(
     pixel_buffer: &mut [u8],
     options: &MoshOptions,
 ) -> Result<(), MoshError> {
+    let min_rate = options.min_rate;
+    let mut max_rate = options.max_rate;
+    let mut pixelation_rate = options.pixelation;
+
+    if options.min_rate > options.max_rate {
+        max_rate = min_rate;
+    }
+
     if options.pixelation == 0 {
-        return Err(MoshError::InvalidParameters);
+        pixelation_rate = 1;
     }
 
     let (orig_width, orig_height) = (image_info.width as usize, image_info.height as usize);
     let (dest_width, dest_height) = (
-        orig_width / options.pixelation as usize,
-        orig_height / options.pixelation as usize,
+        orig_width / pixelation_rate as usize,
+        orig_height / pixelation_rate as usize,
     );
 
     let mut dest = vec![0_u8; dest_width * dest_height * image_info.color_type.samples()];
     let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
 
-    let chunk_count_distrib = Uniform::from(options.min_rate..=options.max_rate);
+    let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
     let mosh_rate = chunk_count_distrib.sample(&mut rng);
 
     for _ in 0..mosh_rate {
