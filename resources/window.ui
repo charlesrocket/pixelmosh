@@ -2,8 +2,8 @@
 <interface>
   <template class="PixelmoshWindow" parent="AdwApplicationWindow">
     <property name="title" translatable="yes">PIXELMOSH</property>
-    <property name="default_width">765</property>
-    <property name="default_height">540</property>
+    <property name="default_width">835</property>
+    <property name="default_height">642</property>
     <property name="content">
       <object class="GtkStack" id="stack">
         <property name="transition-type">crossfade</property>
