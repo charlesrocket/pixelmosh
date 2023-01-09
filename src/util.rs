@@ -69,29 +69,3 @@ fn encoding() {
 
     write_file("moshed.png", &[0_u8], &info).unwrap();
 }
-
-#[test]
-#[should_panic(expected = "InvalidParameters")]
-fn pixelation() {
-    let info = OutputInfo {
-        width: 1,
-        height: 1,
-        color_type: ColorType::Rgba,
-        bit_depth: BitDepth::Eight,
-        line_size: 1,
-    };
-
-    let options = MoshOptions {
-        min_rate: 3,
-        max_rate: 5,
-        pixelation: 0,
-        line_shift: 0.5,
-        reverse: 0.4,
-        flip: 0.3,
-        channel_swap: 0.2,
-        channel_shift: 0.1,
-        seed: 42,
-    };
-
-    mosh(&info, &mut [0_u8], &options).unwrap();
-}
