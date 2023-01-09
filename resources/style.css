@@ -5,7 +5,7 @@ picture {
 }
 
 picture:hover {
-  box-shadow: rgba(255, 23, 23, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(255, 23, 23, 0.1) 0px 7px 29px 0px;
   border-radius: 1px;
   transition-duration: 1s;
 }
