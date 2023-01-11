@@ -4,9 +4,8 @@ use indicatif::{ProgressBar, ProgressStyle};
 use std::{env, path::PathBuf};
 
 use libmosh::{
-    mosh,
     ops::{read_file, write_file},
-    MoshOptions,
+    MoshData, MoshOptions,
 };
 
 // Logo
@@ -171,16 +170,18 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
     spinner.set_message("\x1b[36mreading input\x1b[0m");
 
-    let (mut buf, info) = match read_file(input) {
-        Ok((buf, info)) => (buf, info),
+    let image = match read_file(input) {
+        Ok(image) => image,
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
             std::process::exit(1)
         }
     };
 
+    let mut new_image = MoshData::new(&image).unwrap();
+
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    match mosh(&info, &mut buf, options) {
+    match new_image.mosh(options) {
         Ok(image) => image,
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
@@ -189,7 +190,14 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
     };
 
     spinner.set_message("\x1b[33mwriting output\x1b[0m");
-    match write_file(output, &buf, &info) {
+    match write_file(
+        output,
+        &new_image.data,
+        new_image.width,
+        new_image.height,
+        new_image.color_type,
+        new_image.bit_depth,
+    ) {
         Ok(()) => spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m"),
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");

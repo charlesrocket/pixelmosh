@@ -2,7 +2,7 @@
 //!
 //! Glitch and pixelate PNG images.
 
-use png::{ColorType, OutputInfo};
+use png::{BitDepth, ColorType, Decoder};
 use rand::{
     distributions::{Distribution, Uniform},
     RngCore, SeedableRng,
@@ -23,6 +23,15 @@ use crate::{
 pub mod err;
 pub mod fx;
 pub mod ops;
+
+pub struct MoshData {
+    pub data: Vec<u8>,
+    pub width: u32,
+    pub height: u32,
+    pub color_type: ColorType,
+    pub bit_depth: BitDepth,
+    pub line_size: usize,
+}
 
 /// Processing options
 ///
@@ -48,6 +57,217 @@ pub struct MoshOptions {
     pub seed: u64,
 }
 
+impl MoshData {
+    pub fn new(input: &[u8]) -> Result<Self, MoshError> {
+        let decoder = Decoder::new(input);
+        let mut reader = decoder.read_info()?;
+        let mut buf = vec![0_u8; reader.output_buffer_size()];
+        let info = reader.next_frame(&mut buf)?;
+
+        Ok(Self {
+            data: buf,
+            width: info.width,
+            height: info.height,
+            color_type: info.color_type,
+            bit_depth: info.bit_depth,
+            line_size: info.line_size,
+        })
+    }
+
+    pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
+        let min_rate = options.min_rate;
+        let mut max_rate = options.max_rate;
+        let mut pixelation_rate = options.pixelation;
+
+        if options.min_rate > options.max_rate {
+            max_rate = min_rate;
+        }
+
+        if options.pixelation == 0 {
+            pixelation_rate = 1;
+        }
+
+        let (orig_width, orig_height) = (self.width as usize, self.height as usize);
+        let (dest_width, dest_height) = (
+            orig_width / pixelation_rate as usize,
+            orig_height / pixelation_rate as usize,
+        );
+
+        let mut dest = vec![0_u8; dest_width * dest_height * self.color_type.samples()];
+        let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
+
+        let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
+        let mosh_rate = chunk_count_distrib.sample(&mut rng);
+
+        for _ in 0..mosh_rate {
+            Self::chunkmosh(self, &mut rng, options);
+        }
+
+        if options.pixelation > 1 {
+            match self.color_type {
+                ColorType::GrayscaleAlpha | ColorType::Indexed => {}
+                ColorType::Grayscale => {
+                    resize::new(
+                        orig_width,
+                        orig_height,
+                        dest_width,
+                        dest_height,
+                        Gray8,
+                        Point,
+                    )?
+                    .resize(self.data.as_gray(), dest.as_gray_mut())?;
+                }
+
+                ColorType::Rgb => {
+                    resize::new(
+                        orig_width,
+                        orig_height,
+                        dest_width,
+                        dest_height,
+                        RGB8,
+                        Point,
+                    )?
+                    .resize(self.data.as_rgb(), dest.as_rgb_mut())?;
+                }
+
+                ColorType::Rgba => {
+                    resize::new(
+                        orig_width,
+                        orig_height,
+                        dest_width,
+                        dest_height,
+                        RGBA8,
+                        Point,
+                    )?
+                    .resize(self.data.as_rgba(), dest.as_rgba_mut())?;
+                }
+            };
+
+            match self.color_type {
+                ColorType::GrayscaleAlpha | ColorType::Indexed => {
+                    return Err(MoshError::UnsupportedColorType);
+                }
+
+                ColorType::Grayscale => {
+                    resize::new(
+                        dest_width,
+                        dest_height,
+                        orig_width,
+                        orig_height,
+                        Gray8,
+                        Point,
+                    )?
+                    .resize(dest.as_gray(), self.data.as_gray_mut())?;
+                }
+
+                ColorType::Rgb => {
+                    resize::new(
+                        dest_width,
+                        dest_height,
+                        orig_width,
+                        orig_height,
+                        RGB8,
+                        Point,
+                    )?
+                    .resize(dest.as_rgb(), self.data.as_rgb_mut())?;
+                }
+
+                ColorType::Rgba => {
+                    resize::new(
+                        dest_width,
+                        dest_height,
+                        orig_width,
+                        orig_height,
+                        RGBA8,
+                        Point,
+                    )?
+                    .resize(dest.as_rgba(), self.data.as_rgba_mut())?;
+                }
+            };
+        }
+
+        Ok(())
+    }
+
+    // Use pnglitch approach
+    //
+    // TODO
+    // Add more `rng` to `chunk_size`?
+    fn chunkmosh(&mut self, rng: &mut impl rand::Rng, options: &MoshOptions) {
+        let line_count = self.data.len() / self.line_size;
+        let channel_count = match self.color_type {
+            ColorType::Grayscale | ColorType::Indexed => 1,
+            ColorType::GrayscaleAlpha => 2,
+            ColorType::Rgb => 3,
+            ColorType::Rgba => 4,
+        };
+
+        let line_shift_distrib = Uniform::from(0..self.line_size);
+        let line_number_distrib = Uniform::from(0..line_count);
+        let channel_count_distrib = Uniform::from(0..channel_count);
+
+        let first_line = line_number_distrib.sample(rng);
+        let chunk_size = line_number_distrib.sample(rng) / 2;
+        let last_line = if (first_line + chunk_size) > line_count {
+            line_count
+        } else {
+            first_line + chunk_size
+        };
+
+        let reverse = rng.gen_bool(options.reverse);
+        let flip = rng.gen_bool(options.flip);
+
+        let line_shift = rng.gen_bool(options.line_shift).then(|| {
+            let line_shift_amount = line_shift_distrib.sample(rng);
+
+            MoshLine::Shift(line_shift_amount)
+        });
+
+        let channel_shift = rng.gen_bool(options.channel_shift).then(|| {
+            let amount = line_shift_distrib.sample(rng) / channel_count;
+            let channel = channel_count_distrib.sample(rng);
+
+            MoshLine::ChannelShift(amount, channel, channel_count)
+        });
+
+        let channel_swap = rng.gen_bool(options.channel_swap).then(|| {
+            let channel_1 = channel_count_distrib.sample(rng);
+            let channel_2 = channel_count_distrib.sample(rng);
+
+            MoshChunk::ChannelSwap(channel_1, channel_2, channel_count)
+        });
+
+        for line_number in first_line..last_line {
+            let line_start = line_number * self.line_size;
+            let line_end = line_start + self.line_size;
+            let line = &mut self.data[line_start..line_end];
+
+            if let Some(do_channel_shift) = &channel_shift {
+                do_channel_shift.glitch(line);
+            }
+
+            if let Some(do_line_shift) = &line_shift {
+                do_line_shift.glitch(line);
+            }
+            if reverse {
+                MoshLine::Reverse.glitch(line);
+            }
+        }
+
+        let chunk_start = first_line * self.line_size;
+        let chunk_end = last_line * self.line_size;
+        let chunk = &mut self.data[chunk_start..chunk_end];
+
+        if let Some(do_channel_swap) = channel_swap {
+            do_channel_swap.glitch(chunk);
+        };
+
+        if flip {
+            MoshChunk::Flip.glitch(chunk);
+        };
+    }
+}
+
 impl Default for MoshOptions {
     fn default() -> Self {
         Self {
@@ -66,244 +286,6 @@ impl Default for MoshOptions {
             },
         }
     }
-}
-
-/// Processes provided image data
-///
-/// # Errors
-///
-/// * [`InvalidParameters`]: e.g. when pixelation value is more than `image_info.width`.
-/// * [`OutOfMemory`]: `resize` may run out of memory.
-/// * [`UnsupportedColorType`]: `ColorType::GrayscaleAlpha` is not supported.
-///
-/// # Example
-/// ````
-/// use libmosh::{mosh, ops, MoshOptions};
-/// use libmosh::err::MoshError;
-/// use std::fs::File;
-///
-/// let (mut buf, info) = ops::read_file("src/util/test-grayscale.png")?;
-/// let output = "test.png";
-/// let options = MoshOptions {
-///     min_rate: 5,
-///     max_rate: 7,
-///     pixelation: 10,
-///     line_shift: 0.7,
-///     reverse: 0.4,
-///     flip: 0.3,
-///     channel_swap: 0.5,
-///     channel_shift: 0.5,
-///     seed: 42,
-/// };
-///
-/// mosh(&info, &mut buf, &options)?;
-/// ops::write_file(output, &buf, &info)?;
-/// # Ok::<(), MoshError>(())
-/// ````
-///
-/// [`InvalidParameters`]: crate::err::MoshError::InvalidParameters
-/// [`OutOfMemory`]: crate::err::MoshError::OutOfMemory
-/// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
-pub fn mosh(
-    image_info: &OutputInfo,
-    pixel_buffer: &mut [u8],
-    options: &MoshOptions,
-) -> Result<(), MoshError> {
-    let min_rate = options.min_rate;
-    let mut max_rate = options.max_rate;
-    let mut pixelation_rate = options.pixelation;
-
-    if options.min_rate > options.max_rate {
-        max_rate = min_rate;
-    }
-
-    if options.pixelation == 0 {
-        pixelation_rate = 1;
-    }
-
-    let (orig_width, orig_height) = (image_info.width as usize, image_info.height as usize);
-    let (dest_width, dest_height) = (
-        orig_width / pixelation_rate as usize,
-        orig_height / pixelation_rate as usize,
-    );
-
-    let mut dest = vec![0_u8; dest_width * dest_height * image_info.color_type.samples()];
-    let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
-
-    let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
-    let mosh_rate = chunk_count_distrib.sample(&mut rng);
-
-    for _ in 0..mosh_rate {
-        chunkmosh(image_info, pixel_buffer, &mut rng, options);
-    }
-
-    if options.pixelation > 1 {
-        match image_info.color_type {
-            ColorType::GrayscaleAlpha | ColorType::Indexed => {}
-            ColorType::Grayscale => {
-                resize::new(
-                    orig_width,
-                    orig_height,
-                    dest_width,
-                    dest_height,
-                    Gray8,
-                    Point,
-                )?
-                .resize(pixel_buffer.as_gray(), dest.as_gray_mut())?;
-            }
-
-            ColorType::Rgb => {
-                resize::new(
-                    orig_width,
-                    orig_height,
-                    dest_width,
-                    dest_height,
-                    RGB8,
-                    Point,
-                )?
-                .resize(pixel_buffer.as_rgb(), dest.as_rgb_mut())?;
-            }
-
-            ColorType::Rgba => {
-                resize::new(
-                    orig_width,
-                    orig_height,
-                    dest_width,
-                    dest_height,
-                    RGBA8,
-                    Point,
-                )?
-                .resize(pixel_buffer.as_rgba(), dest.as_rgba_mut())?;
-            }
-        };
-
-        match image_info.color_type {
-            ColorType::GrayscaleAlpha | ColorType::Indexed => {
-                return Err(MoshError::UnsupportedColorType);
-            }
-
-            ColorType::Grayscale => {
-                resize::new(
-                    dest_width,
-                    dest_height,
-                    orig_width,
-                    orig_height,
-                    Gray8,
-                    Point,
-                )?
-                .resize(dest.as_gray(), pixel_buffer.as_gray_mut())?;
-            }
-
-            ColorType::Rgb => {
-                resize::new(
-                    dest_width,
-                    dest_height,
-                    orig_width,
-                    orig_height,
-                    RGB8,
-                    Point,
-                )?
-                .resize(dest.as_rgb(), pixel_buffer.as_rgb_mut())?;
-            }
-
-            ColorType::Rgba => {
-                resize::new(
-                    dest_width,
-                    dest_height,
-                    orig_width,
-                    orig_height,
-                    RGBA8,
-                    Point,
-                )?
-                .resize(dest.as_rgba(), pixel_buffer.as_rgba_mut())?;
-            }
-        };
-    }
-
-    Ok(())
-}
-
-// Use pnglitch approach
-//
-// TODO
-// Add more `rng` to `chunk_size`?
-fn chunkmosh(
-    image_info: &OutputInfo,
-    pixel_buffer: &mut [u8],
-    rng: &mut impl rand::Rng,
-    options: &MoshOptions,
-) {
-    let line_count = pixel_buffer.len() / image_info.line_size;
-    let channel_count = match image_info.color_type {
-        ColorType::Grayscale | ColorType::Indexed => 1,
-        ColorType::GrayscaleAlpha => 2,
-        ColorType::Rgb => 3,
-        ColorType::Rgba => 4,
-    };
-
-    let line_shift_distrib = Uniform::from(0..image_info.line_size);
-    let line_number_distrib = Uniform::from(0..line_count);
-    let channel_count_distrib = Uniform::from(0..channel_count);
-
-    let first_line = line_number_distrib.sample(rng);
-    let chunk_size = line_number_distrib.sample(rng) / 2;
-    let last_line = if (first_line + chunk_size) > line_count {
-        line_count
-    } else {
-        first_line + chunk_size
-    };
-
-    let reverse = rng.gen_bool(options.reverse);
-    let flip = rng.gen_bool(options.flip);
-
-    let line_shift = rng.gen_bool(options.line_shift).then(|| {
-        let line_shift_amount = line_shift_distrib.sample(rng);
-
-        MoshLine::Shift(line_shift_amount)
-    });
-
-    let channel_shift = rng.gen_bool(options.channel_shift).then(|| {
-        let amount = line_shift_distrib.sample(rng) / channel_count;
-        let channel = channel_count_distrib.sample(rng);
-
-        MoshLine::ChannelShift(amount, channel, channel_count)
-    });
-
-    let channel_swap = rng.gen_bool(options.channel_swap).then(|| {
-        let channel_1 = channel_count_distrib.sample(rng);
-        let channel_2 = channel_count_distrib.sample(rng);
-
-        MoshChunk::ChannelSwap(channel_1, channel_2, channel_count)
-    });
-
-    for line_number in first_line..last_line {
-        let line_start = line_number * image_info.line_size;
-        let line_end = line_start + image_info.line_size;
-        let line = &mut pixel_buffer[line_start..line_end];
-
-        if let Some(do_channel_shift) = &channel_shift {
-            do_channel_shift.glitch(line);
-        }
-
-        if let Some(do_line_shift) = &line_shift {
-            do_line_shift.glitch(line);
-        }
-        if reverse {
-            MoshLine::Reverse.glitch(line);
-        }
-    }
-
-    let chunk_start = first_line * image_info.line_size;
-    let chunk_end = last_line * image_info.line_size;
-    let chunk = &mut pixel_buffer[chunk_start..chunk_end];
-
-    if let Some(do_channel_swap) = channel_swap {
-        do_channel_swap.glitch(chunk);
-    };
-
-    if flip {
-        MoshChunk::Flip.glitch(chunk);
-    };
 }
 
 const TEST_SEED: u64 = 901_042_006;
