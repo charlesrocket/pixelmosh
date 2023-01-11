@@ -1,12 +1,10 @@
-use adw::prelude::*;
-use adw::subclass::prelude::*;
+use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
 use gtk::{glib, CompositeTemplate, ResponseType, SpinButton, Stack};
 
 use std::cell::RefCell;
 
-use crate::gui::image::Options;
-use crate::gui::window::Image;
+use crate::gui::{image::Options, window::Image};
 
 #[derive(CompositeTemplate)]
 #[template(resource = "/pixelmosh/window.ui")]

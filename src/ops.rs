@@ -2,9 +2,7 @@
 
 use png::{Decoder, Encoder};
 
-use std::fs::File;
-use std::io::BufWriter;
-use std::path::Path;
+use std::{fs::File, io::BufWriter, path::Path};
 
 use crate::MoshError;
 

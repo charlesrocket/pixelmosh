@@ -1,11 +1,13 @@
 use adler::adler32;
 use png::{BitDepth, ColorType, OutputInfo};
 
-use std::fs::File;
-use std::io::BufReader;
+use std::{fs::File, io::BufReader};
 
-use super::ops::{read_file, write_file};
-use super::{mosh, MoshOptions};
+use super::{
+    mosh,
+    ops::{read_file, write_file},
+    MoshOptions,
+};
 
 #[test]
 fn rgb() {

@@ -1,11 +1,13 @@
 use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
 use indicatif::{ProgressBar, ProgressStyle};
 
-use std::env;
-use std::path::PathBuf;
+use std::{env, path::PathBuf};
 
-use libmosh::ops::{read_file, write_file};
-use libmosh::{mosh, MoshOptions};
+use libmosh::{
+    mosh,
+    ops::{read_file, write_file},
+    MoshOptions,
+};
 
 // Logo
 const BANNER: &str = "┌─────────────────────────────────────┐\n\

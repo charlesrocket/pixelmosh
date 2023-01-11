@@ -1,5 +1,4 @@
-use std::error::Error;
-use std::process::Command;
+use std::{error::Error, process::Command};
 
 use assert_cmd::prelude::*;
 use predicates::str::contains;

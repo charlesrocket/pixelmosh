@@ -1,5 +1,4 @@
-use adw::prelude::*;
-use adw::subclass::prelude::*;
+use adw::{prelude::*, subclass::prelude::*};
 use glib::{clone, Object};
 use gtk::{gio, glib};
 

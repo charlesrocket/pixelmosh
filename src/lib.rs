@@ -3,14 +3,22 @@
 //! Glitch and pixelate PNG images.
 
 use png::{ColorType, OutputInfo};
-use rand::distributions::{Distribution, Uniform};
-use rand::{RngCore, SeedableRng};
-use resize::Pixel::{Gray8, RGB8, RGBA8};
-use resize::Type::Point;
+use rand::{
+    distributions::{Distribution, Uniform},
+    RngCore, SeedableRng,
+};
+
+use resize::{
+    Pixel::{Gray8, RGB8, RGBA8},
+    Type::Point,
+};
+
 use rgb::FromSlice;
 
-use crate::err::MoshError;
-use crate::fx::{Mosh, MoshChunk, MoshLine};
+use crate::{
+    err::MoshError,
+    fx::{Mosh, MoshChunk, MoshLine},
+};
 
 pub mod err;
 pub mod fx;
