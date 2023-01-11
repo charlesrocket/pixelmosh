@@ -98,8 +98,7 @@ fn encoding() {
 
 #[test]
 fn invalid_parameters() {
-    let input = read_file("src/util/test-grayscale.png").unwrap();
-    let mut image = MoshData::new(&input).unwrap();
+    let mut image = MoshData::default();
     let options = MoshOptions {
         min_rate: 13,
         max_rate: 6,

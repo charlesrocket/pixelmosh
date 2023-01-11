@@ -268,6 +268,19 @@ impl MoshData {
     }
 }
 
+impl Default for MoshData {
+    fn default() -> Self {
+        Self {
+            buf: vec![0_u8],
+            width: 1,
+            height: 1,
+            color_type: ColorType::Rgba,
+            bit_depth: BitDepth::Eight,
+            line_size: 1,
+        }
+    }
+}
+
 impl Default for MoshOptions {
     fn default() -> Self {
         Self {
