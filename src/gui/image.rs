@@ -114,38 +114,6 @@ impl Image {
 }
 
 impl Options {
-    pub fn min_rate(&self) -> u16 {
-        self.0.min_rate
-    }
-
-    pub fn max_rate(&self) -> u16 {
-        self.0.max_rate
-    }
-
-    pub fn pixelation(&self) -> u8 {
-        self.0.pixelation
-    }
-
-    pub fn line_shift(&self) -> f64 {
-        self.0.line_shift
-    }
-
-    pub fn reverse(&self) -> f64 {
-        self.0.reverse
-    }
-
-    pub fn flip(&self) -> f64 {
-        self.0.flip
-    }
-
-    pub fn channel_swap(&self) -> f64 {
-        self.0.channel_swap
-    }
-
-    pub fn channel_shift(&self) -> f64 {
-        self.0.channel_shift
-    }
-
     pub fn seed(&self) -> u64 {
         self.0.seed
     }
