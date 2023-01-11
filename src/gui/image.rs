@@ -22,7 +22,7 @@ pub struct Image {
 pub struct Options(MoshOptions);
 
 impl Image {
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             buf: vec![0_u8],
             buf_new: vec![0_u8],
@@ -45,7 +45,7 @@ impl Image {
         }
     }
 
-    pub fn generate_texture(info: &OutputInfo, buf: &Vec<u8>) -> gdk::MemoryTexture {
+    fn generate_texture(info: &OutputInfo, buf: &Vec<u8>) -> gdk::MemoryTexture {
         let (format, stride) = match &info.color_type {
             ColorType::GrayscaleAlpha | ColorType::Indexed => {
                 todo!()
