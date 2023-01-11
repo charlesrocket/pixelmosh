@@ -3,7 +3,7 @@ extern crate test;
 
 use test::black_box;
 
-use libmosh::{mosh as libmosh, ops, MoshOptions};
+use libmosh::{ops, MoshData, MoshOptions};
 
 struct Bench {}
 
@@ -21,9 +21,10 @@ impl Bench {
             seed: input,
         };
 
-        let (mut buf, info) = ops::read_file(image).unwrap();
+        let file = ops::read_file(image).unwrap();
+        let mut image = MoshData::new(&file).unwrap();
 
-        libmosh(&info, &mut buf, &options).unwrap();
+        image.mosh(&options).unwrap();
     }
 }
 
