@@ -178,7 +178,13 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
         }
     };
 
-    let mut new_image = MoshData::new(&image).unwrap();
+    let mut new_image = match MoshData::new(&image) {
+        Ok(new_image) => new_image,
+        Err(error) => {
+            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
+            std::process::exit(1)
+        }
+    };
 
     spinner.set_message("\x1b[94mprocessing\x1b[0m");
     match new_image.mosh(options) {
