@@ -50,7 +50,7 @@ jobs:
         with:
           path: target/
           key: clippy-${{ hashFiles('**/Cargo.lock') }}
-      - run: sudo apt-get install libgtk-4-dev libadwaita-1-dev
+      - run: sudo apt-get update && sudo apt-get install libgtk-4-dev libadwaita-1-dev
       - run: rustup component add clippy
       - run: cargo clippy --all-features -- -D clippy::all -D warnings
 
