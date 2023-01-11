@@ -15,7 +15,7 @@ fn rgb() {
     image.mosh(&MoshOptions::default()).unwrap();
     write_file(
         "moshed.png",
-        &image.data,
+        &image.buf,
         image.width,
         image.height,
         image.color_type,
@@ -37,7 +37,7 @@ fn rgba() {
     image.mosh(&MoshOptions::default()).unwrap();
     write_file(
         "moshed.png",
-        &image.data,
+        &image.buf,
         image.width,
         image.height,
         image.color_type,
@@ -59,7 +59,7 @@ fn grayscale() {
     image.mosh(&MoshOptions::default()).unwrap();
     write_file(
         "moshed.png",
-        &image.data,
+        &image.buf,
         image.width,
         image.height,
         image.color_type,

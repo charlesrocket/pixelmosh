@@ -25,7 +25,7 @@ pub mod fx;
 pub mod ops;
 
 pub struct MoshData {
-    pub data: Vec<u8>,
+    pub buf: Vec<u8>,
     pub width: u32,
     pub height: u32,
     pub color_type: ColorType,
@@ -65,7 +65,7 @@ impl MoshData {
         let info = reader.next_frame(&mut buf)?;
 
         Ok(Self {
-            data: buf,
+            buf: buf,
             width: info.width,
             height: info.height,
             color_type: info.color_type,
@@ -115,7 +115,7 @@ impl MoshData {
                         Gray8,
                         Point,
                     )?
-                    .resize(self.data.as_gray(), dest.as_gray_mut())?;
+                    .resize(self.buf.as_gray(), dest.as_gray_mut())?;
                 }
 
                 ColorType::Rgb => {
@@ -127,7 +127,7 @@ impl MoshData {
                         RGB8,
                         Point,
                     )?
-                    .resize(self.data.as_rgb(), dest.as_rgb_mut())?;
+                    .resize(self.buf.as_rgb(), dest.as_rgb_mut())?;
                 }
 
                 ColorType::Rgba => {
@@ -139,7 +139,7 @@ impl MoshData {
                         RGBA8,
                         Point,
                     )?
-                    .resize(self.data.as_rgba(), dest.as_rgba_mut())?;
+                    .resize(self.buf.as_rgba(), dest.as_rgba_mut())?;
                 }
             };
 
@@ -157,7 +157,7 @@ impl MoshData {
                         Gray8,
                         Point,
                     )?
-                    .resize(dest.as_gray(), self.data.as_gray_mut())?;
+                    .resize(dest.as_gray(), self.buf.as_gray_mut())?;
                 }
 
                 ColorType::Rgb => {
@@ -169,7 +169,7 @@ impl MoshData {
                         RGB8,
                         Point,
                     )?
-                    .resize(dest.as_rgb(), self.data.as_rgb_mut())?;
+                    .resize(dest.as_rgb(), self.buf.as_rgb_mut())?;
                 }
 
                 ColorType::Rgba => {
@@ -181,7 +181,7 @@ impl MoshData {
                         RGBA8,
                         Point,
                     )?
-                    .resize(dest.as_rgba(), self.data.as_rgba_mut())?;
+                    .resize(dest.as_rgba(), self.buf.as_rgba_mut())?;
                 }
             };
         }
@@ -194,7 +194,7 @@ impl MoshData {
     // TODO
     // Add more `rng` to `chunk_size`?
     fn chunkmosh(&mut self, rng: &mut impl rand::Rng, options: &MoshOptions) {
-        let line_count = self.data.len() / self.line_size;
+        let line_count = self.buf.len() / self.line_size;
         let channel_count = match self.color_type {
             ColorType::Grayscale | ColorType::Indexed => 1,
             ColorType::GrayscaleAlpha => 2,
@@ -240,7 +240,7 @@ impl MoshData {
         for line_number in first_line..last_line {
             let line_start = line_number * self.line_size;
             let line_end = line_start + self.line_size;
-            let line = &mut self.data[line_start..line_end];
+            let line = &mut self.buf[line_start..line_end];
 
             if let Some(do_channel_shift) = &channel_shift {
                 do_channel_shift.glitch(line);
@@ -256,7 +256,7 @@ impl MoshData {
 
         let chunk_start = first_line * self.line_size;
         let chunk_end = last_line * self.line_size;
-        let chunk = &mut self.data[chunk_start..chunk_end];
+        let chunk = &mut self.buf[chunk_start..chunk_end];
 
         if let Some(do_channel_swap) = channel_swap {
             do_channel_swap.glitch(chunk);

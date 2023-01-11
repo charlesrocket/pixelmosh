@@ -198,7 +198,7 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
     spinner.set_message("\x1b[33mwriting output\x1b[0m");
     match write_file(
         output,
-        &new_image.data,
+        &new_image.buf,
         new_image.width,
         new_image.height,
         new_image.color_type,
