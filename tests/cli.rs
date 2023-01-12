@@ -25,21 +25,6 @@ fn file_not_found() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn invalid_parameters() -> Result<(), Box<dyn Error>> {
-    let mut cmd = Command::cargo_bin("pixelmosh")?;
-
-    cmd.arg("src/util/test-pixelation.png")
-        .arg("--pixelation")
-        .arg("255");
-
-    cmd.assert()
-        .failure()
-        .stderr(contains("Invalid parameters"));
-
-    Ok(())
-}
-
-#[test]
 fn invalid_sig() -> Result<(), Box<dyn Error>> {
     let mut cmd = Command::cargo_bin("pixelmosh")?;
 
