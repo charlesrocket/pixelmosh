@@ -2,18 +2,14 @@
 //!
 //! Glitch and pixelate PNG images.
 
+use fast_image_resize as fr;
 use png::{BitDepth, ColorType, Decoder};
 use rand::{
     distributions::{Distribution, Uniform},
     RngCore, SeedableRng,
 };
 
-use resize::{
-    Pixel::{Gray8, RGB8, RGBA8},
-    Type::Point,
-};
-
-use rgb::FromSlice;
+use std::num::NonZeroU32;
 
 use crate::{
     err::MoshError,
@@ -81,25 +77,12 @@ impl MoshData {
 
         let min_rate = options.min_rate;
         let mut max_rate = options.max_rate;
-        let mut pixelation_rate = options.pixelation;
 
         if options.min_rate > options.max_rate {
             max_rate = min_rate;
         }
 
-        if options.pixelation == 0 {
-            pixelation_rate = 1;
-        }
-
-        let (orig_width, orig_height) = (self.width as usize, self.height as usize);
-        let (dest_width, dest_height) = (
-            orig_width / pixelation_rate as usize,
-            orig_height / pixelation_rate as usize,
-        );
-
-        let mut dest = vec![0_u8; dest_width * dest_height * self.color_type.samples()];
         let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
-
         let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
         let mosh_rate = chunk_count_distrib.sample(&mut rng);
 
@@ -107,90 +90,50 @@ impl MoshData {
             Self::chunkmosh(self, &mut rng, options);
         }
 
-        if options.pixelation > 1 {
-            match self.color_type {
-                ColorType::GrayscaleAlpha | ColorType::Indexed => {}
-                ColorType::Grayscale => {
-                    resize::new(
-                        orig_width,
-                        orig_height,
-                        dest_width,
-                        dest_height,
-                        Gray8,
-                        Point,
-                    )?
-                    .resize(self.buf.as_gray(), dest.as_gray_mut())?;
-                }
-
-                ColorType::Rgb => {
-                    resize::new(
-                        orig_width,
-                        orig_height,
-                        dest_width,
-                        dest_height,
-                        RGB8,
-                        Point,
-                    )?
-                    .resize(self.buf.as_rgb(), dest.as_rgb_mut())?;
-                }
-
-                ColorType::Rgba => {
-                    resize::new(
-                        orig_width,
-                        orig_height,
-                        dest_width,
-                        dest_height,
-                        RGBA8,
-                        Point,
-                    )?
-                    .resize(self.buf.as_rgba(), dest.as_rgba_mut())?;
-                }
-            };
-
-            match self.color_type {
-                ColorType::GrayscaleAlpha | ColorType::Indexed => {
-                    return Err(MoshError::UnsupportedColorType);
-                }
-
-                ColorType::Grayscale => {
-                    resize::new(
-                        dest_width,
-                        dest_height,
-                        orig_width,
-                        orig_height,
-                        Gray8,
-                        Point,
-                    )?
-                    .resize(dest.as_gray(), self.buf.as_gray_mut())?;
-                }
-
-                ColorType::Rgb => {
-                    resize::new(
-                        dest_width,
-                        dest_height,
-                        orig_width,
-                        orig_height,
-                        RGB8,
-                        Point,
-                    )?
-                    .resize(dest.as_rgb(), self.buf.as_rgb_mut())?;
-                }
-
-                ColorType::Rgba => {
-                    resize::new(
-                        dest_width,
-                        dest_height,
-                        orig_width,
-                        orig_height,
-                        RGBA8,
-                        Point,
-                    )?
-                    .resize(dest.as_rgba(), self.buf.as_rgba_mut())?;
-                }
-            };
+        match self.color_type {
+            ColorType::GrayscaleAlpha | ColorType::Indexed => {
+                return Err(MoshError::UnsupportedColorType);
+            }
+            ColorType::Grayscale => {
+                Self::pixelation(self, options, fr::PixelType::U8);
+            }
+            ColorType::Rgb => {
+                Self::pixelation(self, options, fr::PixelType::U8x3);
+            }
+            ColorType::Rgba => {
+                Self::pixelation(self, options, fr::PixelType::U8x4);
+            }
         }
 
         Ok(())
+    }
+
+    fn pixelation(&mut self, options: &MoshOptions, pixel_type: fr::PixelType) {
+        let mut pixelation_rate = options.pixelation;
+        if options.pixelation == 0 {
+            pixelation_rate = 1;
+        }
+
+        let width = NonZeroU32::new(self.width).unwrap();
+        let height = NonZeroU32::new(self.height).unwrap();
+        let src_image =
+            fr::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type).unwrap();
+
+        let dest_width = NonZeroU32::new(self.width / u32::from(pixelation_rate)).unwrap();
+        let dest_height = NonZeroU32::new(self.height / u32::from(pixelation_rate)).unwrap();
+        let orig_width = NonZeroU32::new(self.width).unwrap();
+        let orig_height = NonZeroU32::new(self.height).unwrap();
+
+        let mut dest_image = fr::Image::new(dest_width, dest_height, src_image.pixel_type());
+        let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
+        let mut dest_view = dest_image.view_mut();
+        let mut orig_view = orig_image.view_mut();
+        let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
+
+        resizer.resize(&src_image.view(), &mut dest_view).unwrap();
+        resizer.resize(&dest_image.view(), &mut orig_view).unwrap();
+
+        self.buf = orig_image.buffer().to_vec();
     }
 
     // Use pnglitch approach

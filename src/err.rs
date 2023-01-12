@@ -9,8 +9,6 @@ pub enum MoshError {
     DecodingError(String),
     /// i.e. wrong data size/formatter failure.
     EncodingError(String),
-    /// e.g. `image_info.width` can't be `0`.
-    InvalidParameters,
     /// I/O errors.
     IoError(String),
     /// Allocation failed.
@@ -25,7 +23,6 @@ impl fmt::Display for MoshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(match self {
             Self::DecodingError(e) | Self::EncodingError(e) | Self::IoError(e) => e,
-            Self::InvalidParameters => "Invalid parameters",
             Self::OutOfMemory => "Out of memory",
             Self::UnsupportedColorType => "Unsupported color type",
         })
@@ -47,15 +44,5 @@ impl From<png::DecodingError> for MoshError {
 impl From<png::EncodingError> for MoshError {
     fn from(e: png::EncodingError) -> Self {
         Self::EncodingError(e.to_string())
-    }
-}
-
-impl From<resize::Error> for MoshError {
-    fn from(e: resize::Error) -> Self {
-        use resize::Error::{InvalidParameters, OutOfMemory};
-        match e {
-            InvalidParameters => Self::InvalidParameters,
-            OutOfMemory => Self::OutOfMemory,
-        }
     }
 }

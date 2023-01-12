@@ -27,7 +27,7 @@ fn rgb() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 2_285_399_975);
+    assert_eq!(checksum, 177_632_196);
 }
 
 #[test]
@@ -49,7 +49,7 @@ fn rgba() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 105_467_096);
+    assert_eq!(checksum, 4_232_986_456);
 }
 
 #[test]
@@ -71,7 +71,7 @@ fn grayscale() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 1_718_963_212);
+    assert_eq!(checksum, 2_950_358_433);
 }
 
 #[test]
@@ -98,7 +98,8 @@ fn encoding() {
 
 #[test]
 fn invalid_parameters() {
-    let mut image = MoshData::default();
+    let input = read_file("src/util/test-grayscale.png").unwrap();
+    let mut image = MoshData::new(&input).unwrap();
     let options = MoshOptions {
         min_rate: 13,
         max_rate: 6,
