@@ -55,12 +55,11 @@ pub struct MoshOptions {
 }
 
 impl MoshData {
-    /// Processes provided image data
+    /// Creates a new image instance of `MoshData` from provided data.
     ///
     /// # Errors
     ///
-    /// * [`OutOfMemory`]: `resize` may run out of memory.
-    /// * [`UnsupportedColorType`]: `ColorType::GrayscaleAlpha` is not supported.
+    /// It may fail if an image is not a valid PNG.
     ///
     /// # Example
     /// ````
@@ -87,9 +86,6 @@ impl MoshData {
     /// )?;
     /// # Ok::<(), MoshError>(())
     /// ````
-    ///
-    /// [`OutOfMemory`]: crate::err::MoshError::OutOfMemory
-    /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
     pub fn new(input: &[u8]) -> Result<Self, MoshError> {
         let decoder = Decoder::new(input);
         let mut reader = decoder.read_info()?;
@@ -107,6 +103,50 @@ impl MoshData {
         })
     }
 
+    /// Processes an image with provided settings.
+    ///
+    /// # Errors
+    ///
+    /// * [`UnsupportedColorType`]: `ColorType::GrayscaleAlpha` is not supported.
+    ///
+    /// # Example
+    /// ````
+    /// use libmosh::{
+    ///     err::MoshError,
+    ///     ops::{read_file, write_file},
+    ///     MoshData, MoshOptions,
+    /// };
+    ///
+    /// use std::fs::File;
+    ///
+    /// let input = read_file("src/util/test-rgb.png")?;
+    /// let output = "test.png";
+    /// let options = MoshOptions {
+    ///     min_rate: 5,
+    ///     max_rate: 7,
+    ///     pixelation: 10,
+    ///     line_shift: 0.7,
+    ///     reverse: 0.4,
+    ///     flip: 0.3,
+    ///     channel_swap: 0.5,
+    ///     channel_shift: 0.5,
+    ///     seed: 42,
+    /// };
+    ///
+    /// let mut image = MoshData::new(&input)?;
+    /// image.mosh(&options)?;
+    /// write_file(
+    ///     output,
+    ///     &image.buf,
+    ///     image.width,
+    ///     image.height,
+    ///     image.color_type,
+    ///     image.bit_depth,
+    /// )?;
+    /// # Ok::<(), MoshError>(())
+    /// ````
+    ///
+    /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
     pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
         self.buf = self.image.clone();
 
