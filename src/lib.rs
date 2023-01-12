@@ -1,6 +1,7 @@
 //! # libmosh
 //!
 //! Glitch and pixelate PNG images.
+
 use fast_image_resize as fr;
 use png::{BitDepth, ColorType, Decoder};
 use rand::{
