@@ -113,30 +113,24 @@ impl MoshData {
             pixelation_rate = 1;
         }
 
-        let (orig_width, orig_height) = (self.width, self.height);
-        let (dest_width, dest_height) = (
-            orig_width / u32::from(pixelation_rate),
-            orig_height / u32::from(pixelation_rate),
-        );
-
-        let width = NonZeroU32::new(orig_width).unwrap();
-        let height = NonZeroU32::new(orig_height).unwrap();
+        let width = NonZeroU32::new(self.width).unwrap();
+        let height = NonZeroU32::new(self.height).unwrap();
         let src_image =
             fr::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type).unwrap();
 
-        let dst_width = NonZeroU32::new(dest_width).unwrap();
-        let dst_height = NonZeroU32::new(dest_height).unwrap();
-        let orig_width = NonZeroU32::new(orig_width).unwrap();
-        let orig_height = NonZeroU32::new(orig_height).unwrap();
+        let dest_width = NonZeroU32::new(self.width / u32::from(pixelation_rate)).unwrap();
+        let dest_height = NonZeroU32::new(self.height / u32::from(pixelation_rate)).unwrap();
+        let orig_width = NonZeroU32::new(self.width).unwrap();
+        let orig_height = NonZeroU32::new(self.height).unwrap();
 
-        let mut dst_image = fr::Image::new(dst_width, dst_height, src_image.pixel_type());
+        let mut dest_image = fr::Image::new(dest_width, dest_height, src_image.pixel_type());
         let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
-        let mut dst_view = dst_image.view_mut();
+        let mut dest_view = dest_image.view_mut();
         let mut orig_view = orig_image.view_mut();
         let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
 
-        resizer.resize(&src_image.view(), &mut dst_view).unwrap();
-        resizer.resize(&dst_image.view(), &mut orig_view).unwrap();
+        resizer.resize(&src_image.view(), &mut dest_view).unwrap();
+        resizer.resize(&dest_image.view(), &mut orig_view).unwrap();
 
         self.buf = orig_image.buffer().to_vec();
     }
