@@ -4,8 +4,7 @@ use png::{BitDepth, ColorType, Encoder};
 
 use std::{
     fs::File,
-    io::BufWriter,
-    io::{BufReader, Read},
+    io::{BufReader, BufWriter, Read},
     path::Path,
 };
 
