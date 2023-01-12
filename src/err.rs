@@ -49,13 +49,3 @@ impl From<png::EncodingError> for MoshError {
         Self::EncodingError(e.to_string())
     }
 }
-
-impl From<resize::Error> for MoshError {
-    fn from(e: resize::Error) -> Self {
-        use resize::Error::{InvalidParameters, OutOfMemory};
-        match e {
-            InvalidParameters => Self::InvalidParameters,
-            OutOfMemory => Self::OutOfMemory,
-        }
-    }
-}
