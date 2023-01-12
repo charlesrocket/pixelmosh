@@ -55,6 +55,41 @@ pub struct MoshOptions {
 }
 
 impl MoshData {
+    /// Processes provided image data
+    ///
+    /// # Errors
+    ///
+    /// * [`OutOfMemory`]: `resize` may run out of memory.
+    /// * [`UnsupportedColorType`]: `ColorType::GrayscaleAlpha` is not supported.
+    ///
+    /// # Example
+    /// ````
+    /// use libmosh::{
+    ///     err::MoshError,
+    ///     ops::{read_file, write_file},
+    ///     MoshData, MoshOptions,
+    /// };
+    ///
+    /// use std::fs::File;
+    ///
+    /// let input = read_file("src/util/test-rgb.png")?;
+    /// let output = "test.png";
+    /// let mut image = MoshData::new(&input)?;
+    ///
+    /// image.mosh(&MoshOptions::default())?;
+    /// write_file(
+    ///     output,
+    ///     &image.buf,
+    ///     image.width,
+    ///     image.height,
+    ///     image.color_type,
+    ///     image.bit_depth,
+    /// )?;
+    /// # Ok::<(), MoshError>(())
+    /// ````
+    ///
+    /// [`OutOfMemory`]: crate::err::MoshError::OutOfMemory
+    /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
     pub fn new(input: &[u8]) -> Result<Self, MoshError> {
         let decoder = Decoder::new(input);
         let mut reader = decoder.read_info()?;
