@@ -9,7 +9,7 @@ use rand::{
     RngCore, SeedableRng,
 };
 
-use std::num::NonZeroU32;
+use std::{cmp, num::NonZeroU32};
 
 use crate::{
     err::MoshError,
@@ -76,12 +76,7 @@ impl MoshData {
         self.buf = self.image.clone();
 
         let min_rate = options.min_rate;
-        let mut max_rate = options.max_rate;
-
-        if options.min_rate > options.max_rate {
-            max_rate = min_rate;
-        }
-
+        let max_rate = cmp::max(options.min_rate, options.max_rate);
         let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
         let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
         let mosh_rate = chunk_count_distrib.sample(&mut rng);
@@ -109,11 +104,7 @@ impl MoshData {
     }
 
     fn pixelation(&mut self, options: &MoshOptions, pixel_type: fr::PixelType) {
-        let mut pixelation_rate = options.pixelation;
-        if options.pixelation == 0 {
-            pixelation_rate = 1;
-        }
-
+        let pixelation_rate = options.pixelation.max(1);
         let width = NonZeroU32::new(self.width).unwrap();
         let height = NonZeroU32::new(self.height).unwrap();
         let src_image =
