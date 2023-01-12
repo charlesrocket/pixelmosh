@@ -3,6 +3,7 @@
 use std::{fmt, io};
 
 /// It handles internal, I/O and formatter errors
+#[non_exhaustive]
 #[derive(Debug)]
 pub enum MoshError {
     /// Data format is not supported.
