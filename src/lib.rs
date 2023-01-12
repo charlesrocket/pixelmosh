@@ -20,13 +20,23 @@ pub mod err;
 pub mod fx;
 pub mod ops;
 
+/// Image data
+///
+/// It holds the original image, buffer and parameters.
 pub struct MoshData {
+    /// Buffer.
     pub buf: Vec<u8>,
+    /// Original image.
     pub image: Vec<u8>,
+    /// Width.
     pub width: u32,
+    /// Height.
     pub height: u32,
+    /// Color type.
     pub color_type: ColorType,
+    /// Bit depth.
     pub bit_depth: BitDepth,
+    /// Line size.
     pub line_size: usize,
 }
 
