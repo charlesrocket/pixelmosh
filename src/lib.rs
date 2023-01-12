@@ -76,21 +76,10 @@ impl MoshData {
 
         let min_rate = options.min_rate;
         let mut max_rate = options.max_rate;
-        let mut pixelation_rate = options.pixelation;
 
         if options.min_rate > options.max_rate {
             max_rate = min_rate;
         }
-
-        if options.pixelation == 0 {
-            pixelation_rate = 1;
-        }
-
-        let (orig_width, orig_height) = (self.width, self.height);
-        let (dest_width, dest_height) = (
-            orig_width / pixelation_rate as u32,
-            orig_height / pixelation_rate as u32,
-        );
 
         let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
         let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
@@ -100,31 +89,56 @@ impl MoshData {
             Self::chunkmosh(self, &mut rng, options);
         }
 
-        if options.pixelation > 1 {
-            let width = NonZeroU32::new(orig_width).unwrap();
-            let height = NonZeroU32::new(orig_height).unwrap();
-            let src_image =
-                fr::Image::from_vec_u8(width, height, self.buf.clone(), fr::PixelType::U8x4)
-                    .unwrap();
-
-            let dst_width = NonZeroU32::new(dest_width).unwrap();
-            let dst_height = NonZeroU32::new(dest_height).unwrap();
-            let orig_width = NonZeroU32::new(orig_width).unwrap();
-            let orig_height = NonZeroU32::new(orig_height).unwrap();
-
-            let mut dst_image = fr::Image::new(dst_width, dst_height, src_image.pixel_type());
-            let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
-            let mut dst_view = dst_image.view_mut();
-            let mut orig_view = orig_image.view_mut();
-
-            let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
-            resizer.resize(&src_image.view(), &mut dst_view).unwrap();
-            resizer.resize(&dst_image.view(), &mut orig_view).unwrap();
-
-            self.buf = orig_image.buffer().to_vec();
+        match self.color_type {
+            ColorType::GrayscaleAlpha | ColorType::Indexed => {
+                return Err(MoshError::UnsupportedColorType);
+            }
+            ColorType::Grayscale => {
+                Self::pixelation(self, options, fr::PixelType::U8);
+            }
+            ColorType::Rgb => {
+                Self::pixelation(self, options, fr::PixelType::U8x3);
+            }
+            ColorType::Rgba => {
+                Self::pixelation(self, options, fr::PixelType::U8x4);
+            }
         }
 
         Ok(())
+    }
+
+    fn pixelation(&mut self, options: &MoshOptions, pixel_type: fr::PixelType) {
+        let mut pixelation_rate = options.pixelation;
+        if options.pixelation == 0 {
+            pixelation_rate = 1;
+        }
+
+        let (orig_width, orig_height) = (self.width, self.height);
+        let (dest_width, dest_height) = (
+            orig_width / u32::from(pixelation_rate),
+            orig_height / u32::from(pixelation_rate),
+        );
+
+        let width = NonZeroU32::new(orig_width).unwrap();
+        let height = NonZeroU32::new(orig_height).unwrap();
+        let src_image =
+            fr::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type).unwrap();
+
+        let dst_width = NonZeroU32::new(dest_width).unwrap();
+        let dst_height = NonZeroU32::new(dest_height).unwrap();
+        let orig_width = NonZeroU32::new(orig_width).unwrap();
+        let orig_height = NonZeroU32::new(orig_height).unwrap();
+
+        let mut dst_image = fr::Image::new(dst_width, dst_height, src_image.pixel_type());
+        let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
+        let mut dst_view = dst_image.view_mut();
+        let mut orig_view = orig_image.view_mut();
+        let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
+
+        resizer.resize(&src_image.view(), &mut dst_view).unwrap();
+        resizer.resize(&dst_image.view(), &mut orig_view).unwrap();
+
+        self.buf = orig_image.buffer().to_vec();
     }
 
     // Use pnglitch approach
