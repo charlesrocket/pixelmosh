@@ -10,9 +10,9 @@ struct Bench {}
 impl Bench {
     fn bench_image(input: u64, image: &str) {
         let options = MoshOptions {
-            min_rate: 1,
-            max_rate: 1,
-            pixelation: 10,
+            min_rate: 3,
+            max_rate: 3,
+            pixelation: 2,
             line_shift: 1.0,
             reverse: 1.0,
             flip: 1.0,
