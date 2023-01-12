@@ -26,6 +26,7 @@ pub mod ops;
 
 pub struct MoshData {
     pub buf: Vec<u8>,
+    pub image: Vec<u8>,
     pub width: u32,
     pub height: u32,
     pub color_type: ColorType,
@@ -65,7 +66,8 @@ impl MoshData {
         let info = reader.next_frame(&mut buf)?;
 
         Ok(Self {
-            buf: buf,
+            buf: vec![0_u8],
+            image: buf,
             width: info.width,
             height: info.height,
             color_type: info.color_type,
@@ -75,6 +77,8 @@ impl MoshData {
     }
 
     pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
+        self.buf = self.image.clone();
+
         let min_rate = options.min_rate;
         let mut max_rate = options.max_rate;
         let mut pixelation_rate = options.pixelation;
@@ -272,6 +276,7 @@ impl Default for MoshData {
     fn default() -> Self {
         Self {
             buf: vec![0_u8],
+            image: vec![0_u8],
             width: 1,
             height: 1,
             color_type: ColorType::Rgba,
