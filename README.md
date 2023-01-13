@@ -53,4 +53,4 @@ Options:
 ```
 
 ## `libmosh`
-Follow the [example](https://docs.rs/pixelmosh/latest/libmosh/struct.MoshData.html#example-1) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
+Follow the [example](https://docs.rs/pixelmosh/latest/libmosh/struct.MoshData.html#example) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
