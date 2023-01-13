@@ -60,7 +60,7 @@ impl ObjectSubclass for Window {
             .build();
 
         png_filter.add_mime_type("image/png");
-        png_filter.set_name(Some("PNG image"));
+        png_filter.set_name(Some("PNG Image"));
         dialog_open.add_filter(&png_filter);
 
         Self {
