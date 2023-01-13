@@ -1,6 +1,29 @@
-//! # libmosh
-//!
 //! Glitch and pixelate PNG images.
+//!
+//! # Usage
+//!
+//! ````
+//! use libmosh::{
+//!     err::MoshError,
+//!     ops::{read_file, write_file},
+//!     MoshData, MoshOptions,
+//! };
+//!
+//! let input = read_file("src/util/test-rgb.png")?;
+//! let output = "test.png";
+//! let mut image = MoshData::new(&input)?;
+//!
+//! image.mosh(&MoshOptions::default())?;
+//! write_file(
+//!     output,
+//!     &image.buf,
+//!     image.width,
+//!     image.height,
+//!     image.color_type,
+//!     image.bit_depth,
+//! )?;
+//! # Ok::<(), MoshError>(())
+//! ````
 
 use fast_image_resize as fr;
 use png::{BitDepth, ColorType, Decoder};
@@ -71,32 +94,6 @@ impl MoshData {
     /// # Errors
     ///
     /// It may fail if an image is not a valid PNG.
-    ///
-    /// # Example
-    /// ````
-    /// use libmosh::{
-    ///     err::MoshError,
-    ///     ops::{read_file, write_file},
-    ///     MoshData, MoshOptions,
-    /// };
-    ///
-    /// use std::fs::File;
-    ///
-    /// let input = read_file("src/util/test-rgb.png")?;
-    /// let output = "test.png";
-    /// let mut image = MoshData::new(&input)?;
-    ///
-    /// image.mosh(&MoshOptions::default())?;
-    /// write_file(
-    ///     output,
-    ///     &image.buf,
-    ///     image.width,
-    ///     image.height,
-    ///     image.color_type,
-    ///     image.bit_depth,
-    /// )?;
-    /// # Ok::<(), MoshError>(())
-    /// ````
     pub fn new(input: &[u8]) -> Result<Self, MoshError> {
         let decoder = Decoder::new(input);
         let mut reader = decoder.read_info()?;
@@ -127,8 +124,6 @@ impl MoshData {
     ///     ops::{read_file, write_file},
     ///     MoshData, MoshOptions,
     /// };
-    ///
-    /// use std::fs::File;
     ///
     /// let input = read_file("src/util/test-rgb.png")?;
     /// let output = "test.png";
