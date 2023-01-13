@@ -66,7 +66,7 @@ pub struct MoshOptions {
 }
 
 impl MoshData {
-    /// Creates a new image instance of `MoshData` from provided data.
+    /// Creates a new instance of `MoshData` from the provided image.
     ///
     /// # Errors
     ///
