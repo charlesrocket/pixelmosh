@@ -43,6 +43,7 @@ pub struct MoshData {
 /// Processing options
 ///
 /// Minimal `pixelation` value is `1` (OFF).
+#[derive(Debug)]
 pub struct MoshOptions {
     /// Minimal amount of chunks to process.
     pub min_rate: u16,
