@@ -5,8 +5,16 @@
 
 ### Compilation
 
+#### CLI
+
 ```
 cargo install --locked pixelmosh
+```
+
+#### GUI
+
+```
+cargo install --locked pixelmosh --features gui
 ```
 
 ### Basic usage
