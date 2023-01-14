@@ -1,4 +1,9 @@
-//! Glitch and pixelate PNG images.
+//! # Overview
+//!
+//! _Glitch and pixelate PNG images_.
+//!
+//! Provides the [`MoshData`] and [`MoshOptions`] types for image processing
+//! and I/O functions, available in the [`ops`] module.
 //!
 //! # Usage
 //!
@@ -111,11 +116,11 @@ impl MoshData {
         })
     }
 
-    /// Processes an image with provided settings.
+    /// Processes an image with provided settings, storing the result in [`MoshData::buf`].
     ///
     /// # Errors
     ///
-    /// * [`UnsupportedColorType`]: `ColorType::GrayscaleAlpha` is not supported.
+    /// * [`UnsupportedColorType`]: [`ColorType::GrayscaleAlpha`] is not supported.
     ///
     /// # Example
     /// ````
