@@ -238,21 +238,18 @@ impl MoshData {
 
         let line_shift = rng.gen_bool(options.line_shift).then(|| {
             let line_shift_amount = line_shift_distrib.sample(rng);
-
             MoshLine::Shift(line_shift_amount)
         });
 
         let channel_shift = rng.gen_bool(options.channel_shift).then(|| {
             let amount = line_shift_distrib.sample(rng) / channel_count;
             let channel = channel_count_distrib.sample(rng);
-
             MoshLine::ChannelShift(amount, channel, channel_count)
         });
 
         let channel_swap = rng.gen_bool(options.channel_swap).then(|| {
             let channel_1 = channel_count_distrib.sample(rng);
             let channel_2 = channel_count_distrib.sample(rng);
-
             MoshChunk::ChannelSwap(channel_1, channel_2, channel_count)
         });
 
