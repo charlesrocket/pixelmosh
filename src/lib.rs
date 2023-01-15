@@ -94,7 +94,7 @@ pub struct MoshOptions {
 }
 
 impl MoshData {
-    /// Creates a new instance of `MoshData` from the provided image.
+    /// Creates a new instance of [`MoshData`] from the provided image.
     ///
     /// # Errors
     ///
@@ -116,7 +116,10 @@ impl MoshData {
         })
     }
 
-    /// Processes an image with provided settings, storing the result in [`MoshData::buf`].
+    /// Processes an image with provided [settings], storing the result in a [buffer].
+    ///
+    /// [buffer]: MoshData::buf
+    /// [settings]: MoshOptions
     ///
     /// # Errors
     ///
