@@ -1,5 +1,6 @@
-use std::{error::Error, process::Command};
+use std::{error::Error, fs::File, io::BufReader, process::Command};
 
+use adler::adler32;
 use assert_cmd::prelude::*;
 use predicates::str::contains;
 
@@ -65,6 +66,12 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg("test.png")
         .assert()
         .success();
+
+    let output = File::open("test.png")?;
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file)?;
+
+    assert_eq!(checksum, 3_958_067_430);
 
     Ok(())
 }
