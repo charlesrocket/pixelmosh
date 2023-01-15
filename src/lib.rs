@@ -1,6 +1,6 @@
 //! # Overview
 //!
-//! _Glitch and pixelate PNG images_.
+//! _Glitch and pixelate PNG images_
 //!
 //! Provides the [`MoshData`] and [`MoshOptions`] types for image processing
 //! and I/O functions, available in the [`ops`] module.
