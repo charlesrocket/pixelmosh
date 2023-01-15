@@ -123,7 +123,9 @@ impl MoshData {
     ///
     /// # Errors
     ///
-    /// * [`UnsupportedColorType`]: [`ColorType::GrayscaleAlpha`] is not supported.
+    /// * [`UnsupportedColorType`]: [GrayscaleAlpha] is not supported.
+    ///
+    /// [GrayscaleAlpha]: ColorType::GrayscaleAlpha
     ///
     /// # Example
     /// ````
