@@ -1,6 +1,7 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::{clone, Object};
 use gtk::{gio, glib};
+use png::ColorType;
 
 use libmosh::err::MoshError;
 
@@ -63,16 +64,18 @@ impl Window {
             .borrow_mut()
             .open_file(&file.path().unwrap())?;
 
-        self.imp()
-            .image
-            .borrow_mut()
-            .mosh(&self.imp().options.borrow_mut());
+        if self.imp().image.borrow_mut().data.color_type != ColorType::GrayscaleAlpha {
+            self.imp()
+                .image
+                .borrow_mut()
+                .mosh(&self.imp().options.borrow_mut());
 
-        self.imp()
-            .picture
-            .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+            self.imp()
+                .picture
+                .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
 
-        self.skip_placeholder();
+            self.skip_placeholder();
+        }
 
         Ok(())
     }

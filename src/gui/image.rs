@@ -81,15 +81,17 @@ impl Image {
 
         self.data = MoshData::new(&input).unwrap();
 
-        let texture = Self::generate_texture(
-            &self.data.buf,
-            self.data.width,
-            self.data.height,
-            self.data.color_type,
-            self.data.line_size,
-        );
+        if self.data.color_type != ColorType::GrayscaleAlpha {
+            let texture = Self::generate_texture(
+                &self.data.buf,
+                self.data.width,
+                self.data.height,
+                self.data.color_type,
+                self.data.line_size,
+            );
 
-        self.texture = texture.upcast();
+            self.texture = texture.upcast();
+        }
 
         Ok(())
     }
