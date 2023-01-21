@@ -42,6 +42,10 @@ impl Window {
         self.imp().stack.set_visible_child_name("placeholder");
     }
 
+    fn set_instructions(&self) {
+        self.imp().stack.set_visible_child_name("instructions");
+    }
+
     fn mosh(&self) {
         self.imp()
             .options
@@ -76,7 +80,7 @@ impl Window {
 
             self.skip_placeholder();
         } else {
-            self.set_stack();
+            self.set_instructions();
         }
 
         Ok(())

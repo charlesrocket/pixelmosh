@@ -49,6 +49,47 @@
         </child>
         <child>
           <object class="GtkStackPage">
+            <property name="name">instructions</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkHeaderBar">
+                    <style>
+                      <class name="flat" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkWindowHandle">
+                    <property name="vexpand">True</property>
+                    <property name="child">
+                      <object class="AdwStatusPage">
+                        <property name="icon-name">emblem-important-symbolic</property>
+                        <property name="title" translatable="yes">Unsupported file</property>
+                        <property name="description" translatable="yes">Supported color types are RGB/A and Grayscale</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="label" translatable="yes">_Restart</property>
+                            <property name="use-underline">True</property>
+                            <property name="halign">center</property>
+                            <property name="action-name">win.open-file</property>
+                            <property name="name">start</property>
+                            <style>
+                              <class name="pill" />
+                            </style>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
             <property name="name">main</property>
             <property name="child">
               <object class="GtkBox">
