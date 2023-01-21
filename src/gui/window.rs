@@ -76,7 +76,7 @@ impl Window {
 
             self.skip_placeholder();
         } else {
-            self.set_stack()
+            self.set_stack();
         }
 
         Ok(())
