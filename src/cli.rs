@@ -127,15 +127,26 @@ fn arg_matches() -> ArgMatches {
             .value_name("OUTPUT")
             .help("Output filename")
             .hide_default_value(true)
-            .default_value("moshed.png"));
+            .default_value("moshed"))
+        .arg(Arg::new("batch")
+            .short('b')
+            .long("batch")
+            .value_name("BATCH")
+            .conflicts_with("seed")
+            .help("Number of files to output")
+            .long_help("Enable batch mode and set the number of files to output")
+            .hide_default_value(true)
+            .value_parser(value_parser!(u8))
+            .default_value("1"));
 
     matches.get_matches()
 }
 
-fn args() -> (PathBuf, String, MoshOptions) {
+fn args() -> (PathBuf, String, MoshOptions, u8) {
     let matches = arg_matches();
     let input = matches.get_one::<PathBuf>("file").unwrap();
     let output = matches.get_one::<String>("output").unwrap();
+    let batch = matches.get_one::<u8>("batch").unwrap();
     let options = MoshOptions {
         min_rate: *matches.get_one::<u16>("minrate").unwrap(),
         max_rate: *matches.get_one::<u16>("maxrate").unwrap(),
@@ -148,10 +159,19 @@ fn args() -> (PathBuf, String, MoshOptions) {
         seed: *matches.get_one::<u64>("seed").unwrap(),
     };
 
-    (input.clone(), output.to_string(), options)
+    (input.clone(), output.to_string(), options, *batch)
 }
 
-fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
+fn filename(output: &str, index: u8, batch: u8) -> String {
+    if batch > 1 {
+        format!("{}-{:03}.png", output, index)
+    } else {
+        format!("{}.png", output)
+    }
+}
+
+fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
+    let mut index = 0;
     let spinner = ProgressBar::new_spinner();
     let spinner_style = if cfg!(unix) {
         if display_var() | cfg!(target_os = "macos") {
@@ -186,33 +206,42 @@ fn cli(input: PathBuf, output: &str, options: &MoshOptions) {
         }
     };
 
-    spinner.set_message("\x1b[94mprocessing\x1b[0m");
-    match new_image.mosh(options) {
-        Ok(image) => image,
-        Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
-            std::process::exit(1)
-        }
-    };
+    for _ in 0..batch {
+        spinner.set_message("\x1b[94mprocessing\x1b[0m");
+        match new_image.mosh(&options) {
+            Ok(image) => image,
+            Err(error) => {
+                eprintln!("\x1b[1;31merror:\x1b[0m {error}");
+                std::process::exit(1)
+            }
+        };
 
-    spinner.set_message("\x1b[33mwriting output\x1b[0m");
-    match write_file(
-        output,
-        &new_image.buf,
-        new_image.width,
-        new_image.height,
-        new_image.color_type,
-        new_image.bit_depth,
-    ) {
-        Ok(()) => spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m"),
-        Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
-            std::process::exit(1)
+        index += 1;
+        spinner.set_message("\x1b[33mwriting output\x1b[0m");
+        match write_file(
+            &filename(output, index, batch),
+            &new_image.buf,
+            new_image.width,
+            new_image.height,
+            new_image.color_type,
+            new_image.bit_depth,
+        ) {
+            Ok(()) => {}
+            Err(error) => {
+                eprintln!("\x1b[1;31merror:\x1b[0m {error}");
+                std::process::exit(1)
+            }
+        };
+
+        if index > 0 {
+            options.seed = MoshOptions::default().seed;
         }
-    };
+    }
+
+    spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
 }
 
 pub fn start() {
-    let (input, output, options) = args();
-    cli(input, &output, &options);
+    let (input, output, options, series) = args();
+    cli(input, &output, options, series);
 }
