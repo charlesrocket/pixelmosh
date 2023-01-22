@@ -122,13 +122,6 @@ fn arg_matches() -> ArgMatches {
             .hide_default_value(true)
             .value_parser(value_parser!(u64))
             .default_value(defaults().seed.to_string()))
-        .arg(Arg::new("output")
-            .short('o')
-            .long("output")
-            .value_name("OUTPUT")
-            .help("Output filename")
-            .hide_default_value(true)
-            .default_value("moshed"))
         .arg(Arg::new("batch")
             .short('b')
             .long("batch")
@@ -138,7 +131,14 @@ fn arg_matches() -> ArgMatches {
             .long_help("Enable batch mode and set the number of files to output")
             .hide_default_value(true)
             .value_parser(value_parser!(u8))
-            .default_value("1"));
+            .default_value("1"))
+        .arg(Arg::new("output")
+            .short('o')
+            .long("output")
+            .value_name("OUTPUT")
+            .help("Output filename")
+            .hide_default_value(true)
+            .default_value("moshed"));
 
     matches.get_matches()
 }
