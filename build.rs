@@ -1,3 +1,5 @@
+//! Custom build script
+
 fn main() {
     #[cfg(feature = "gui")]
     glib_build_tools::compile_resources(
