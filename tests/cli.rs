@@ -63,7 +63,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg("--seed")
         .arg("1309999")
         .arg("--output")
-        .arg("test.png")
+        .arg("test")
         .assert()
         .success();
 
