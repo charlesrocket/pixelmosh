@@ -215,7 +215,7 @@ impl MoshData {
             resizer.resize(&src_image.view(), &mut dest_view).unwrap();
             resizer.resize(&dest_image.view(), &mut orig_view).unwrap();
 
-            self.buf = orig_image.buffer().to_vec();
+            self.buf = orig_image.into_vec();
         }
     }
 
