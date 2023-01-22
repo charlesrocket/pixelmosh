@@ -195,27 +195,28 @@ impl MoshData {
     }
 
     fn pixelation(&mut self, options: &MoshOptions, pixel_type: fr::PixelType) {
-        let pixelation_rate = options.pixelation.max(1);
-        let width = NonZeroU32::new(self.width).unwrap();
-        let height = NonZeroU32::new(self.height).unwrap();
-        let src_image =
-            fr::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type).unwrap();
+        if options.pixelation > 1 {
+            let width = NonZeroU32::new(self.width).unwrap();
+            let height = NonZeroU32::new(self.height).unwrap();
+            let src_image =
+                fr::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type).unwrap();
 
-        let dest_width = NonZeroU32::new(self.width / u32::from(pixelation_rate)).unwrap();
-        let dest_height = NonZeroU32::new(self.height / u32::from(pixelation_rate)).unwrap();
-        let orig_width = NonZeroU32::new(self.width).unwrap();
-        let orig_height = NonZeroU32::new(self.height).unwrap();
+            let dest_width = NonZeroU32::new(self.width / u32::from(options.pixelation)).unwrap();
+            let dest_height = NonZeroU32::new(self.height / u32::from(options.pixelation)).unwrap();
+            let orig_width = NonZeroU32::new(self.width).unwrap();
+            let orig_height = NonZeroU32::new(self.height).unwrap();
 
-        let mut dest_image = fr::Image::new(dest_width, dest_height, src_image.pixel_type());
-        let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
-        let mut dest_view = dest_image.view_mut();
-        let mut orig_view = orig_image.view_mut();
-        let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
+            let mut dest_image = fr::Image::new(dest_width, dest_height, src_image.pixel_type());
+            let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
+            let mut dest_view = dest_image.view_mut();
+            let mut orig_view = orig_image.view_mut();
+            let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
 
-        resizer.resize(&src_image.view(), &mut dest_view).unwrap();
-        resizer.resize(&dest_image.view(), &mut orig_view).unwrap();
+            resizer.resize(&src_image.view(), &mut dest_view).unwrap();
+            resizer.resize(&dest_image.view(), &mut orig_view).unwrap();
 
-        self.buf = orig_image.buffer().to_vec();
+            self.buf = orig_image.buffer().to_vec();
+        }
     }
 
     // Use pnglitch approach
