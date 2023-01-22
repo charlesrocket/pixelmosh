@@ -46,10 +46,11 @@ Options:
   -f, --flip <FLIP>                    Flip rate [default: 0.3]
   -c, --channel-swap <CHANNEL_SWAP>    Channel swap rate [default: 0.3]
   -t, --channel-shift <CHANNEL_SHIFT>  Channel shift rate [default: 0.3]
-  -s, --seed <SEED>                    Random seed
+  -s, --seed <SEED>                    Custom seed
   -o, --output <OUTPUT>                Output filename
-  -h, --help                           Print help information
-  -V, --version                        Print version information
+  -b, --batch <BATCH>                  Number of files to output
+  -h, --help                           Print help (see more with '--help')
+  -V, --version                        Print version
 ```
 
 ## `libmosh`
