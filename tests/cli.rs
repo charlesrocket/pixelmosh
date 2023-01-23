@@ -90,7 +90,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .assert()
         .success();
 
-    let output = File::open("test.png")?;
+    let output = fs::File::open("test.png")?;
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file)?;
 
