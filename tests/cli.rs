@@ -1,4 +1,4 @@
-use std::{error::Error, fs::File, io::BufReader, process::Command};
+use std::{error::Error, fs, io::BufReader, path::Path, process::Command};
 
 use adler::adler32;
 use assert_cmd::prelude::*;
@@ -45,6 +45,29 @@ fn unsupported_color_type() -> Result<(), Box<dyn Error>> {
     cmd.assert()
         .failure()
         .stderr(contains("Unsupported color type"));
+
+    Ok(())
+}
+
+#[test]
+fn batch() -> Result<(), Box<dyn Error>> {
+    let mut cmd = Command::cargo_bin("pixelmosh")?;
+
+    cmd.arg("src/util/test-grayscale.png")
+        .arg("--batch")
+        .arg("3")
+        .arg("--output")
+        .arg("moshed-test")
+        .assert()
+        .success();
+
+    assert!(Path::new("moshed-test-001.png").exists());
+    assert!(Path::new("moshed-test-002.png").exists());
+    assert!(Path::new("moshed-test-003.png").exists());
+
+    fs::remove_file("moshed-test-001.png").unwrap();
+    fs::remove_file("moshed-test-002.png").unwrap();
+    fs::remove_file("moshed-test-003.png").unwrap();
 
     Ok(())
 }
