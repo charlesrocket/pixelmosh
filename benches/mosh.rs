@@ -3,12 +3,16 @@ extern crate test;
 
 use test::black_box;
 
-use libmosh::{ops, MoshData, MoshOptions};
+use libmosh::{MoshData, MoshOptions};
+
+use crate::images::{GRAYSCALE, RGB, RGBA};
+
+mod images;
 
 struct Bench {}
 
 impl Bench {
-    fn bench_image(input: u64, image: &str) {
+    fn bench_image(input: u64, image: &[u8]) {
         let options = MoshOptions {
             min_rate: 3,
             max_rate: 3,
@@ -21,23 +25,22 @@ impl Bench {
             seed: input,
         };
 
-        let file = ops::read_file(image).unwrap();
-        let mut image = MoshData::new(&file).unwrap();
+        let mut image = MoshData::new(image).unwrap();
 
         image.mosh(&options).unwrap();
     }
 }
 
 fn rgb(value: u64) {
-    Bench::bench_image(value, "benches/bench-rgb.png");
+    Bench::bench_image(value, RGB);
 }
 
 fn rgba(value: u64) {
-    Bench::bench_image(value, "benches/bench-rgb-alpha.png");
+    Bench::bench_image(value, RGBA);
 }
 
 fn grayscale(value: u64) {
-    Bench::bench_image(value, "benches/bench-grayscale.png");
+    Bench::bench_image(value, GRAYSCALE);
 }
 
 #[cfg(test)]
