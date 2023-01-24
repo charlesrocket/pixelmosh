@@ -1,4 +1,4 @@
-use std::{error::Error, fs, io::BufReader, path::Path, process::Command};
+use std::{error::Error, fs::File, io::BufReader, process::Command};
 
 use adler::adler32;
 use assert_cmd::prelude::*;
@@ -55,19 +55,25 @@ fn batch() -> Result<(), Box<dyn Error>> {
 
     cmd.arg("src/util/test-grayscale.png")
         .arg("--batch")
-        .arg("3")
+        .arg("2")
         .arg("--output")
         .arg("moshed-test")
+        .arg("--seed")
+        .arg("1309999")
         .assert()
         .success();
 
-    assert!(Path::new("moshed-test-001.png").exists());
-    assert!(Path::new("moshed-test-002.png").exists());
-    assert!(Path::new("moshed-test-003.png").exists());
+    let output_1 = File::open("moshed-test-001.png")?;
+    let output_2 = File::open("moshed-test-002.png")?;
 
-    fs::remove_file("moshed-test-001.png").unwrap();
-    fs::remove_file("moshed-test-002.png").unwrap();
-    fs::remove_file("moshed-test-003.png").unwrap();
+    let mut file_1 = BufReader::new(output_1);
+    let checksum_1 = adler32(&mut file_1)?;
+
+    let mut file_2 = BufReader::new(output_2);
+    let checksum_2 = adler32(&mut file_2)?;
+
+    assert_eq!(checksum_1, 2_708_112_166);
+    assert_eq!(checksum_2, 4_096_059_757);
 
     Ok(())
 }
@@ -90,7 +96,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .assert()
         .success();
 
-    let output = fs::File::open("test.png")?;
+    let output = File::open("test.png")?;
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file)?;
 
