@@ -126,7 +126,6 @@ fn arg_matches() -> ArgMatches {
             .short('b')
             .long("batch")
             .value_name("BATCH")
-            .conflicts_with("seed")
             .help("Number of files to output")
             .long_help("Enable batch mode and set the number of files to output")
             .hide_default_value(true)
@@ -218,6 +217,7 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
         };
 
         index += 1;
+        options.seed += 1;
         spinner.set_message("\x1b[33mwriting output\x1b[0m");
         match write_file(
             &filename(output, index, batch),
@@ -233,10 +233,6 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
                 std::process::exit(1)
             }
         };
-
-        if index > 0 {
-            options.seed = MoshOptions::default().seed;
-        }
     }
 
     spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
