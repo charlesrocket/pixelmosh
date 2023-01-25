@@ -127,8 +127,8 @@ impl Image {
 }
 
 impl Options {
-    pub fn seed(&self) -> u64 {
-        self.0.seed
+    pub fn new_seed(&mut self) {
+        self.0.new_seed();
     }
 
     pub fn set_min_rate(&mut self, value: u16) {
@@ -161,10 +161,6 @@ impl Options {
 
     pub fn set_channel_shift(&mut self, value: f64) {
         self.0.channel_shift = value;
-    }
-
-    pub fn set_seed(&mut self, value: u64) {
-        self.0.seed = value;
     }
 }
 

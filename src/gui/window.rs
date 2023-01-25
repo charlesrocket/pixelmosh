@@ -47,11 +47,7 @@ impl Window {
     }
 
     fn mosh(&self) {
-        self.imp()
-            .options
-            .borrow_mut()
-            .set_seed(Options::default().seed());
-
+        self.imp().options.borrow_mut().new_seed();
         self.imp()
             .image
             .borrow_mut()
@@ -63,6 +59,7 @@ impl Window {
     }
 
     fn load_file(&self, file: &gio::File) -> Result<(), MoshError> {
+        self.imp().options.borrow_mut().new_seed();
         self.imp()
             .image
             .borrow_mut()
