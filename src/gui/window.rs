@@ -5,7 +5,7 @@ use png::ColorType;
 
 use libmosh::err::MoshError;
 
-use crate::gui::image::{Image, Options};
+use crate::gui::image::Image;
 
 mod imp;
 
