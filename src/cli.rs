@@ -184,7 +184,7 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
     };
 
     println!("file: {}", &input.display());
-    println!("seed: \x1b[3m{}\x1b[0m", options.seed);
+    println!("seed: \x1b[3m{}\x1b[0m", &options.seed);
 
     spinner.enable_steady_tick(std::time::Duration::from_millis(90));
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
