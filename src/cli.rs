@@ -37,7 +37,6 @@ const SPINNER_2: [&str; 7] = [
 ];
 
 // Checks for TTY
-#[must_use]
 fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
