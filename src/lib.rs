@@ -17,8 +17,10 @@
 //! let input = read_file("src/util/test-rgb.png")?;
 //! let output = "test.png";
 //! let mut image = MoshData::new(&input)?;
+//! let mut options = MoshOptions::default();
 //!
-//! image.mosh(&MoshOptions::default())?;
+//! options.new_seed();
+//! image.mosh(&options)?;
 //! write_file(
 //!     output,
 //!     &image.buf,
@@ -91,6 +93,13 @@ pub struct MoshOptions {
     pub channel_shift: f64,
     /// Random seed.
     pub seed: u64,
+}
+
+impl MoshOptions {
+    /// Generates a new random seed.
+    pub fn new_seed(&mut self) {
+        self.seed = rand::thread_rng().next_u64();
+    }
 }
 
 impl MoshData {
@@ -320,11 +329,7 @@ impl Default for MoshOptions {
             flip: 0.3,
             channel_swap: 0.3,
             channel_shift: 0.3,
-            seed: if cfg!(test) {
-                TEST_SEED
-            } else {
-                rand::thread_rng().next_u64()
-            },
+            seed: if cfg!(test) { TEST_SEED } else { 1 },
         }
     }
 }
