@@ -11,26 +11,26 @@
 //! use libmosh::{
 //!     err::MoshError,
 //!     ops::{read_file, write_file},
-//!     MoshData, MoshOptions,
+//!     MoshCore,
 //! };
 //!
 //! let input = read_file("src/util/test-rgb.png")?;
 //! let output = "test.png";
-//! let mut image = MoshData::new(&input)?;
-//! let mut options = MoshOptions::default();
+//! let mut image = MoshCore::new();
 //!
-//! options.new_seed();
-//! image.mosh(&options)?;
+//! image.read_image(&input)?;
+//! image.mosh()?;
 //! write_file(
 //!     output,
-//!     &image.buf,
-//!     image.width,
-//!     image.height,
-//!     image.color_type,
-//!     image.bit_depth,
+//!     &image.data.buf,
+//!     image.data.width,
+//!     image.data.height,
+//!     image.data.color_type,
+//!     image.data.bit_depth,
 //! )?;
 //! # Ok::<(), MoshError>(())
 //! ````
+#![allow(deprecated)]
 
 use fast_image_resize as fr;
 use png::{BitDepth, ColorType, Decoder};
@@ -95,10 +95,116 @@ pub struct MoshOptions {
     pub seed: u64,
 }
 
+#[derive(Default)]
+pub struct MoshCore {
+    pub data: MoshData,
+    pub options: MoshOptions,
+}
+
+impl MoshCore {
+    /// Creates a new empty instance of [`MoshCore`] with a random seed.
+    pub fn new() -> Self {
+        Self {
+            data: MoshData::default(),
+            options: MoshOptions::new(),
+        }
+    }
+
+    /// Reads provided image for future processing.
+    ///
+    /// # Errors
+    ///
+    /// It may fail if an image is not a valid PNG file.
+    pub fn read_image(&mut self, input: &[u8]) -> Result<(), MoshError> {
+        let decoder = Decoder::new(input);
+        let mut reader = decoder.read_info()?;
+        let mut buf = vec![0_u8; reader.output_buffer_size()];
+        let info = reader.next_frame(&mut buf)?;
+
+        self.data.buf = vec![0_u8];
+        self.data.image = buf;
+        self.data.width = info.width;
+        self.data.height = info.height;
+        self.data.color_type = info.color_type;
+        self.data.bit_depth = info.bit_depth;
+        self.data.line_size = info.line_size;
+
+        Ok(())
+    }
+
+    /// Processes an image with provided [settings], storing the result in a [buffer].
+    ///
+    /// [buffer]: MoshData::buf
+    /// [settings]: MoshOptions
+    ///
+    /// # Errors
+    ///
+    /// * [`UnsupportedColorType`]: [`GrayscaleAlpha`] is not supported.
+    ///
+    /// [`GrayscaleAlpha`]: ColorType::GrayscaleAlpha
+    ///
+    /// # Example
+    /// ````
+    /// use libmosh::{
+    ///     err::MoshError,
+    ///     ops::{read_file, write_file},
+    ///     MoshCore,
+    /// };
+    ///
+    /// let input = read_file("src/util/test-rgb.png")?;
+    /// let output = "test.png";
+    /// let mut image = MoshCore::new();
+    ///
+    /// image.options.min_rate = 5;
+    /// image.options.max_rate = 7;
+    /// image.options.pixelation = 10;
+    /// image.options.line_shift = 0.7;
+    /// image.options.reverse = 0.4;
+    /// image.options.flip = 0.3;
+    /// image.options.channel_swap = 0.5;
+    /// image.options.channel_shift = 0.5;
+    /// image.options.seed = 42;
+    ///
+    /// image.read_image(&input)?;
+    /// image.mosh()?;
+    /// write_file(
+    ///     output,
+    ///     &image.data.buf,
+    ///     image.data.width,
+    ///     image.data.height,
+    ///     image.data.color_type,
+    ///     image.data.bit_depth,
+    /// )?;
+    /// # Ok::<(), MoshError>(())
+    /// ````
+    ///
+    /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
+    pub fn mosh(&mut self) -> Result<(), MoshError> {
+        self.data.mosh(&self.options)?;
+
+        Ok(())
+    }
+}
+
 impl MoshOptions {
+    fn generate_seed() -> u64 {
+        if cfg!(test) {
+            TEST_SEED
+        } else {
+            rand::thread_rng().next_u64()
+        }
+    }
+
+    fn new() -> Self {
+        Self {
+            seed: Self::generate_seed(),
+            ..Self::default()
+        }
+    }
+
     /// Generates a new random seed.
     pub fn new_seed(&mut self) {
-        self.seed = rand::thread_rng().next_u64();
+        self.seed = Self::generate_seed();
     }
 }
 
@@ -108,6 +214,7 @@ impl MoshData {
     /// # Errors
     ///
     /// It may fail if an image is not a valid PNG.
+    #[deprecated(since = "3.1.0", note = "Users should use MoshCore instead")]
     pub fn new(input: &[u8]) -> Result<Self, MoshError> {
         let decoder = Decoder::new(input);
         let mut reader = decoder.read_info()?;
@@ -172,6 +279,7 @@ impl MoshData {
     /// ````
     ///
     /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
+    #[deprecated]
     pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
         self.buf = self.image.clone();
 
@@ -329,7 +437,7 @@ impl Default for MoshOptions {
             flip: 0.3,
             channel_swap: 0.3,
             channel_shift: 0.3,
-            seed: if cfg!(test) { TEST_SEED } else { 1 },
+            seed: 1,
         }
     }
 }
