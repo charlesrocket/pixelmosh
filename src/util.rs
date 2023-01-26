@@ -5,21 +5,22 @@ use std::{fs::File, io::BufReader};
 
 use super::{
     ops::{read_file, write_file},
-    MoshData, MoshOptions,
+    MoshCore,
 };
 
 #[test]
 fn rgb() {
     let input = read_file("src/util/test-rgb.png").unwrap();
-    let mut image = MoshData::new(&input).unwrap();
-    image.mosh(&MoshOptions::default()).unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
     write_file(
         "moshed.png",
-        &image.buf,
-        image.width,
-        image.height,
-        image.color_type,
-        image.bit_depth,
+        &image.data.buf,
+        image.data.width,
+        image.data.height,
+        image.data.color_type,
+        image.data.bit_depth,
     )
     .unwrap();
 
@@ -33,15 +34,16 @@ fn rgb() {
 #[test]
 fn rgba() {
     let input = read_file("src/util/test-rgb-alpha.png").unwrap();
-    let mut image = MoshData::new(&input).unwrap();
-    image.mosh(&MoshOptions::default()).unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
     write_file(
         "moshed.png",
-        &image.buf,
-        image.width,
-        image.height,
-        image.color_type,
-        image.bit_depth,
+        &image.data.buf,
+        image.data.width,
+        image.data.height,
+        image.data.color_type,
+        image.data.bit_depth,
     )
     .unwrap();
 
@@ -55,15 +57,16 @@ fn rgba() {
 #[test]
 fn grayscale() {
     let input = read_file("src/util/test-grayscale.png").unwrap();
-    let mut image = MoshData::new(&input).unwrap();
-    image.mosh(&MoshOptions::default()).unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
     write_file(
         "moshed.png",
-        &image.buf,
-        image.width,
-        image.height,
-        image.color_type,
-        image.bit_depth,
+        &image.data.buf,
+        image.data.width,
+        image.data.height,
+        image.data.color_type,
+        image.data.bit_depth,
     )
     .unwrap();
 
@@ -78,8 +81,9 @@ fn grayscale() {
 #[should_panic(expected = "UnsupportedColorType")]
 fn grayscale_alpha() {
     let input = read_file("src/util/test-grayscale-alpha.png").unwrap();
-    let mut image = MoshData::new(&input).unwrap();
-    image.mosh(&MoshOptions::default()).unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
 }
 
 #[test]
@@ -99,18 +103,18 @@ fn encoding() {
 #[test]
 fn invalid_parameters() {
     let input = read_file("src/util/test-grayscale.png").unwrap();
-    let mut image = MoshData::new(&input).unwrap();
-    let options = MoshOptions {
-        min_rate: 13,
-        max_rate: 6,
-        pixelation: 0,
-        line_shift: 0.5,
-        reverse: 0.4,
-        flip: 0.3,
-        channel_swap: 0.2,
-        channel_shift: 0.1,
-        seed: 42,
-    };
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
 
-    image.mosh(&options).unwrap();
+    image.options.min_rate = 13;
+    image.options.max_rate = 6;
+    image.options.pixelation = 0;
+    image.options.line_shift = 0.5;
+    image.options.reverse = 0.4;
+    image.options.flip = 0.3;
+    image.options.channel_swap = 0.2;
+    image.options.channel_shift = 0.1;
+    image.options.seed = 42;
+
+    image.mosh().unwrap();
 }
