@@ -5,7 +5,7 @@ use std::{env, path::PathBuf};
 
 use libmosh::{
     ops::{read_file, write_file},
-    MoshData, MoshOptions,
+    MoshCore,
 };
 
 // Logo
@@ -41,10 +41,8 @@ fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
 
-fn arg_matches() -> ArgMatches {
-    let mut defaults = MoshOptions::default();
-    defaults.new_seed();
-
+fn arg_matches() -> (ArgMatches, MoshCore) {
+    let container = MoshCore::new();
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
@@ -61,56 +59,56 @@ fn arg_matches() -> ArgMatches {
             .value_name("MIN_RATE")
             .help("Minimum chunks to process")
             .value_parser(value_parser!(u16))
-            .default_value(defaults.min_rate.to_string()))
+            .default_value(container.options.min_rate.to_string()))
         .arg(Arg::new("maxrate")
             .short('m')
             .long("max-rate")
             .value_name("MAX_RATE")
             .help("Maximum chunks to process")
             .value_parser(value_parser!(u16))
-            .default_value(defaults.max_rate.to_string()))
+            .default_value(container.options.max_rate.to_string()))
         .arg(Arg::new("pixelation")
             .short('p')
             .long("pixelation")
             .value_name("PIXELATION")
             .help("Pixelation rate")
             .value_parser(value_parser!(u8))
-            .default_value(defaults.pixelation.to_string()))
+            .default_value(container.options.pixelation.to_string()))
         .arg(Arg::new("lineshift")
             .short('l')
             .long("line-shift")
             .value_name("LINE_SHIFT")
             .help("Line shift rate")
             .value_parser(value_parser!(f64))
-            .default_value(defaults.line_shift.to_string()))
+            .default_value(container.options.line_shift.to_string()))
         .arg(Arg::new("reverse")
             .short('r')
             .long("reverse")
             .value_name("REVERSE")
             .help("Reverse rate")
             .value_parser(value_parser!(f64))
-            .default_value(defaults.reverse.to_string()))
+            .default_value(container.options.reverse.to_string()))
         .arg(Arg::new("flip")
             .short('f')
             .long("flip")
             .value_name("FLIP")
             .help("Flip rate")
             .value_parser(value_parser!(f64))
-            .default_value(defaults.flip.to_string()))
+            .default_value(container.options.flip.to_string()))
         .arg(Arg::new("channelswap")
             .short('c')
             .long("channel-swap")
             .value_name("CHANNEL_SWAP")
             .help("Channel swap rate")
             .value_parser(value_parser!(f64))
-            .default_value(defaults.channel_swap.to_string()))
+            .default_value(container.options.channel_swap.to_string()))
         .arg(Arg::new("channelshift")
             .short('t')
             .long("channel-shift")
             .value_name("CHANNEL_SHIFT")
             .help("Channel shift rate")
             .value_parser(value_parser!(f64))
-            .default_value(defaults.channel_shift.to_string()))
+            .default_value(container.options.channel_shift.to_string()))
         .arg(Arg::new("seed")
             .short('s')
             .long("seed")
@@ -119,7 +117,7 @@ fn arg_matches() -> ArgMatches {
             .long_help("Set a custom seed value")
             .hide_default_value(true)
             .value_parser(value_parser!(u64))
-            .default_value(defaults.seed.to_string()))
+            .default_value(container.options.seed.to_string()))
         .arg(Arg::new("batch")
             .short('b')
             .long("batch")
@@ -137,27 +135,26 @@ fn arg_matches() -> ArgMatches {
             .hide_default_value(true)
             .default_value("moshed"));
 
-    matches.get_matches()
+    (matches.get_matches(), container)
 }
 
-fn args() -> (PathBuf, String, MoshOptions, u8) {
-    let matches = arg_matches();
+fn args() -> (PathBuf, String, MoshCore, u8) {
+    let (matches, mut container) = arg_matches();
     let input = matches.get_one::<PathBuf>("file").unwrap();
     let output = matches.get_one::<String>("output").unwrap();
     let batch = matches.get_one::<u8>("batch").unwrap();
-    let options = MoshOptions {
-        min_rate: *matches.get_one::<u16>("minrate").unwrap(),
-        max_rate: *matches.get_one::<u16>("maxrate").unwrap(),
-        pixelation: *matches.get_one::<u8>("pixelation").unwrap(),
-        line_shift: *matches.get_one::<f64>("lineshift").unwrap(),
-        reverse: *matches.get_one::<f64>("reverse").unwrap(),
-        flip: *matches.get_one::<f64>("flip").unwrap(),
-        channel_swap: *matches.get_one::<f64>("channelswap").unwrap(),
-        channel_shift: *matches.get_one::<f64>("channelshift").unwrap(),
-        seed: *matches.get_one::<u64>("seed").unwrap(),
-    };
 
-    (input.clone(), output.to_string(), options, *batch)
+    container.options.min_rate = *matches.get_one::<u16>("minrate").unwrap();
+    container.options.max_rate = *matches.get_one::<u16>("maxrate").unwrap();
+    container.options.pixelation = *matches.get_one::<u8>("pixelation").unwrap();
+    container.options.line_shift = *matches.get_one::<f64>("lineshift").unwrap();
+    container.options.reverse = *matches.get_one::<f64>("reverse").unwrap();
+    container.options.flip = *matches.get_one::<f64>("flip").unwrap();
+    container.options.channel_swap = *matches.get_one::<f64>("channelswap").unwrap();
+    container.options.channel_shift = *matches.get_one::<f64>("channelshift").unwrap();
+    container.options.seed = *matches.get_one::<u64>("seed").unwrap();
+
+    (input.clone(), output.to_string(), container, *batch)
 }
 
 fn filename(output: &str, index: u8, batch: u8) -> String {
@@ -168,7 +165,7 @@ fn filename(output: &str, index: u8, batch: u8) -> String {
     }
 }
 
-fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
+fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
     let mut index = 0;
     let spinner = ProgressBar::new_spinner();
     let spinner_style = if cfg!(unix) {
@@ -182,7 +179,7 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
     };
 
     println!("file: {}", &input.display());
-    println!("seed: \x1b[3m{}\x1b[0m", &options.seed);
+    println!("seed: \x1b[3m{}\x1b[0m", &container.options.seed);
 
     spinner.enable_steady_tick(std::time::Duration::from_millis(90));
     spinner.set_style(ProgressStyle::default_spinner().tick_strings(&spinner_style));
@@ -196,7 +193,7 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
         }
     };
 
-    let mut new_image = match MoshData::new(&image) {
+    match container.read_image(&image) {
         Ok(new_image) => new_image,
         Err(error) => {
             eprintln!("\x1b[1;31merror:\x1b[0m {error}");
@@ -206,8 +203,8 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
 
     for _ in 0..batch {
         spinner.set_message("\x1b[94mprocessing\x1b[0m");
-        match new_image.mosh(&options) {
-            Ok(image) => image,
+        match container.mosh() {
+            Ok(()) => {}
             Err(error) => {
                 eprintln!("\x1b[1;31merror:\x1b[0m {error}");
                 std::process::exit(1)
@@ -215,15 +212,15 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
         };
 
         index += 1;
-        options.seed += 1;
+        container.options.seed += 1;
         spinner.set_message("\x1b[33mwriting output\x1b[0m");
         match write_file(
             &filename(output, index, batch),
-            &new_image.buf,
-            new_image.width,
-            new_image.height,
-            new_image.color_type,
-            new_image.bit_depth,
+            &container.data.buf,
+            container.data.width,
+            container.data.height,
+            container.data.color_type,
+            container.data.bit_depth,
         ) {
             Ok(()) => {}
             Err(error) => {
@@ -237,6 +234,6 @@ fn cli(input: PathBuf, output: &str, mut options: MoshOptions, batch: u8) {
 }
 
 pub fn start() {
-    let (input, output, options, series) = args();
-    cli(input, &output, options, series);
+    let (input, output, container, series) = args();
+    cli(input, &output, container, series);
 }
