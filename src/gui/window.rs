@@ -47,11 +47,8 @@ impl Window {
     }
 
     fn mosh(&self) {
-        self.imp().options.borrow_mut().new_seed();
-        self.imp()
-            .image
-            .borrow_mut()
-            .mosh(&self.imp().options.borrow_mut());
+        self.imp().image.borrow_mut().new_seed();
+        self.imp().image.borrow_mut().mosh();
 
         self.imp()
             .picture
@@ -59,17 +56,14 @@ impl Window {
     }
 
     fn load_file(&self, file: &gio::File) -> Result<(), MoshError> {
-        self.imp().options.borrow_mut().new_seed();
+        self.imp().image.borrow_mut().new_seed();
         self.imp()
             .image
             .borrow_mut()
             .open_file(&file.path().unwrap())?;
 
-        if self.imp().image.borrow_mut().data.color_type != ColorType::GrayscaleAlpha {
-            self.imp()
-                .image
-                .borrow_mut()
-                .mosh(&self.imp().options.borrow_mut());
+        if self.imp().image.borrow_mut().core.data.color_type != ColorType::GrayscaleAlpha {
+            self.imp().image.borrow_mut().mosh();
 
             self.imp()
                 .picture

@@ -4,7 +4,7 @@ use gtk::{glib, CompositeTemplate, ResponseType, SpinButton, Stack};
 
 use std::cell::RefCell;
 
-use crate::gui::{image::Options, window::Image};
+use crate::gui::window::Image;
 
 #[derive(CompositeTemplate)]
 #[template(resource = "/pixelmosh/window.ui")]
@@ -28,7 +28,6 @@ pub struct Window {
     pub dialog_open: gtk::FileChooserNative,
     pub dialog_save: gtk::FileChooserNative,
     pub image: RefCell<Image>,
-    pub options: RefCell<Options>,
     #[template_child]
     pub picture: TemplateChild<gtk::Picture>,
     #[template_child]
@@ -75,7 +74,6 @@ impl ObjectSubclass for Window {
             dialog_open,
             dialog_save,
             image: RefCell::new(Image::default()),
-            options: RefCell::new(Options::default()),
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
         }
@@ -132,48 +130,42 @@ impl ObjectImpl for Window {
 impl Window {
     #[template_callback]
     fn handle_min_rate(&self, button: &gtk::SpinButton) {
-        self.options
-            .borrow_mut()
-            .set_min_rate(button.value() as u16);
+        self.image.borrow_mut().set_min_rate(button.value() as u16);
     }
 
     #[template_callback]
     fn handle_max_rate(&self, button: &gtk::SpinButton) {
-        self.options
-            .borrow_mut()
-            .set_max_rate(button.value() as u16);
+        self.image.borrow_mut().set_max_rate(button.value() as u16);
     }
 
     #[template_callback]
     fn handle_pixelation(&self, button: &gtk::SpinButton) {
-        self.options
-            .borrow_mut()
-            .set_pixelation(button.value() as u8);
+        self.image.borrow_mut().set_pixelation(button.value() as u8);
     }
 
     #[template_callback]
     fn handle_line_shift(&self, button: &gtk::SpinButton) {
-        self.options.borrow_mut().set_line_shift(button.value());
+        self.image.borrow_mut().set_line_shift(button.value());
     }
 
     #[template_callback]
     fn handle_reverse(&self, button: &gtk::SpinButton) {
-        self.options.borrow_mut().set_reverse(button.value());
+        self.image.borrow_mut().set_reverse(button.value());
     }
 
     #[template_callback]
     fn handle_flip(&self, button: &gtk::SpinButton) {
-        self.options.borrow_mut().set_flip(button.value());
+        self.image.borrow_mut().set_flip(button.value());
     }
 
     #[template_callback]
     fn handle_channel_swap(&self, button: &gtk::SpinButton) {
-        self.options.borrow_mut().set_channel_swap(button.value());
+        self.image.borrow_mut().set_channel_swap(button.value());
     }
 
     #[template_callback]
     fn handle_channel_shift(&self, button: &gtk::SpinButton) {
-        self.options.borrow_mut().set_channel_shift(button.value());
+        self.image.borrow_mut().set_channel_shift(button.value());
     }
 }
 
