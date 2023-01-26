@@ -21,7 +21,7 @@ pub enum MoshError {
 impl std::error::Error for MoshError {}
 
 impl fmt::Display for MoshError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(match self {
             Self::DecodingError(e) | Self::EncodingError(e) | Self::IoError(e) => e,
             Self::OutOfMemory => "Out of memory",
