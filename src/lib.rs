@@ -212,11 +212,6 @@ impl MoshOptions {
 }
 
 impl MoshData {
-    /// Creates a new instance of [`MoshData`] from the provided image.
-    ///
-    /// # Errors
-    ///
-    /// It may fail if an image is not a valid PNG.
     #[deprecated(since = "3.1.0", note = "Users should use MoshCore instead")]
     pub fn new(input: &[u8]) -> Result<Self, MoshError> {
         let decoder = Decoder::new(input);
@@ -235,53 +230,6 @@ impl MoshData {
         })
     }
 
-    /// Processes an image with provided [settings], storing the result in a [buffer].
-    ///
-    /// [buffer]: MoshData::buf
-    /// [settings]: MoshOptions
-    ///
-    /// # Errors
-    ///
-    /// * [`UnsupportedColorType`]: [`GrayscaleAlpha`] is not supported.
-    ///
-    /// [`GrayscaleAlpha`]: ColorType::GrayscaleAlpha
-    ///
-    /// # Example
-    /// ````
-    /// use libmosh::{
-    ///     err::MoshError,
-    ///     ops::{read_file, write_file},
-    ///     MoshData, MoshOptions,
-    /// };
-    ///
-    /// let input = read_file("src/util/test-rgb.png")?;
-    /// let output = "test.png";
-    /// let options = MoshOptions {
-    ///     min_rate: 5,
-    ///     max_rate: 7,
-    ///     pixelation: 10,
-    ///     line_shift: 0.7,
-    ///     reverse: 0.4,
-    ///     flip: 0.3,
-    ///     channel_swap: 0.5,
-    ///     channel_shift: 0.5,
-    ///     seed: 42,
-    /// };
-    ///
-    /// let mut image = MoshData::new(&input)?;
-    /// image.mosh(&options)?;
-    /// write_file(
-    ///     output,
-    ///     &image.buf,
-    ///     image.width,
-    ///     image.height,
-    ///     image.color_type,
-    ///     image.bit_depth,
-    /// )?;
-    /// # Ok::<(), MoshError>(())
-    /// ````
-    ///
-    /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
     #[deprecated]
     pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
         self.buf = self.image.clone();
