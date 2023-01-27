@@ -15,7 +15,7 @@ fn rgb() {
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
     write_file(
-        "moshed.png",
+        "moshed-rgb.png",
         &image.data.buf,
         image.data.width,
         image.data.height,
@@ -24,7 +24,7 @@ fn rgb() {
     )
     .unwrap();
 
-    let output = File::open("moshed.png").unwrap();
+    let output = File::open("moshed-rgb.png").unwrap();
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
@@ -38,7 +38,7 @@ fn rgba() {
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
     write_file(
-        "moshed.png",
+        "moshed-rgb-alpha.png",
         &image.data.buf,
         image.data.width,
         image.data.height,
@@ -47,7 +47,7 @@ fn rgba() {
     )
     .unwrap();
 
-    let output = File::open("moshed.png").unwrap();
+    let output = File::open("moshed-rgb-alpha.png").unwrap();
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
@@ -61,7 +61,7 @@ fn grayscale() {
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
     write_file(
-        "moshed.png",
+        "moshed-grayscale.png",
         &image.data.buf,
         image.data.width,
         image.data.height,
@@ -70,7 +70,7 @@ fn grayscale() {
     )
     .unwrap();
 
-    let output = File::open("moshed.png").unwrap();
+    let output = File::open("moshed-grayscale.png").unwrap();
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
@@ -85,7 +85,7 @@ fn defaults() {
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
     write_file(
-        "moshed.png",
+        "moshed-defaults.png",
         &image.data.buf,
         image.data.width,
         image.data.height,
@@ -94,11 +94,11 @@ fn defaults() {
     )
     .unwrap();
 
-    let output = File::open("moshed.png").unwrap();
+    let output = File::open("moshed-defaults.png").unwrap();
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 3_469_606_025);
+    assert_eq!(checksum, 3_664_879_923);
 }
 
 #[test]
