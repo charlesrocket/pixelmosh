@@ -2,8 +2,8 @@
 //!
 //! _Glitch and pixelate PNG images_
 //!
-//! Provides the [`MoshData`] and [`MoshOptions`] types for image processing
-//! and I/O functions, available in the [`ops`] module.
+//! Provides the [`MoshCore`] type for image processing and I/O functions,
+//! available in the [`ops`] module.
 //!
 //! # Usage
 //!
@@ -50,7 +50,7 @@ pub mod err;
 pub mod fx;
 pub mod ops;
 
-/// Image data
+/// Image data.
 ///
 /// It holds the original image, buffer and parameters.
 pub struct MoshData {
@@ -70,7 +70,7 @@ pub struct MoshData {
     pub line_size: usize,
 }
 
-/// Processing options
+/// Processing options.
 ///
 /// Minimal `pixelation` value is `1` (OFF).
 #[derive(Debug)]
@@ -95,6 +95,9 @@ pub struct MoshOptions {
     pub seed: u64,
 }
 
+/// Main image container.
+///
+/// Holds image data and processing options.
 #[derive(Default)]
 pub struct MoshCore {
     pub data: MoshData,
