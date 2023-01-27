@@ -135,7 +135,7 @@ impl MoshCore {
         Ok(())
     }
 
-    /// Processes an image with provided [settings], storing the result in a [buffer].
+    /// Processes an image with current [settings], storing the result in a [buffer].
     ///
     /// [buffer]: MoshData::buf
     /// [settings]: MoshOptions
