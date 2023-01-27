@@ -102,6 +102,15 @@ fn defaults() {
 }
 
 #[test]
+fn seed() {
+    let mut image = MoshCore::default();
+    assert_eq!(image.options.seed, 1);
+
+    image.options.new_seed();
+    assert_eq!(image.options.seed, 901_042_006);
+}
+
+#[test]
 #[should_panic(expected = "UnsupportedColorType")]
 fn grayscale_alpha() {
     let input = read_file("src/util/test-grayscale-alpha.png").unwrap();
