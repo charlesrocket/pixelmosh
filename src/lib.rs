@@ -232,7 +232,7 @@ impl MoshData {
 
     #[deprecated]
     pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
-        self.buf = self.image.clone();
+        self.buf.clone_from(&self.image);
 
         let min_rate = options.min_rate;
         let max_rate = cmp::max(options.min_rate, options.max_rate);
