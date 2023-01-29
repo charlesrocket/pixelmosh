@@ -79,10 +79,7 @@ fn grayscale() {
 
 #[test]
 fn seed() {
-    let mut image = MoshCore::default();
-    assert_eq!(image.options.seed, 1);
-
-    image.options.new_seed();
+    let image = MoshCore::default();
     assert_eq!(image.options.seed, 901_042_006);
 }
 
