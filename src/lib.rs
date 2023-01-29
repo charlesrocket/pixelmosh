@@ -95,7 +95,7 @@ pub struct MoshOptions {
     pub seed: u64,
 }
 
-/// Main image container.
+/// Core container.
 ///
 /// Holds image data and processing options.
 #[derive(Default)]
