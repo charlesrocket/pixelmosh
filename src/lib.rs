@@ -105,7 +105,9 @@ pub struct MoshCore {
 }
 
 impl MoshCore {
-    /// Creates a new empty instance of [`MoshCore`] with a random seed.
+    /// Creates a new, empty instance of [`MoshCore`] with a random [seed].
+    ///
+    /// [seed]: MoshOptions::seed
     pub fn new() -> Self {
         Self {
             data: MoshData::default(),
