@@ -383,7 +383,7 @@ impl Default for MoshOptions {
             flip: 0.3,
             channel_swap: 0.3,
             channel_shift: 0.3,
-            seed: 1,
+            seed: Self::generate_seed(),
         }
     }
 }
