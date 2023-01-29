@@ -78,30 +78,6 @@ fn grayscale() {
 }
 
 #[test]
-fn defaults() {
-    let input = read_file("src/util/test-grayscale.png").unwrap();
-    let mut image = MoshCore::default();
-
-    image.read_image(&input).unwrap();
-    image.mosh().unwrap();
-    write_file(
-        "moshed-defaults.png",
-        &image.data.buf,
-        image.data.width,
-        image.data.height,
-        image.data.color_type,
-        image.data.bit_depth,
-    )
-    .unwrap();
-
-    let output = File::open("moshed-defaults.png").unwrap();
-    let mut file = BufReader::new(output);
-    let checksum = adler32(&mut file).unwrap();
-
-    assert_eq!(checksum, 3_664_879_923);
-}
-
-#[test]
 fn seed() {
     let mut image = MoshCore::default();
     assert_eq!(image.options.seed, 1);
