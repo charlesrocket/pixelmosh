@@ -16,17 +16,17 @@
 //!
 //! let input = read_file("src/util/test-rgb.png")?;
 //! let output = "test.png";
-//! let mut image = MoshCore::new();
+//! let mut core = MoshCore::new();
 //!
-//! image.read_image(&input)?;
-//! image.mosh()?;
+//! core.read_image(&input)?;
+//! core.mosh()?;
 //! write_file(
 //!     output,
-//!     &image.data.buf,
-//!     image.data.width,
-//!     image.data.height,
-//!     image.data.color_type,
-//!     image.data.bit_depth,
+//!     &core.data.buf,
+//!     core.data.width,
+//!     core.data.height,
+//!     core.data.color_type,
+//!     core.data.bit_depth,
 //! )?;
 //! # Ok::<(), MoshError>(())
 //! ````
