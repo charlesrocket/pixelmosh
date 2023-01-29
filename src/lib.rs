@@ -109,7 +109,7 @@ impl MoshCore {
     pub fn new() -> Self {
         Self {
             data: MoshData::default(),
-            options: MoshOptions::new(),
+            options: MoshOptions::default(),
         }
     }
 
@@ -195,13 +195,6 @@ impl MoshOptions {
             TEST_SEED
         } else {
             rand::thread_rng().next_u64()
-        }
-    }
-
-    fn new() -> Self {
-        Self {
-            seed: Self::generate_seed(),
-            ..Self::default()
         }
     }
 
