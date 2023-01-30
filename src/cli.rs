@@ -159,9 +159,9 @@ fn args() -> (PathBuf, String, MoshCore, u8) {
 
 fn filename(output: &str, index: u8, batch: u8) -> String {
     if batch > 1 {
-        format!("{}-{:03}.png", output, index)
+        format!("{output}-{index:03}.png")
     } else {
-        format!("{}.png", output)
+        format!("{output}.png")
     }
 }
 
