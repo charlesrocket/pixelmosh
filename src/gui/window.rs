@@ -62,7 +62,7 @@ impl Window {
             .borrow_mut()
             .open_file(&file.path().unwrap())?;
 
-        if self.imp().image.borrow_mut().core.data.color_type != ColorType::GrayscaleAlpha {
+        if self.imp().image.borrow_mut().core.data.color_type != ColorType::Indexed {
             self.imp().image.borrow_mut().mosh();
 
             self.imp()
