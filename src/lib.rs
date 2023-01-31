@@ -143,9 +143,9 @@ impl MoshCore {
     ///
     /// # Errors
     ///
-    /// * [`UnsupportedColorType`]: [`GrayscaleAlpha`] is not supported.
+    /// * [`UnsupportedColorType`]: [`Indexed`] is not supported.
     ///
-    /// [`GrayscaleAlpha`]: ColorType::GrayscaleAlpha
+    /// [`Indexed`]: ColorType::Indexed
     ///
     /// # Example
     /// ````
