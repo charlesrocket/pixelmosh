@@ -38,7 +38,7 @@ impl Image {
         line_size: usize,
     ) -> gdk::MemoryTexture {
         let (format, stride) = match &color_type {
-            ColorType::GrayscaleAlpha | ColorType::Indexed => {
+            ColorType::Indexed => {
                 todo!()
             }
 
@@ -56,6 +56,27 @@ impl Image {
                     gdk::MemoryFormat::R8g8b8,
                     &glib::Bytes::from_owned(rgb),
                     width as usize * 3,
+                )
+                .upcast();
+            }
+
+            ColorType::GrayscaleAlpha => {
+                let mut rgba = Vec::with_capacity(buf.len());
+                for row in buf.chunks_exact(line_size) {
+                    for pixels in row.chunks_exact(2) {
+                        let gray = pixels[0];
+                        let alpha = pixels[1];
+
+                        rgba.extend_from_slice(&[gray, gray, gray, alpha]);
+                    }
+                }
+
+                return gdk::MemoryTexture::new(
+                    width as i32,
+                    height as i32,
+                    gdk::MemoryFormat::R8g8b8a8,
+                    &glib::Bytes::from_owned(rgba),
+                    width as usize * 4,
                 )
                 .upcast();
             }

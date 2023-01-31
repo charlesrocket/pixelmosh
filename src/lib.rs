@@ -239,11 +239,14 @@ impl MoshData {
         }
 
         match self.color_type {
-            ColorType::GrayscaleAlpha | ColorType::Indexed => {
+            ColorType::Indexed => {
                 return Err(MoshError::UnsupportedColorType);
             }
             ColorType::Grayscale => {
                 Self::pixelation(self, options, fr::PixelType::U8);
+            }
+            ColorType::GrayscaleAlpha => {
+                Self::pixelation(self, options, fr::PixelType::U8x2);
             }
             ColorType::Rgb => {
                 Self::pixelation(self, options, fr::PixelType::U8x3);
