@@ -1,6 +1,5 @@
 #[cfg(feature = "cli")]
 mod cli;
-
 #[cfg(feature = "gui")]
 mod gui;
 
