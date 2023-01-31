@@ -78,6 +78,29 @@ fn grayscale() {
 }
 
 #[test]
+fn grayscale_alpha() {
+    let input = read_file("src/util/test-grayscale-alpha.png").unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file(
+        "moshed-grayscale-alpha.png",
+        &image.data.buf,
+        image.data.width,
+        image.data.height,
+        image.data.color_type,
+        image.data.bit_depth,
+    )
+    .unwrap();
+
+    let output = File::open("moshed-grayscale-alpha.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 1_813_360_601);
+}
+
+#[test]
 fn seed() {
     let mut image = MoshCore::default();
     image.options.seed = 1;
