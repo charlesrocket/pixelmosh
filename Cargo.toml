@@ -27,15 +27,17 @@ path = "src/main.rs"
 test = false
 
 [features]
+default = ["cli"]
+cli = ["dep:clap", "dep:indicatif"]
 gui = ["dep:adw", "dep:glib", "dep:gtk"]
 
 [dependencies]
 adw = { version = "0.2.1", package = "libadwaita", optional = true }
-clap = { version = "4.1", features = ["string"] }
+clap = { version = "4.1", features = ["string"], optional = true }
 fast_image_resize = "2.5"
 glib = { version = "0.16.7", optional = true }
 gtk = { version = "0.5", package = "gtk4", optional = true }
-indicatif = "0.17.3"
+indicatif = { version = "0.17.3", optional = true }
 png = "0.17.7"
 rand = "0.8.5"
 rand_chacha = "0.3.1"

@@ -1,3 +1,4 @@
+#[cfg(feature = "cli")]
 mod cli;
 
 #[cfg(feature = "gui")]
@@ -8,6 +9,7 @@ fn main() {
         #[cfg(feature = "gui")]
         gui::start();
     } else {
+        #[cfg(feature = "cli")]
         cli::start();
     }
 }
