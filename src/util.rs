@@ -88,8 +88,8 @@ fn seed() {
 
 #[test]
 #[should_panic(expected = "UnsupportedColorType")]
-fn grayscale_alpha() {
-    let input = read_file("src/util/test-grayscale-alpha.png").unwrap();
+fn indexed() {
+    let input = read_file("src/util/test-indexed.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();

@@ -43,7 +43,7 @@ mod cli {
     fn unsupported_color_type() -> Result<(), Box<dyn Error>> {
         let mut cmd = Command::cargo_bin("pixelmosh")?;
 
-        cmd.arg("src/util/test-grayscale-alpha.png");
+        cmd.arg("src/util/test-indexed.png");
         cmd.assert()
             .failure()
             .stderr(contains("Unsupported color type"));
