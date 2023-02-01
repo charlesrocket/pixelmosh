@@ -1,35 +1,43 @@
-//! # Overview
-//!
-//! _Glitch and pixelate PNG images_
-//!
-//! Provides the [`MoshCore`] type for image processing and I/O functions,
-//! available in the [`ops`] module.
-//!
-//! # Usage
-//!
-//! ````
-//! use libmosh::{
-//!     err::MoshError,
-//!     ops::{read_file, write_file},
-//!     MoshCore,
-//! };
-//!
-//! let input = read_file("src/util/test-rgb.png")?;
-//! let output = "test.png";
-//! let mut core = MoshCore::new();
-//!
-//! core.read_image(&input)?;
-//! core.mosh()?;
-//! write_file(
-//!     output,
-//!     &core.data.buf,
-//!     core.data.width,
-//!     core.data.height,
-//!     core.data.color_type,
-//!     core.data.bit_depth,
-//! )?;
-//! # Ok::<(), MoshError>(())
-//! ````
+/*! # Overview
+
+_Glitch and pixelate PNG images_
+
+Provides the [`MoshCore`] type for image processing and I/O functions,
+available in the [`ops`] module.
+
+# Usage
+Add `pixelmosh` to your dependencies in your project's `Cargo.toml`.
+
+```toml
+[dependencies]
+pixelmosh = { version = "3.1", default-features = false }
+```
+
+# Example
+```rust
+use libmosh::{
+    err::MoshError,
+    ops::{read_file, write_file},
+    MoshCore,
+};
+
+let input = read_file("src/util/test-rgb.png")?;
+let output = "test.png";
+let mut core = MoshCore::new();
+
+core.read_image(&input)?;
+core.mosh()?;
+write_file(
+    output,
+    &core.data.buf,
+    core.data.width,
+    core.data.height,
+    core.data.color_type,
+    core.data.bit_depth,
+)?;
+# Ok::<(), MoshError>(())
+```
+*/
 #![allow(deprecated)]
 
 use fast_image_resize as fr;
@@ -136,53 +144,55 @@ impl MoshCore {
         Ok(())
     }
 
-    /// Processes an image with current [settings], storing the result in a [buffer].
-    ///
-    /// [buffer]: MoshData::buf
-    /// [settings]: MoshOptions
-    ///
-    /// # Errors
-    ///
-    /// * [`UnsupportedColorType`]: [`Indexed`] is not supported.
-    ///
-    /// [`Indexed`]: ColorType::Indexed
-    ///
-    /// # Example
-    /// ````
-    /// use libmosh::{
-    ///     err::MoshError,
-    ///     ops::{read_file, write_file},
-    ///     MoshCore,
-    /// };
-    ///
-    /// let input = read_file("src/util/test-rgb.png")?;
-    /// let output = "test.png";
-    /// let mut image = MoshCore::new();
-    ///
-    /// image.options.min_rate = 5;
-    /// image.options.max_rate = 7;
-    /// image.options.pixelation = 10;
-    /// image.options.line_shift = 0.7;
-    /// image.options.reverse = 0.4;
-    /// image.options.flip = 0.3;
-    /// image.options.channel_swap = 0.5;
-    /// image.options.channel_shift = 0.5;
-    /// image.options.seed = 42;
-    ///
-    /// image.read_image(&input)?;
-    /// image.mosh()?;
-    /// write_file(
-    ///     output,
-    ///     &image.data.buf,
-    ///     image.data.width,
-    ///     image.data.height,
-    ///     image.data.color_type,
-    ///     image.data.bit_depth,
-    /// )?;
-    /// # Ok::<(), MoshError>(())
-    /// ````
-    ///
-    /// [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
+    /**
+    Processes an image with current [settings], storing the result in a [buffer].
+
+    [buffer]: MoshData::buf
+    [settings]: MoshOptions
+
+    # Errors
+
+    * [`UnsupportedColorType`]: [`Indexed`] is not supported.
+
+    [`Indexed`]: ColorType::Indexed
+
+    # Example
+    ```rust
+    use libmosh::{
+        err::MoshError,
+        ops::{read_file, write_file},
+        MoshCore,
+    };
+
+    let input = read_file("src/util/test-rgb.png")?;
+    let output = "test.png";
+    let mut image = MoshCore::new();
+
+    image.options.min_rate = 5;
+    image.options.max_rate = 7;
+    image.options.pixelation = 10;
+    image.options.line_shift = 0.7;
+    image.options.reverse = 0.4;
+    image.options.flip = 0.3;
+    image.options.channel_swap = 0.5;
+    image.options.channel_shift = 0.5;
+    image.options.seed = 42;
+
+    image.read_image(&input)?;
+    image.mosh()?;
+    write_file(
+        output,
+        &image.data.buf,
+        image.data.width,
+        image.data.height,
+        image.data.color_type,
+        image.data.bit_depth,
+    )?;
+    # Ok::<(), MoshError>(())
+    ```
+
+    [`UnsupportedColorType`]: crate::err::MoshError::UnsupportedColorType
+    */
     pub fn mosh(&mut self) -> Result<(), MoshError> {
         self.data.mosh(&self.options)?;
 
