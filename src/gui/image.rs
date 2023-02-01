@@ -99,7 +99,7 @@ impl Image {
 
         self.core.read_image(&input).unwrap();
 
-        if self.core.data.color_type != ColorType::GrayscaleAlpha {
+        if self.core.data.color_type != ColorType::Indexed {
             let texture = Self::generate_texture(
                 &self.core.data.buf,
                 self.core.data.width,
