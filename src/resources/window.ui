@@ -67,7 +67,7 @@
                       <object class="AdwStatusPage">
                         <property name="icon-name">emblem-important-symbolic</property>
                         <property name="title" translatable="yes">Unsupported file</property>
-                        <property name="description" translatable="yes">Supported color types are RGB/A and Grayscale</property>
+                        <property name="description" translatable="yes">Supported color types are RGB and Grayscale</property>
                         <property name="child">
                           <object class="GtkButton">
                             <property name="label" translatable="yes">_Restart</property>
