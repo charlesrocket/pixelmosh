@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/pixelmosh/">
     <file compressed="true" preprocess="xml-stripblanks">window.ui</file>
+    <file alias="style.css">style.css</file>
   </gresource>
 </gresources>

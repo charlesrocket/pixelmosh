@@ -18,7 +18,9 @@ glib::wrapper! {
 
 impl Window {
     pub fn new(app: &adw::Application) -> Self {
-        Object::new(&[("application", app)])
+        Object::builder::<Window>()
+            .property("application", app)
+            .build()
     }
 
     fn setup_actions(&self) {

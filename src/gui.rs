@@ -27,7 +27,7 @@ fn build_ui(app: &adw::Application) {
 
 fn load_css() {
     let provider = CssProvider::new();
-    provider.load_from_data(include_bytes!("../src/resources/style.css"));
+    provider.load_from_resource("/pixelmosh/style.css");
 
     StyleContext::add_provider_for_display(
         &Display::default().expect("Could not connect to a display."),
