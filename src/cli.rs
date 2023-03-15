@@ -10,25 +10,25 @@ use libmosh::{
 
 // Logo
 const BANNER: &str = "\u{250C}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2510} \n\u{2502} \u{2588}\
-                      \u{2580}\u{2584} \u{2588} \u{2580}\u{2584}\u{2580} \
-                      \u{2588}\u{2588}\u{2580} \u{2588}   \u{2588}\u{2584} \
-                      \u{2584}\u{2588} \u{2584}\u{2580}\u{2584} \u{2584}\
-                      \u{2580}\u{2580} \u{2588}\u{2584}\u{2588} \u{2502}\n\
-                      \u{2502} \u{2588}\u{2580}  \u{2588} \u{2588} \u{2588} \
-                      \u{2588}\u{2584}\u{2584} \u{2588}\u{2584}\u{2584} \
-                      \u{2588} \u{2580} \u{2588} \u{2580}\u{2584}\u{2580} \
-                      \u{2584}\u{2588}\u{2588} \u{2588} \u{2588} \u{2502}\n\
-                      \u{2514}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
-                      \u{2500}\u{2500}\u{2500}\u{2518}";
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2510} \n\u{2502} \u{2588}\
+    \u{2580}\u{2584} \u{2588} \u{2580}\u{2584}\u{2580} \
+    \u{2588}\u{2588}\u{2580} \u{2588}   \u{2588}\u{2584} \
+    \u{2584}\u{2588} \u{2584}\u{2580}\u{2584} \u{2584}\
+    \u{2580}\u{2580} \u{2588}\u{2584}\u{2588} \u{2502}\n\
+    \u{2502} \u{2588}\u{2580}  \u{2588} \u{2588} \u{2588} \
+    \u{2588}\u{2584}\u{2584} \u{2588}\u{2584}\u{2584} \
+    \u{2588} \u{2580} \u{2588} \u{2580}\u{2584}\u{2580} \
+    \u{2584}\u{2588}\u{2588} \u{2588} \u{2588} \u{2502}\n\
+    \u{2514}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\
+    \u{2500}\u{2500}\u{2500}\u{2518}";
 
 // TTY animation
 const SPINNER_1: [&str; 7] = [
@@ -63,93 +63,123 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
         .version(env!("CARGO_PKG_VERSION"))
-        .help_template("{name} v{version} CLI\n{about-with-newline}PNG corrupter\n\n{usage-heading} {usage}\n\n{all-args}{after-help}")
-        .arg(Arg::new("file")
-            .action(ArgAction::Set)
-            .value_name("FILE")
-            .help("File path")
-            .required(true).value_parser(value_parser!(PathBuf)))
-        .arg(Arg::new("minrate")
-            .short('n')
-            .long("min-rate")
-            .value_name("MIN_RATE")
-            .help("Minimum chunks to process")
-            .value_parser(value_parser!(u16))
-            .default_value(container.options.min_rate.to_string()))
-        .arg(Arg::new("maxrate")
-            .short('m')
-            .long("max-rate")
-            .value_name("MAX_RATE")
-            .help("Maximum chunks to process")
-            .value_parser(value_parser!(u16))
-            .default_value(container.options.max_rate.to_string()))
-        .arg(Arg::new("pixelation")
-            .short('p')
-            .long("pixelation")
-            .value_name("PIXELATION")
-            .help("Pixelation rate")
-            .value_parser(value_parser!(u8))
-            .default_value(container.options.pixelation.to_string()))
-        .arg(Arg::new("lineshift")
-            .short('l')
-            .long("line-shift")
-            .value_name("LINE_SHIFT")
-            .help("Line shift rate")
-            .value_parser(value_parser!(f64))
-            .default_value(container.options.line_shift.to_string()))
-        .arg(Arg::new("reverse")
-            .short('r')
-            .long("reverse")
-            .value_name("REVERSE")
-            .help("Reverse rate")
-            .value_parser(value_parser!(f64))
-            .default_value(container.options.reverse.to_string()))
-        .arg(Arg::new("flip")
-            .short('f')
-            .long("flip")
-            .value_name("FLIP")
-            .help("Flip rate")
-            .value_parser(value_parser!(f64))
-            .default_value(container.options.flip.to_string()))
-        .arg(Arg::new("channelswap")
-            .short('c')
-            .long("channel-swap")
-            .value_name("CHANNEL_SWAP")
-            .help("Channel swap rate")
-            .value_parser(value_parser!(f64))
-            .default_value(container.options.channel_swap.to_string()))
-        .arg(Arg::new("channelshift")
-            .short('t')
-            .long("channel-shift")
-            .value_name("CHANNEL_SHIFT")
-            .help("Channel shift rate")
-            .value_parser(value_parser!(f64))
-            .default_value(container.options.channel_shift.to_string()))
-        .arg(Arg::new("seed")
-            .short('s')
-            .long("seed")
-            .value_name("SEED")
-            .help("Custom seed")
-            .long_help("Set a custom seed value")
-            .hide_default_value(true)
-            .value_parser(value_parser!(u64))
-            .default_value(container.options.seed.to_string()))
-        .arg(Arg::new("batch")
-            .short('b')
-            .long("batch")
-            .value_name("BATCH")
-            .help("Number of files to output")
-            .long_help("Enable batch mode and set the number of files to output")
-            .hide_default_value(true)
-            .value_parser(value_parser!(u8))
-            .default_value("1"))
-        .arg(Arg::new("output")
-            .short('o')
-            .long("output")
-            .value_name("OUTPUT")
-            .help("Output filename")
-            .hide_default_value(true)
-            .default_value("moshed"));
+        .help_template(
+            "{name} v{version} \
+                CLI\n{about-with-newline}\
+                PNG corrupter\n\n{usage-heading} \
+                {usage}\n\n{all-args}{after-help}",
+        )
+        .arg(
+            Arg::new("file")
+                .action(ArgAction::Set)
+                .value_name("FILE")
+                .help("File path")
+                .required(true)
+                .value_parser(value_parser!(PathBuf)),
+        )
+        .arg(
+            Arg::new("minrate")
+                .short('n')
+                .long("min-rate")
+                .value_name("MIN_RATE")
+                .help("Minimum chunks to process")
+                .value_parser(value_parser!(u16))
+                .default_value(container.options.min_rate.to_string()),
+        )
+        .arg(
+            Arg::new("maxrate")
+                .short('m')
+                .long("max-rate")
+                .value_name("MAX_RATE")
+                .help("Maximum chunks to process")
+                .value_parser(value_parser!(u16))
+                .default_value(container.options.max_rate.to_string()),
+        )
+        .arg(
+            Arg::new("pixelation")
+                .short('p')
+                .long("pixelation")
+                .value_name("PIXELATION")
+                .help("Pixelation rate")
+                .value_parser(value_parser!(u8))
+                .default_value(container.options.pixelation.to_string()),
+        )
+        .arg(
+            Arg::new("lineshift")
+                .short('l')
+                .long("line-shift")
+                .value_name("LINE_SHIFT")
+                .help("Line shift rate")
+                .value_parser(value_parser!(f64))
+                .default_value(container.options.line_shift.to_string()),
+        )
+        .arg(
+            Arg::new("reverse")
+                .short('r')
+                .long("reverse")
+                .value_name("REVERSE")
+                .help("Reverse rate")
+                .value_parser(value_parser!(f64))
+                .default_value(container.options.reverse.to_string()),
+        )
+        .arg(
+            Arg::new("flip")
+                .short('f')
+                .long("flip")
+                .value_name("FLIP")
+                .help("Flip rate")
+                .value_parser(value_parser!(f64))
+                .default_value(container.options.flip.to_string()),
+        )
+        .arg(
+            Arg::new("channelswap")
+                .short('c')
+                .long("channel-swap")
+                .value_name("CHANNEL_SWAP")
+                .help("Channel swap rate")
+                .value_parser(value_parser!(f64))
+                .default_value(container.options.channel_swap.to_string()),
+        )
+        .arg(
+            Arg::new("channelshift")
+                .short('t')
+                .long("channel-shift")
+                .value_name("CHANNEL_SHIFT")
+                .help("Channel shift rate")
+                .value_parser(value_parser!(f64))
+                .default_value(container.options.channel_shift.to_string()),
+        )
+        .arg(
+            Arg::new("seed")
+                .short('s')
+                .long("seed")
+                .value_name("SEED")
+                .help("Custom seed")
+                .long_help("Set a custom seed value")
+                .hide_default_value(true)
+                .value_parser(value_parser!(u64))
+                .default_value(container.options.seed.to_string()),
+        )
+        .arg(
+            Arg::new("batch")
+                .short('b')
+                .long("batch")
+                .value_name("BATCH")
+                .help("Number of files to output")
+                .long_help("Enable batch mode and set the number of files to output")
+                .hide_default_value(true)
+                .value_parser(value_parser!(u8))
+                .default_value("1"),
+        )
+        .arg(
+            Arg::new("output")
+                .short('o')
+                .long("output")
+                .value_name("OUTPUT")
+                .help("Output filename")
+                .hide_default_value(true)
+                .default_value("moshed"),
+        );
 
     (matches.get_matches(), container)
 }
