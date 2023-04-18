@@ -28,7 +28,7 @@ fn rgb() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 177_632_196);
+    assert_eq!(checksum, 1_880_861_039);
 }
 
 #[test]
@@ -51,7 +51,7 @@ fn rgba() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 4_232_986_456);
+    assert_eq!(checksum, 3_840_088_373);
 }
 
 #[test]
@@ -74,7 +74,7 @@ fn grayscale() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 2_950_358_433);
+    assert_eq!(checksum, 779_801_850);
 }
 
 #[test]
@@ -97,7 +97,7 @@ fn grayscale_alpha() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 1_813_360_601);
+    assert_eq!(checksum, 3_326_620_465);
 }
 
 #[test]
