@@ -1,5 +1,5 @@
 use adw::{gio, prelude::*};
-use gtk::{gdk::Display, CssProvider, StyleContext};
+use gtk::{gdk::Display, CssProvider};
 
 use window::Window;
 
@@ -29,7 +29,7 @@ fn load_css() {
     let provider = CssProvider::new();
     provider.load_from_resource("/pixelmosh/style.css");
 
-    StyleContext::add_provider_for_display(
+    gtk::style_context_add_provider_for_display(
         &Display::default().expect("Could not connect to a display."),
         &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
