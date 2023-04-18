@@ -8,13 +8,13 @@
 #### CLI
 
 ```
-cargo install --locked pixelmosh
+cargo install pixelmosh
 ```
 
 #### GUI
 
 ```
-cargo install --locked pixelmosh --features gui
+cargo install pixelmosh --features gui
 ```
 
 ### Basic usage
