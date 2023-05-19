@@ -29,7 +29,29 @@ impl Window {
             window.mosh();
         }));
 
+        let action_minimize = gio::SimpleAction::new("minimize", None);
+        action_minimize.connect_activate(clone!(@weak self as window => move |_, _| {
+            window.minimize();
+        }));
+
+        let action_maximize = gio::SimpleAction::new("maximize", None);
+        action_maximize.connect_activate(clone!(@weak self as window => move |_, _| {
+            if window.is_maximized() {
+                window.unmaximize();
+            } else {
+                window.maximize();
+            }
+        }));
+
+        let action_close = gio::SimpleAction::new("close", None);
+        action_close.connect_activate(clone!(@weak self as window => move |_, _| {
+            window.close();
+        }));
+
         self.add_action(&action_mosh_image);
+        self.add_action(&action_minimize);
+        self.add_action(&action_maximize);
+        self.add_action(&action_close);
     }
 
     fn setup_callbacks(&self) {
@@ -49,12 +71,14 @@ impl Window {
     }
 
     fn mosh(&self) {
-        self.imp().image.borrow_mut().new_seed();
-        self.imp().image.borrow_mut().mosh();
+        if self.imp().image.borrow_mut().is_present {
+            self.imp().image.borrow_mut().new_seed();
+            self.imp().image.borrow_mut().mosh();
 
-        self.imp()
-            .picture
-            .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+            self.imp()
+                .picture
+                .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+        }
     }
 
     fn load_file(&self, file: &gio::File) -> Result<(), MoshError> {

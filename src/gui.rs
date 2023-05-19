@@ -14,6 +14,12 @@ pub fn start() {
 
     app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
+
+    app.set_accels_for_action("win.mosh-file", &["p"]);
+    app.set_accels_for_action("win.minimize", &["m"]);
+    app.set_accels_for_action("win.maximize", &["f"]);
+    app.set_accels_for_action("win.close", &["q"]);
+
     app.run();
 }
 

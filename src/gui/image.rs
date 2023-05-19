@@ -13,6 +13,7 @@ use libmosh::{
 pub struct Image {
     pub core: MoshCore,
     pub texture: gdk::Texture,
+    pub is_present: bool,
 }
 
 impl Image {
@@ -27,6 +28,7 @@ impl Image {
                 3,
             )
             .upcast(),
+            is_present: false,
         }
     }
 
@@ -110,6 +112,8 @@ impl Image {
 
             self.texture = texture.upcast();
         }
+
+        self.is_present = true;
 
         Ok(())
     }
