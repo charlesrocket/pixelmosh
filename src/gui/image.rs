@@ -111,9 +111,10 @@ impl Image {
             );
 
             self.texture = texture.upcast();
+            self.is_present = true;
+        } else {
+            self.is_present = false;
         }
-
-        self.is_present = true;
 
         Ok(())
     }
