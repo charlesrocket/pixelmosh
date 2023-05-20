@@ -7,7 +7,7 @@ use std::cell::RefCell;
 use crate::gui::window::Image;
 
 #[derive(CompositeTemplate)]
-#[template(resource = "/pixelmosh/window.ui")]
+#[template(resource = "/org/hellbyte/pixelmosh/window.ui")]
 pub struct Window {
     #[template_child]
     pub btn_min_rate: TemplateChild<SpinButton>,
