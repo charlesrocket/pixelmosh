@@ -100,11 +100,13 @@ impl ObjectSubclass for Window {
             "win.save-file",
             None,
             |win, _action_name, _action_target| async move {
-                let dialog = &win.imp().dialog_save;
-                dialog.set_transient_for(Some(&win));
-                if dialog.run_future().await == ResponseType::Accept {
-                    if let Err(error) = win.save_file(&dialog.file().unwrap()) {
-                        println!("Error saving the image: {error}");
+                if win.imp().image.borrow_mut().is_present {
+                    let dialog = &win.imp().dialog_save;
+                    dialog.set_transient_for(Some(&win));
+                    if dialog.run_future().await == ResponseType::Accept {
+                        if let Err(error) = win.save_file(&dialog.file().unwrap()) {
+                            println!("Error saving the image: {error}");
+                        }
                     }
                 }
             },
