@@ -132,6 +132,13 @@
                         <property name="tooltip-text">Save to file</property>
                       </object>
                     </child>
+                    <child type="end">
+                      <object class="GtkButton">
+                        <property name="action-name">win.show-help-overlay</property>
+                        <property name="icon-name">view-more-symbolic</property>
+                        <property name="tooltip-text">Show shortcust</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
