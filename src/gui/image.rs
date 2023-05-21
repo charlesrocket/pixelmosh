@@ -99,7 +99,7 @@ impl Image {
     pub fn open_file(&mut self, file: &PathBuf) -> Result<(), MoshError> {
         let input = read_file(file)?;
 
-        self.core.read_image(&input).unwrap();
+        self.core.read_image(&input)?;
 
         if self.core.data.color_type != ColorType::Indexed {
             let texture = Self::generate_texture(

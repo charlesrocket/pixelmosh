@@ -89,9 +89,7 @@ impl ObjectSubclass for Window {
                 let dialog = &win.imp().dialog_open;
                 dialog.set_transient_for(Some(&win));
                 if dialog.run_future().await == ResponseType::Accept {
-                    if let Err(error) = win.load_file(&dialog.file().unwrap()) {
-                        println!("Error loading the image: {error}");
-                    }
+                    win.load_file(&dialog.file().unwrap())
                 }
             },
         );
@@ -105,7 +103,16 @@ impl ObjectSubclass for Window {
                     dialog.set_transient_for(Some(&win));
                     if dialog.run_future().await == ResponseType::Accept {
                         if let Err(error) = win.save_file(&dialog.file().unwrap()) {
-                            println!("Error saving the image: {error}");
+                            let error_dialog = gtk::MessageDialog::builder()
+                                .transient_for(&win)
+                                .modal(true)
+                                .buttons(gtk::ButtonsType::Close)
+                                .message_type(gtk::MessageType::Error)
+                                .text(&format!("Error saving the image: {}", error))
+                                .build();
+
+                            error_dialog.run_future().await;
+                            error_dialog.close();
                         }
                     }
                 }

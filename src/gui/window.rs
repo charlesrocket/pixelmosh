@@ -81,26 +81,29 @@ impl Window {
         }
     }
 
-    fn load_file(&self, file: &gio::File) -> Result<(), MoshError> {
+    fn load_file(&self, file: &gio::File) {
         self.imp().image.borrow_mut().new_seed();
-        self.imp()
+
+        if self
+            .imp()
             .image
             .borrow_mut()
-            .open_file(&file.path().unwrap())?;
+            .open_file(&file.path().unwrap())
+            .is_ok()
+        {
+            if self.imp().image.borrow_mut().core.data.color_type != ColorType::Indexed {
+                self.imp().image.borrow_mut().mosh();
+                self.imp()
+                    .picture
+                    .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
 
-        if self.imp().image.borrow_mut().core.data.color_type != ColorType::Indexed {
-            self.imp().image.borrow_mut().mosh();
-
-            self.imp()
-                .picture
-                .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
-
-            self.skip_placeholder();
+                self.skip_placeholder();
+            } else {
+                self.set_instructions();
+            }
         } else {
             self.set_instructions();
         }
-
-        Ok(())
     }
 
     fn save_file(&self, file: &gio::File) -> Result<(), MoshError> {
