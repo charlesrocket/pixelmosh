@@ -216,7 +216,7 @@ impl MoshOptions {
 }
 
 impl MoshData {
-    #[deprecated(since = "3.1.0", note = "Users should use `MoshCore` instead")]
+    #[deprecated(since = "3.1.0", note = "Users should use MoshCore instead")]
     pub fn new(input: &[u8]) -> Result<Self, MoshError> {
         let decoder = Decoder::new(input);
         let mut reader = decoder.read_info()?;
