@@ -11,7 +11,7 @@
 cargo install pixelmosh
 ```
 
-#### GUI
+#### GUI (GTK)
 
 ```
 cargo install pixelmosh --features gui
