@@ -108,7 +108,7 @@ impl ObjectSubclass for Window {
                                 .modal(true)
                                 .buttons(gtk::ButtonsType::Close)
                                 .message_type(gtk::MessageType::Error)
-                                .text(&format!("Error saving the image: {}", error))
+                                .text(format!("Error saving the image: {}", error))
                                 .build();
 
                             error_dialog.run_future().await;
