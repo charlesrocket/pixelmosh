@@ -59,8 +59,12 @@ impl ObjectSubclass for Window {
             .build();
 
         png_filter.add_mime_type("image/png");
-        png_filter.set_name(Some("PNG Image"));
-        dialog_open.add_filter(&png_filter);
+        png_filter.set_name(Some("PNG"));
+
+        // GTK #4986?
+        if !cfg!(target_os = "macos") {
+            dialog_open.add_filter(&png_filter);
+        }
 
         Self {
             btn_min_rate: TemplateChild::default(),
