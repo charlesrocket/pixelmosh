@@ -390,7 +390,7 @@
                             <property name="margin-bottom">30</property>
                             <property name="margin-start">30</property>
                             <property name="margin-end">30</property>
-                            <property name="content-fit">cover</property>
+                            <property name="content-fit">scale-down</property>
                           </object>
                         </child>
                       </object>

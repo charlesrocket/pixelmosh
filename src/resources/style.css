@@ -1,18 +1,6 @@
 @define-color accent_color @red_3;
 @define-color accent_bg_color @red_1;
 
-picture {
-  box-shadow: rgba(42, 65, 20, 0.2) 0px 7px 32px 0px;
-  border-radius: 3px;
-  transition-duration: 0.2s;
-}
-
-picture:hover {
-  box-shadow: rgba(255, 23, 23, 0.1) 0px 7px 29px 0px;
-  border-radius: 1px;
-  transition-duration: 1s;
-}
-
 #moshbutton:hover {
   color: @red_2;
   background: @headerbar_bg_color;
