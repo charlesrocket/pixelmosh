@@ -29,6 +29,35 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes" context="shortcut window">Window</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Minimize</property>
+                <property name="action-name">win.minimize</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Maximize</property>
+                <property name="action-name">win.maximize</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Close</property>
+                <property name="action-name">win.close</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Toggle color scheme</property>
+                <property name="action-name">win.toggle-color-scheme</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

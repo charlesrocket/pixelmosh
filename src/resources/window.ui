@@ -6,7 +6,7 @@
       <attribute name="action">win.toggle-color-scheme</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Keyboard shortcuts</attribute>
+      <attribute name="label" translatable="yes">_Show keyboard shortcuts</attribute>
       <attribute name="action">win.show-help-overlay</attribute>
     </item>
   </menu>
