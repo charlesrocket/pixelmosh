@@ -48,10 +48,16 @@ impl Window {
             window.close();
         }));
 
+        let action_style_manager = gio::SimpleAction::new("toggle-color-scheme", None);
+        action_style_manager.connect_activate(clone!(@weak self as window => move |_, _| {
+            window.toggle_color_scheme();
+        }));
+
         self.add_action(&action_mosh_image);
         self.add_action(&action_minimize);
         self.add_action(&action_maximize);
         self.add_action(&action_close);
+        self.add_action(&action_style_manager);
     }
 
     fn setup_callbacks(&self) {
@@ -113,5 +119,17 @@ impl Window {
             .save_file(&file.path().unwrap())?;
 
         Ok(())
+    }
+
+    fn toggle_color_scheme(&self) {
+        if self.imp().style_manager.is_dark() {
+            self.imp()
+                .style_manager
+                .set_color_scheme(adw::ColorScheme::ForceLight);
+        } else {
+            self.imp()
+                .style_manager
+                .set_color_scheme(adw::ColorScheme::ForceDark);
+        }
     }
 }

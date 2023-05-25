@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <menu id="main-menu">
+    <item>
+      <attribute name="label" translatable="yes">_Toggle color Scheme</attribute>
+      <attribute name="action">win.toggle-color-scheme</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Keyboard shortcuts</attribute>
+      <attribute name="action">win.show-help-overlay</attribute>
+    </item>
+  </menu>
   <template class="PixelmoshWindow" parent="AdwApplicationWindow">
     <property name="title" translatable="yes">PIXELMOSH</property>
     <property name="default_width">835</property>
-    <property name="default_height">642</property>
+    <property name="default_height">542</property>
     <property name="content">
       <object class="GtkStack" id="stack">
         <property name="transition-type">crossfade</property>
@@ -133,10 +143,10 @@
                       </object>
                     </child>
                     <child type="end">
-                      <object class="GtkButton">
-                        <property name="action-name">win.show-help-overlay</property>
-                        <property name="icon-name">view-more-symbolic</property>
-                        <property name="tooltip-text">Show shortcust</property>
+                      <object class="GtkMenuButton">
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="menu-model">main-menu</property>
+                        <property name="tooltip-text" translatable="yes">Main Menu</property>
                       </object>
                     </child>
                   </object>

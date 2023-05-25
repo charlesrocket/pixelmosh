@@ -20,16 +20,14 @@ pub fn start() {
     app.set_accels_for_action("win.save-file", &["<Ctrl>s"]);
     app.set_accels_for_action("win.minimize", &["m"]);
     app.set_accels_for_action("win.maximize", &["f"]);
+    app.set_accels_for_action("win.toggle-color-scheme", &["c"]);
     app.set_accels_for_action("win.close", &["<Ctrl>q"]);
 
     app.run();
 }
 
 fn build_ui(app: &adw::Application) {
-    let style_manager = adw::StyleManager::default();
     let window = Window::new(app);
-
-    style_manager.set_color_scheme(adw::ColorScheme::PreferDark);
     window.present();
 }
 

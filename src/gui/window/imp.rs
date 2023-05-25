@@ -32,6 +32,7 @@ pub struct Window {
     pub picture: TemplateChild<gtk::Picture>,
     #[template_child]
     pub stack: TemplateChild<Stack>,
+    pub style_manager: adw::StyleManager,
 }
 
 #[glib::object_subclass]
@@ -80,6 +81,7 @@ impl ObjectSubclass for Window {
             image: RefCell::new(Image::default()),
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
+            style_manager: adw::StyleManager::default(),
         }
     }
 
