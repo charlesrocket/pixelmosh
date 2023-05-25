@@ -2,7 +2,7 @@
 <interface>
   <menu id="main-menu">
     <item>
-      <attribute name="label" translatable="yes">_Toggle color Scheme</attribute>
+      <attribute name="label" translatable="yes">_Toggle color scheme</attribute>
       <attribute name="action">win.toggle-color-scheme</attribute>
     </item>
     <item>
