@@ -61,6 +61,12 @@ impl Window {
     }
 
     fn setup_callbacks(&self) {
+        self.imp()
+            .seed
+            .connect_icon_release(clone!(@weak self as window => move |_,_| {
+                window.mosh_with_seed();
+            }));
+
         self.set_stack();
     }
 
@@ -76,10 +82,43 @@ impl Window {
         self.imp().stack.set_visible_child_name("instructions");
     }
 
+    fn mosh_with_seed(&self) {
+        let buffer = self.imp().seed.buffer();
+        let seed = buffer.text().to_string();
+
+        if seed.is_empty() || seed.parse::<u64>().is_err() {
+            self.imp().image.borrow_mut().new_seed();
+            self.imp()
+                .seed
+                .buffer()
+                .set_text(self.imp().image.borrow_mut().get_seed().to_string());
+
+            self.imp().image.borrow_mut().mosh();
+        } else {
+            self.imp()
+                .image
+                .borrow_mut()
+                .set_seed(seed.parse::<u64>().unwrap());
+
+            self.imp().image.borrow_mut().mosh();
+
+            buffer.set_text(self.imp().image.borrow_mut().get_seed().to_string());
+        }
+
+        self.imp().image.borrow_mut().new_seed();
+        self.imp()
+            .picture
+            .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+    }
+
     fn mosh(&self) {
         if self.imp().image.borrow_mut().is_present {
             self.imp().image.borrow_mut().new_seed();
             self.imp().image.borrow_mut().mosh();
+            self.imp()
+                .seed
+                .buffer()
+                .set_text(self.imp().image.borrow_mut().get_seed().to_string());
 
             self.imp()
                 .picture

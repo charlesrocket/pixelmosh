@@ -169,6 +169,19 @@
                         <property name="margin-start">30</property>
                         <property name="spacing">5</property>
                         <child>
+                          <object class="GtkEntry" id="seed">
+                            <property name="placeholder-text" translatable="yes">Seed</property>
+                            <property name="secondary-icon-name">document-send-symbolic</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator">
+                            <property name="margin-bottom">7</property>
+                            <property name="margin-top">7</property>
+                            <property name="opacity">0.3</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkLabel">
                             <property name="label">Min rate</property>
                             <property name="margin-end">5</property>

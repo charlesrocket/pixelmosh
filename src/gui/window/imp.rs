@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{glib, CompositeTemplate, ResponseType, SpinButton, Stack};
+use gtk::{glib, CompositeTemplate, Entry, ResponseType, SpinButton, Stack};
 
 use std::cell::RefCell;
 
@@ -32,6 +32,8 @@ pub struct Window {
     pub picture: TemplateChild<gtk::Picture>,
     #[template_child]
     pub stack: TemplateChild<Stack>,
+    #[template_child]
+    pub seed: TemplateChild<Entry>,
     pub style_manager: adw::StyleManager,
 }
 
@@ -81,6 +83,7 @@ impl ObjectSubclass for Window {
             image: RefCell::new(Image::default()),
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
+            seed: TemplateChild::default(),
             style_manager: adw::StyleManager::default(),
         }
     }

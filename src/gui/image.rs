@@ -154,6 +154,14 @@ impl Image {
         self.core.options.new_seed();
     }
 
+    pub fn get_seed(&self) -> u64 {
+        self.core.options.seed
+    }
+
+    pub fn set_seed(&mut self, value: u64) {
+        self.core.options.seed = value;
+    }
+
     pub fn set_min_rate(&mut self, value: u16) {
         self.core.options.min_rate = value;
     }
