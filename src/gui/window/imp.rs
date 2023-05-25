@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{glib, CompositeTemplate, Entry, ResponseType, SpinButton, Stack};
+use gtk::{gio, glib, CompositeTemplate, Entry, SpinButton, Stack};
 
 use std::cell::RefCell;
 
@@ -25,8 +25,8 @@ pub struct Window {
     pub btn_channel_swap: TemplateChild<SpinButton>,
     #[template_child]
     pub btn_channel_shift: TemplateChild<SpinButton>,
-    pub dialog_open: gtk::FileChooserNative,
-    pub dialog_save: gtk::FileChooserNative,
+    pub dialog_open: gtk::FileDialog,
+    pub dialog_save: gtk::FileDialog,
     pub image: RefCell<Image>,
     #[template_child]
     pub picture: TemplateChild<gtk::Picture>,
@@ -44,30 +44,26 @@ impl ObjectSubclass for Window {
     type ParentType = adw::ApplicationWindow;
 
     fn new() -> Self {
+        let filters = gio::ListStore::new(gtk::FileFilter::static_type());
         let png_filter = gtk::FileFilter::new();
-        let dialog_open = gtk::FileChooserNative::builder()
-            .title("Open file")
-            .action(gtk::FileChooserAction::Open)
-            .accept_label("Open")
-            .cancel_label("Cancel")
-            .modal(true)
-            .build();
-
-        let dialog_save = gtk::FileChooserNative::builder()
-            .title("Save file")
-            .action(gtk::FileChooserAction::Save)
-            .accept_label("Save")
-            .cancel_label("Cancel")
-            .modal(true)
-            .build();
 
         png_filter.add_mime_type("image/png");
         png_filter.set_name(Some("PNG"));
 
-        // GTK #4986?
         if !cfg!(target_os = "macos") {
-            dialog_open.add_filter(&png_filter);
+            filters.append(&png_filter);
         }
+
+        let dialog_open = gtk::FileDialog::builder()
+            .title("Open file")
+            .accept_label("Open")
+            .filters(&filters)
+            .build();
+
+        let dialog_save = gtk::FileDialog::builder()
+            .title("Save file")
+            .accept_label("Save")
+            .build();
 
         Self {
             btn_min_rate: TemplateChild::default(),
@@ -96,9 +92,8 @@ impl ObjectSubclass for Window {
             None,
             |win, _action_name, _action_target| async move {
                 let dialog = &win.imp().dialog_open;
-                dialog.set_transient_for(Some(&win));
-                if dialog.run_future().await == ResponseType::Accept {
-                    win.load_file(&dialog.file().unwrap())
+                if let Ok(file) = dialog.open_future(Some(&win)).await {
+                    win.load_file(&file);
                 }
             },
         );
@@ -107,22 +102,15 @@ impl ObjectSubclass for Window {
             "win.save-file",
             None,
             |win, _action_name, _action_target| async move {
-                if win.imp().image.borrow_mut().is_present {
-                    let dialog = &win.imp().dialog_save;
-                    dialog.set_transient_for(Some(&win));
-                    if dialog.run_future().await == ResponseType::Accept {
-                        if let Err(error) = win.save_file(&dialog.file().unwrap()) {
-                            let error_dialog = gtk::MessageDialog::builder()
-                                .transient_for(&win)
-                                .modal(true)
-                                .buttons(gtk::ButtonsType::Close)
-                                .message_type(gtk::MessageType::Error)
-                                .text(format!("Error saving the image: {}", error))
-                                .build();
+                let dialog = &win.imp().dialog_save;
+                if let Ok(file) = dialog.save_future(Some(&win)).await {
+                    if let Err(error) = win.save_file(&file) {
+                        let error_dialog = gtk::AlertDialog::builder()
+                            .modal(true)
+                            .message(format!("Error saving the image: {}", error))
+                            .build();
 
-                            error_dialog.run_future().await;
-                            error_dialog.close();
-                        }
+                        error_dialog.show(Some(&win));
                     }
                 }
             },
