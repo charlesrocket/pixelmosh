@@ -15,13 +15,13 @@ pub fn start() {
     app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
 
-    app.set_accels_for_action("win.open-file", &["<Ctrl>o"]);
-    app.set_accels_for_action("win.mosh-file", &["<Ctrl>p"]);
-    app.set_accels_for_action("win.save-file", &["<Ctrl>s"]);
+    app.set_accels_for_action("win.open-file", &["<Primary>o"]);
+    app.set_accels_for_action("win.mosh-file", &["<Primary><Shift>p"]);
+    app.set_accels_for_action("win.save-file", &["<Primary>s"]);
     app.set_accels_for_action("win.minimize", &["m"]);
     app.set_accels_for_action("win.maximize", &["f"]);
     app.set_accels_for_action("win.toggle-color-scheme", &["c"]);
-    app.set_accels_for_action("win.close", &["<Ctrl>q"]);
+    app.set_accels_for_action("win.close", &["<Primary>q"]);
 
     app.run();
 }
