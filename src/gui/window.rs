@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::{clone, Object};
-use gtk::{gio, glib};
+use gtk::{gio, glib, License};
 use png::ColorType;
 
 use libmosh::err::MoshError;
@@ -24,6 +24,11 @@ impl Window {
     }
 
     fn setup_actions(&self) {
+        let action_about = gio::SimpleAction::new("about", None);
+        action_about.connect_activate(clone!(@weak self as window => move |_, _| {
+            window.show_about_dialog();
+        }));
+
         let action_minimize = gio::SimpleAction::new("minimize", None);
         action_minimize.connect_activate(clone!(@weak self as window => move |_, _| {
             window.minimize();
@@ -48,6 +53,7 @@ impl Window {
             window.toggle_color_scheme();
         }));
 
+        self.add_action(&action_about);
         self.add_action(&action_minimize);
         self.add_action(&action_maximize);
         self.add_action(&action_close);
@@ -164,5 +170,16 @@ impl Window {
                 .style_manager
                 .set_color_scheme(adw::ColorScheme::ForceDark);
         }
+    }
+
+    fn show_about_dialog(&self) {
+        gtk::AboutDialog::builder()
+            .program_name("PIXELMOSH")
+            .version(env!("CARGO_PKG_VERSION"))
+            .license_type(License::MitX11)
+            .website("CARGO_PKG_REPOSITORY")
+            .comments(env!("CARGO_PKG_DESCRIPTION"))
+            .build()
+            .present();
     }
 }

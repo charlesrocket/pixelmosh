@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="main-menu">
-    <item>
-      <attribute name="label" translatable="yes">_Toggle color scheme</attribute>
-      <attribute name="action">win.toggle-color-scheme</attribute>
-    </item>
-    <item>
-      <attribute name="label" translatable="yes">_Show keyboard shortcuts</attribute>
-      <attribute name="action">win.show-help-overlay</attribute>
-    </item>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_About</attribute>
+        <attribute name="action">win.about</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Toggle color scheme</attribute>
+        <attribute name="action">win.toggle-color-scheme</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Show keyboard shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+    </section>
   </menu>
   <template class="PixelmoshWindow" parent="AdwApplicationWindow">
     <property name="title" translatable="yes">PIXELMOSH</property>
