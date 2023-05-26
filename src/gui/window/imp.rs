@@ -58,11 +58,15 @@ impl ObjectSubclass for Window {
             .title("Open file")
             .accept_label("Open")
             .filters(&filters)
+            .modal(true)
             .build();
 
         let dialog_save = gtk::FileDialog::builder()
             .title("Save file")
             .accept_label("Save")
+            .initial_name("moshed.png")
+            .filters(&filters)
+            .modal(true)
             .build();
 
         Self {
