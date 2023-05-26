@@ -87,12 +87,10 @@ impl ObjectSubclass for Window {
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
         klass.bind_template_callbacks();
-        klass.install_action_async(
+        klass.install_action(
             "win.mosh-file",
             None,
-            |win, _action_name, _action_target| async move {
-                win.mosh();
-            },
+            |win, _action_name, _action_target| win.mosh(),
         );
 
         klass.install_action_async(
