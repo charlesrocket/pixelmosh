@@ -88,6 +88,14 @@ impl ObjectSubclass for Window {
         klass.bind_template();
         klass.bind_template_callbacks();
         klass.install_action_async(
+            "win.mosh-file",
+            None,
+            |win, _action_name, _action_target| async move {
+                win.mosh();
+            },
+        );
+
+        klass.install_action_async(
             "win.open-file",
             None,
             |win, _action_name, _action_target| async move {

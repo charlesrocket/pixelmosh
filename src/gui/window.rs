@@ -24,11 +24,6 @@ impl Window {
     }
 
     fn setup_actions(&self) {
-        let action_mosh_image = gio::SimpleAction::new("mosh-file", None);
-        action_mosh_image.connect_activate(clone!(@weak self as window => move |_, _| {
-            window.mosh();
-        }));
-
         let action_minimize = gio::SimpleAction::new("minimize", None);
         action_minimize.connect_activate(clone!(@weak self as window => move |_, _| {
             window.minimize();
@@ -53,7 +48,6 @@ impl Window {
             window.toggle_color_scheme();
         }));
 
-        self.add_action(&action_mosh_image);
         self.add_action(&action_minimize);
         self.add_action(&action_maximize);
         self.add_action(&action_close);
