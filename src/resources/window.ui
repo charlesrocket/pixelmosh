@@ -200,6 +200,7 @@
                                       <object class="GtkLabel" id="color_type">
                                         <property name="label">Color type</property>
                                         <property name="valign">center</property>
+                                        <property name="tooltip-text">Color model</property>
                                       </object>
                                     </child>
                                   </object>
@@ -210,6 +211,7 @@
                               <object class="GtkEntry" id="seed">
                                 <property name="placeholder-text" translatable="yes">Seed</property>
                                 <property name="secondary-icon-name">document-send-symbolic</property>
+                                <property name="tooltip-text">Process with custom seed</property>
                               </object>
                             </child>
                           </object>
