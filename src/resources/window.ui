@@ -211,7 +211,8 @@
                               <object class="GtkEntry" id="seed">
                                 <property name="placeholder-text" translatable="yes">Seed</property>
                                 <property name="secondary-icon-name">document-send-symbolic</property>
-                                <property name="tooltip-text">Process with custom seed</property>
+                                <property name="secondary-icon-tooltip-text">Process with custom seed</property>
+                                <property name="tooltip-text">Random seed</property>
                               </object>
                             </child>
                           </object>

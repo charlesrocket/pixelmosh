@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::{clone, Object};
-use gtk::{gdk::gdk_pixbuf, gio, glib, License, Picture};
+use gtk::{gdk::gdk_pixbuf, gio, glib, EntryIconPosition::Secondary, License, Picture};
 use png::ColorType;
 
 use libmosh::err::MoshError;
@@ -69,6 +69,12 @@ impl Window {
                 window.mosh_with_seed();
             }));
 
+        self.imp()
+            .seed
+            .connect_changed(clone!(@weak self as window => move |_| {
+                window.set_seed_button();
+            }));
+
         self.set_stack();
     }
 
@@ -86,6 +92,14 @@ impl Window {
 
     fn set_color_type(&self, label: &str) {
         self.imp().color_type.set_label(label);
+    }
+
+    fn set_seed_button(&self) {
+        if self.imp().seed.buffer().text().to_string().is_empty() {
+            self.imp().seed.set_icon_sensitive(Secondary, false)
+        } else {
+            self.imp().seed.set_icon_sensitive(Secondary, true);
+        }
     }
 
     fn mosh_with_seed(&self) {
