@@ -1,6 +1,7 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{gio, glib, CompositeTemplate, Entry, SpinButton, Stack};
+use gtk::{gio, glib, CompositeTemplate, Entry, Label, SpinButton, Stack};
+use png::ColorType;
 
 use std::cell::RefCell;
 
@@ -34,6 +35,8 @@ pub struct Window {
     pub stack: TemplateChild<Stack>,
     #[template_child]
     pub seed: TemplateChild<Entry>,
+    #[template_child]
+    pub color_type: TemplateChild<Label>,
     pub style_manager: adw::StyleManager,
 }
 
@@ -84,6 +87,7 @@ impl ObjectSubclass for Window {
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
             seed: TemplateChild::default(),
+            color_type: TemplateChild::default(),
             style_manager: adw::StyleManager::default(),
         }
     }
@@ -104,6 +108,16 @@ impl ObjectSubclass for Window {
                 let dialog = &win.imp().dialog_open;
                 if let Ok(file) = dialog.open_future(Some(&win)).await {
                     win.load_file(&file);
+
+                    let color_type = match win.imp().image.borrow_mut().core.data.color_type {
+                        ColorType::Grayscale => "Grayscale",
+                        ColorType::Indexed => "Indexed",
+                        ColorType::GrayscaleAlpha => "Grayscale A",
+                        ColorType::Rgb => "RGB",
+                        ColorType::Rgba => "RGBA",
+                    };
+
+                    win.set_color_type(color_type);
                 }
             },
         );

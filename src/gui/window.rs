@@ -84,6 +84,10 @@ impl Window {
         self.imp().stack.set_visible_child_name("instructions");
     }
 
+    fn set_color_type(&self, label: &str) {
+        self.imp().color_type.set_label(label);
+    }
+
     fn mosh_with_seed(&self) {
         let buffer = self.imp().seed.buffer();
         let seed = buffer.text().to_string();
