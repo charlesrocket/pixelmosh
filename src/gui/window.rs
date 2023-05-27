@@ -179,7 +179,7 @@ impl Window {
             .program_name("PIXELMOSH")
             .version(env!("CARGO_PKG_VERSION"))
             .license_type(License::MitX11)
-            .website("CARGO_PKG_REPOSITORY")
+            .website(env!("CARGO_PKG_REPOSITORY"))
             .comments(env!("CARGO_PKG_DESCRIPTION"))
             .logo(
                 &Picture::for_pixbuf(
