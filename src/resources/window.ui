@@ -20,7 +20,7 @@
   </menu>
   <template class="PixelmoshWindow" parent="AdwApplicationWindow">
     <property name="title" translatable="yes">PIXELMOSH</property>
-    <property name="default_width">835</property>
+    <property name="default_width">975</property>
     <property name="default_height">542</property>
     <property name="content">
       <object class="GtkStack" id="stack">
