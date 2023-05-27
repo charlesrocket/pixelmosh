@@ -106,7 +106,7 @@ impl Window {
         let buffer = self.imp().seed.buffer();
         let seed = buffer.text().to_string();
 
-        if seed.is_empty() || seed.parse::<u64>().is_err() {
+        if seed.parse::<u64>().is_err() {
             self.imp().image.borrow_mut().new_seed();
             self.imp()
                 .seed
