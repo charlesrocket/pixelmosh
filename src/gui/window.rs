@@ -95,73 +95,62 @@ impl Window {
     }
 
     fn set_seed_button(&self) {
-        if self.imp().seed.buffer().text().to_string().is_empty() {
-            self.imp().seed.set_icon_sensitive(Secondary, false)
+        let seed = &self.imp().seed;
+
+        if seed.buffer().text().to_string().is_empty() {
+            seed.set_icon_sensitive(Secondary, false)
         } else {
-            self.imp().seed.set_icon_sensitive(Secondary, true);
+            seed.set_icon_sensitive(Secondary, true);
         }
     }
 
     fn mosh_with_seed(&self) {
-        let buffer = self.imp().seed.buffer();
+        let buffer = &self.imp().seed.buffer();
         let seed = buffer.text().to_string();
+        let mut image = self.imp().image.borrow_mut();
 
         if seed.parse::<u64>().is_err() {
-            self.imp().image.borrow_mut().new_seed();
+            image.new_seed();
             self.imp()
                 .seed
                 .buffer()
-                .set_text(self.imp().image.borrow_mut().get_seed().to_string());
+                .set_text(image.get_seed().to_string());
 
-            self.imp().image.borrow_mut().mosh();
+            image.mosh();
         } else {
-            self.imp()
-                .image
-                .borrow_mut()
-                .set_seed(seed.parse::<u64>().unwrap());
-
-            self.imp().image.borrow_mut().mosh();
-
-            buffer.set_text(self.imp().image.borrow_mut().get_seed().to_string());
+            image.set_seed(seed.parse::<u64>().unwrap());
+            image.mosh();
+            buffer.set_text(image.get_seed().to_string());
         }
 
-        self.imp().image.borrow_mut().new_seed();
-        self.imp()
-            .picture
-            .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+        image.new_seed();
+        self.imp().picture.set_paintable(Some(&image.get_texture()));
     }
 
     fn mosh(&self) {
-        if self.imp().image.borrow_mut().is_present {
-            self.imp().image.borrow_mut().new_seed();
-            self.imp().image.borrow_mut().mosh();
+        let mut image = self.imp().image.borrow_mut();
+
+        if image.is_present {
+            image.new_seed();
+            image.mosh();
             self.imp()
                 .seed
                 .buffer()
-                .set_text(self.imp().image.borrow_mut().get_seed().to_string());
+                .set_text(image.get_seed().to_string());
 
-            self.imp()
-                .picture
-                .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+            self.imp().picture.set_paintable(Some(&image.get_texture()));
         }
     }
 
     fn load_file(&self, file: &gio::File) {
-        self.imp().image.borrow_mut().new_seed();
+        let mut image = self.imp().image.borrow_mut();
 
-        if self
-            .imp()
-            .image
-            .borrow_mut()
-            .open_file(&file.path().unwrap())
-            .is_ok()
-        {
-            if self.imp().image.borrow_mut().core.data.color_type != ColorType::Indexed {
-                self.imp().image.borrow_mut().mosh();
-                self.imp()
-                    .picture
-                    .set_paintable(Some(&self.imp().image.borrow_mut().get_texture()));
+        image.new_seed();
 
+        if image.open_file(&file.path().unwrap()).is_ok() {
+            if image.core.data.color_type != ColorType::Indexed {
+                image.mosh();
+                self.imp().picture.set_paintable(Some(&image.get_texture()));
                 self.skip_placeholder();
             } else {
                 self.set_instructions();
