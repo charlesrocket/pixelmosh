@@ -127,9 +127,9 @@ impl ObjectSubclass for Window {
                     let color_type = match win.imp().image.borrow_mut().core.data.color_type {
                         ColorType::Grayscale => "Grayscale",
                         ColorType::Indexed => "Indexed",
-                        ColorType::GrayscaleAlpha => "Grayscale A",
+                        ColorType::GrayscaleAlpha => "Grayscale/A",
                         ColorType::Rgb => "RGB",
-                        ColorType::Rgba => "RGBA",
+                        ColorType::Rgba => "RGB/A",
                     };
 
                     win.set_color_type(color_type);
