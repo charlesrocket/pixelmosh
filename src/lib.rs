@@ -61,6 +61,7 @@ pub mod ops;
 /// Image data.
 ///
 /// It holds the original image, buffer and parameters.
+#[derive(Clone)]
 pub struct MoshData {
     /// Buffer.
     pub buf: Vec<u8>,
@@ -81,7 +82,7 @@ pub struct MoshData {
 /// Processing options.
 ///
 /// Minimal `pixelation` value is `1` (OFF).
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct MoshOptions {
     /// Minimal amount of chunks to process.
     pub min_rate: u16,
@@ -106,7 +107,7 @@ pub struct MoshOptions {
 /// Core container.
 ///
 /// Holds image data and processing options.
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct MoshCore {
     pub data: MoshData,
     pub options: MoshOptions,
