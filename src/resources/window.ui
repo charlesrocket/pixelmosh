@@ -136,11 +136,19 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="btn_mosh">
                         <property name="action-name">win.mosh-file</property>
                         <property name="icon-name">view-refresh-symbolic</property>
                         <property name="tooltip-text">Process</property>
                         <property name="name">moshbutton</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="btn_rewind">
+                        <property name="action-name">win.mosh-rewind</property>
+                        <property name="icon-name">edit-undo-symbolic</property>
+                        <property name="sensitive">False</property>
+                        <property name="tooltip-text">Process with previous settings</property>
                       </object>
                     </child>
                     <child>

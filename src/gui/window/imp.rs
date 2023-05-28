@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{gio, glib, CompositeTemplate, Entry, Label, SpinButton, Stack};
+use gtk::{gio, glib, Button, CompositeTemplate, Entry, Label, SpinButton, Stack};
 use png::ColorType;
 
 use std::cell::RefCell;
@@ -26,6 +26,8 @@ pub struct Window {
     pub btn_channel_swap: TemplateChild<SpinButton>,
     #[template_child]
     pub btn_channel_shift: TemplateChild<SpinButton>,
+    #[template_child]
+    pub btn_rewind: TemplateChild<Button>,
     pub dialog_open: gtk::FileDialog,
     pub dialog_save: gtk::FileDialog,
     pub image: RefCell<Image>,
@@ -81,6 +83,7 @@ impl ObjectSubclass for Window {
             btn_flip: TemplateChild::default(),
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
+            btn_rewind: TemplateChild::default(),
             dialog_open,
             dialog_save,
             image: RefCell::new(Image::default()),
@@ -98,7 +101,19 @@ impl ObjectSubclass for Window {
         klass.install_action(
             "win.mosh-file",
             None,
-            |win, _action_name, _action_target| win.mosh(),
+            |win, _action_name, _action_target| {
+                win.mosh();
+                win.set_rewind_button();
+            },
+        );
+
+        klass.install_action(
+            "win.mosh-rewind",
+            None,
+            |win, _action_name, _action_target| {
+                win.mosh_rewind();
+                win.set_rewind_button();
+            },
         );
 
         klass.install_action_async(
@@ -153,6 +168,7 @@ impl ObjectImpl for Window {
 
         obj.setup_callbacks();
         obj.setup_actions();
+        obj.setup_buttons();
     }
 }
 

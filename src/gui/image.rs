@@ -7,12 +7,13 @@ use std::path::{Path, PathBuf};
 use libmosh::{
     err::MoshError,
     ops::{read_file, write_file},
-    MoshCore,
+    MoshCore, MoshOptions,
 };
 
 pub struct Image {
     pub core: MoshCore,
     pub texture: gdk::Texture,
+    pub settings: Option<MoshOptions>,
     pub is_present: bool,
 }
 
@@ -28,6 +29,7 @@ impl Image {
                 3,
             )
             .upcast(),
+            settings: None,
             is_present: false,
         }
     }
@@ -132,7 +134,7 @@ impl Image {
         Ok(())
     }
 
-    pub fn mosh(&mut self) {
+    pub fn mosh_file(&mut self) {
         self.core.mosh().unwrap();
         self.texture = Self::generate_texture(
             &self.core.data.buf,
@@ -192,6 +194,17 @@ impl Image {
 
     pub fn set_channel_shift(&mut self, value: f64) {
         self.core.options.channel_shift = value;
+    }
+
+    pub fn save_settings(&mut self) {
+        self.settings = Some(self.core.options.clone());
+    }
+
+    pub fn load_settings(&mut self) {
+        if let Some(settings) = self.settings.clone() {
+            self.core.options = settings;
+            self.settings = None;
+        }
     }
 }
 

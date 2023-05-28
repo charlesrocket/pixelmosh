@@ -78,6 +78,11 @@ impl Window {
         self.set_stack();
     }
 
+    fn setup_buttons(&self) {
+        self.set_seed_button();
+        self.set_rewind_button();
+    }
+
     fn skip_placeholder(&self) {
         self.imp().stack.set_visible_child_name("main");
     }
@@ -104,6 +109,14 @@ impl Window {
         }
     }
 
+    fn set_rewind_button(&self) {
+        if self.imp().image.borrow_mut().settings.is_none() {
+            self.imp().btn_rewind.set_sensitive(false);
+        } else {
+            self.imp().btn_rewind.set_sensitive(true);
+        }
+    }
+
     fn mosh_with_seed(&self) {
         let buffer = &self.imp().seed.buffer();
         let seed = buffer.text().to_string();
@@ -116,10 +129,10 @@ impl Window {
                 .buffer()
                 .set_text(image.get_seed().to_string());
 
-            image.mosh();
+            image.mosh_file();
         } else {
             image.set_seed(seed.parse::<u64>().unwrap());
-            image.mosh();
+            image.mosh_file();
             buffer.set_text(image.get_seed().to_string());
         }
 
@@ -127,12 +140,26 @@ impl Window {
         self.imp().picture.set_paintable(Some(&image.get_texture()));
     }
 
+    fn mosh_rewind(&self) {
+        let mut image = self.imp().image.borrow_mut();
+
+        image.load_settings();
+        image.mosh_file();
+        self.imp()
+            .seed
+            .buffer()
+            .set_text(image.get_seed().to_string());
+
+        self.imp().picture.set_paintable(Some(&image.get_texture()));
+    }
+
     fn mosh(&self) {
         let mut image = self.imp().image.borrow_mut();
 
         if image.is_present {
+            image.save_settings();
             image.new_seed();
-            image.mosh();
+            image.mosh_file();
             self.imp()
                 .seed
                 .buffer()
@@ -149,7 +176,7 @@ impl Window {
 
         if image.open_file(&file.path().unwrap()).is_ok() {
             if image.core.data.color_type != ColorType::Indexed {
-                image.mosh();
+                image.mosh_file();
                 self.imp().picture.set_paintable(Some(&image.get_texture()));
                 self.skip_placeholder();
             } else {
