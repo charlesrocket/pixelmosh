@@ -201,7 +201,7 @@ fn args() -> (PathBuf, String, MoshCore, u8) {
     container.options.channel_shift = *matches.get_one::<f64>("channelshift").unwrap();
     container.options.seed = *matches.get_one::<u64>("seed").unwrap();
 
-    (input.clone(), output.to_string(), container, *batch)
+    (input.to_path_buf(), output.to_string(), container, *batch)
 }
 
 fn filename(output: &str, index: u8, batch: u8) -> String {
