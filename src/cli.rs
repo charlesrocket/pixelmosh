@@ -225,7 +225,7 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
         SPINNER_1
     };
 
-    println!("file: {}", &input.display());
+    println!("file: {}", &input.file_name().unwrap().to_str().unwrap());
     println!("seed: \x1b[3m{}\x1b[0m", &container.options.seed);
 
     spinner.enable_steady_tick(std::time::Duration::from_millis(90));
