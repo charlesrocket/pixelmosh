@@ -238,7 +238,8 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
     let image = match read_file(input) {
         Ok(image) => image,
         Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
+            spinner.finish_with_message("\x1b[1;31mERROR\x1b[0m");
+            eprintln!("{error}");
             std::process::exit(1)
         }
     };
@@ -246,7 +247,8 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
     match container.read_image(&image) {
         Ok(new_image) => new_image,
         Err(error) => {
-            eprintln!("\x1b[1;31merror:\x1b[0m {error}");
+            spinner.finish_with_message("\x1b[1;31mERROR\x1b[0m");
+            eprintln!("{error}");
             std::process::exit(1)
         }
     };
@@ -263,18 +265,18 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
 
     for _ in 0..batch {
         spinner.set_message("\x1b[94mprocessing\x1b[0m");
-        match container.mosh() {
-            Ok(()) => {}
-            Err(error) => {
-                eprintln!("\x1b[1;31merror:\x1b[0m {error}");
-                std::process::exit(1)
-            }
-        };
+
+        if let Err(error) = container.mosh() {
+            spinner.finish_with_message("\x1b[1;31mERROR\x1b[0m");
+            eprintln!("{error}");
+            std::process::exit(1);
+        }
 
         index += 1;
         container.options.seed += 1;
         spinner.set_message("\x1b[33mwriting output\x1b[0m");
-        match write_file(
+
+        if let Err(error) = write_file(
             &filename(output, index, batch),
             &container.data.buf,
             container.data.width,
@@ -282,15 +284,13 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
             container.data.color_type,
             container.data.bit_depth,
         ) {
-            Ok(()) => {}
-            Err(error) => {
-                eprintln!("\x1b[1;31merror:\x1b[0m {error}");
-                std::process::exit(1)
-            }
-        };
-    }
+            spinner.finish_with_message("\x1b[1;31mERROR\x1b[0m");
+            eprintln!("{error}");
+            std::process::exit(1);
+        }
 
-    spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
+        spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
+    }
 }
 
 pub fn start() {
