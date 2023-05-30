@@ -1,5 +1,6 @@
 use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
 use indicatif::{ProgressBar, ProgressStyle};
+use png::ColorType;
 
 use std::{env, path::PathBuf};
 
@@ -246,6 +247,16 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
             std::process::exit(1)
         }
     };
+
+    let mode = match container.data.color_type {
+        ColorType::Grayscale => "Grayscale",
+        ColorType::Indexed => "Indexed",
+        ColorType::GrayscaleAlpha => "Grayscale/A",
+        ColorType::Rgb => "RGB",
+        ColorType::Rgba => "RGB/A",
+    };
+
+    spinner.println(format!("mode: {mode}"));
 
     for _ in 0..batch {
         spinner.set_message("\x1b[94mprocessing\x1b[0m");
