@@ -58,6 +58,16 @@ fn display_var() -> bool {
     matches!(env::var("DISPLAY"), Ok(_))
 }
 
+fn color_type(container: &MoshCore) -> &str {
+    match container.data.color_type {
+        ColorType::Grayscale => "Grayscale",
+        ColorType::Indexed => "Indexed",
+        ColorType::GrayscaleAlpha => "Grayscale/A",
+        ColorType::Rgb => "RGB",
+        ColorType::Rgba => "RGB/A",
+    }
+}
+
 fn arg_matches() -> (ArgMatches, MoshCore) {
     let container = MoshCore::new();
     let matches = Command::new(env!("CARGO_PKG_NAME"))
@@ -253,15 +263,7 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
         }
     };
 
-    let mode = match container.data.color_type {
-        ColorType::Grayscale => "Grayscale",
-        ColorType::Indexed => "Indexed",
-        ColorType::GrayscaleAlpha => "Grayscale/A",
-        ColorType::Rgb => "RGB",
-        ColorType::Rgba => "RGB/A",
-    };
-
-    spinner.println(format!("mode: {mode}"));
+    spinner.println(format!("mode: {}", color_type(&container)));
 
     for _ in 0..batch {
         spinner.set_message("\x1b[94mprocessing\x1b[0m");
