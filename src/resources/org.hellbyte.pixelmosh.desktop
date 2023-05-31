@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Pixelmosh
+Comment=PNG corrupter
+Icon=org.hellbyte.pixelmosh
+Terminal=false
+TryExec=pixelmosh
+Exec=pixelmosh
+Categories=Graphics;
+MimeType=image/png;
