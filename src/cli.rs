@@ -290,9 +290,9 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
             eprintln!("{error}");
             std::process::exit(1);
         }
-
-        spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
     }
+
+    spinner.finish_with_message("\x1b[1;32mDONE\x1b[0m");
 }
 
 pub fn start() {
