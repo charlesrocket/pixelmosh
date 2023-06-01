@@ -212,8 +212,9 @@ impl Window {
         self.imp().toast_overlay.add_toast(toast);
     }
 
-    pub fn show_message(&self, message: &str) {
+    pub fn show_message(&self, message: &str, timeout: u32) {
         let toast = adw::Toast::new(message);
+        toast.set_timeout(timeout);
         self.add_toast(toast);
     }
 

@@ -151,14 +151,9 @@ impl ObjectSubclass for Window {
                 let dialog = &win.imp().dialog_save;
                 if let Ok(file) = dialog.save_future(Some(&win)).await {
                     if let Err(error) = win.save_file(&file) {
-                        let error_dialog = gtk::AlertDialog::builder()
-                            .modal(true)
-                            .detail(format!("Error saving the image: {error}"))
-                            .build();
-
-                        error_dialog.show(Some(&win));
+                        win.show_message(&format!("Error saving the image: {}", error), 0);
                     } else {
-                        win.show_message("DONE");
+                        win.show_message("DONE", 3);
                     }
                 }
             },
