@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::{clone, Object};
-use gtk::{gdk::gdk_pixbuf, gio, glib, EntryIconPosition::Secondary, License, Picture};
+use gtk::{gio, glib, EntryIconPosition::Secondary, License};
 use png::ColorType;
 
 use libmosh::err::MoshError;
@@ -8,8 +8,6 @@ use libmosh::err::MoshError;
 use crate::gui::image::Image;
 
 mod imp;
-
-pub const LOGO: &[u8; 67398] = include_bytes!("../resources/app_logo.png");
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
@@ -219,19 +217,12 @@ impl Window {
     }
 
     fn show_about_dialog(&self) {
-        gtk::AboutDialog::builder()
-            .program_name("PIXELMOSH")
+        adw::AboutWindow::builder()
+            .application_name("PIXELMOSH")
             .version(env!("CARGO_PKG_VERSION"))
             .license_type(License::MitX11)
             .website(env!("CARGO_PKG_REPOSITORY"))
             .comments(env!("CARGO_PKG_DESCRIPTION"))
-            .logo(
-                &Picture::for_pixbuf(
-                    &gdk_pixbuf::Pixbuf::from_read(std::io::BufReader::new(&LOGO[..])).unwrap(),
-                )
-                .paintable()
-                .unwrap(),
-            )
             .build()
             .present();
     }
