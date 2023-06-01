@@ -114,12 +114,8 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkHeaderBar" id="header_bar">
-                    <property name="title-widget">
-                      <object class="GtkLabel"/>
-                    </property>
                     <style>
                       <class name="flat"/>
-                      <class name="title"/>
                     </style>
                     <child type="start">
                       <object class="GtkToggleButton" id="toggle_pane_button">

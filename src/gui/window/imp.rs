@@ -132,6 +132,10 @@ impl ObjectSubclass for Window {
                         ColorType::Rgba => "RGB/A",
                     };
 
+                    if let Some(file_path) = file.path() {
+                        win.set_title(file_path.file_name().and_then(|name| name.to_str()))
+                    }
+
                     win.set_color_type(color_type);
                 }
             },
