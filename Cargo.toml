@@ -37,7 +37,7 @@ clap = { version = "4.3", features = ["string"], optional = true }
 fast_image_resize = "2.7"
 glib = { version = "0.17", optional = true }
 gtk = { version = "0.6", package = "gtk4", features = ["v4_10"], optional = true }
-indicatif = { version = "0.17.3", optional = true }
+indicatif = { version = "0.17.4", optional = true }
 png = "0.17.8"
 rand = "0.8.5"
 rand_chacha = "0.3.1"
