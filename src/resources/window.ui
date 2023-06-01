@@ -444,7 +444,7 @@
                       </object>
                     </property>
                     <property name="content">
-                      <object class="GtkBox">
+                      <object class="AdwToastOverlay" id="toast_overlay">
                         <property name="halign">center</property>
                         <property name="valign">center</property>
                         <property name="margin-top">10</property>

@@ -28,6 +28,8 @@ pub struct Window {
     pub btn_channel_shift: TemplateChild<SpinButton>,
     #[template_child]
     pub btn_rewind: TemplateChild<Button>,
+    #[template_child]
+    pub toast_overlay: TemplateChild<adw::ToastOverlay>,
     pub dialog_open: gtk::FileDialog,
     pub dialog_save: gtk::FileDialog,
     pub image: RefCell<Image>,
@@ -84,6 +86,7 @@ impl ObjectSubclass for Window {
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
             btn_rewind: TemplateChild::default(),
+            toast_overlay: TemplateChild::default(),
             dialog_open,
             dialog_save,
             image: RefCell::new(Image::default()),
@@ -154,6 +157,8 @@ impl ObjectSubclass for Window {
                             .build();
 
                         error_dialog.show(Some(&win));
+                    } else {
+                        win.show_message("DONE");
                     }
                 }
             },
