@@ -23,6 +23,11 @@ impl Window {
             .build()
     }
 
+    fn setup_window(&self) {
+        #[cfg(debug_assertions)]
+        self.add_css_class("devel");
+    }
+
     fn setup_actions(&self) {
         let action_about = gio::SimpleAction::new("about", None);
         action_about.connect_activate(clone!(@weak self as window => move |_, _| {

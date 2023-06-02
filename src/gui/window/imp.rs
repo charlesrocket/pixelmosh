@@ -173,6 +173,7 @@ impl ObjectImpl for Window {
         obj.setup_callbacks();
         obj.setup_actions();
         obj.setup_buttons();
+        obj.setup_window();
     }
 }
 
