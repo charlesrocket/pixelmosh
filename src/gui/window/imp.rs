@@ -173,7 +173,8 @@ impl ObjectImpl for Window {
         obj.setup_callbacks();
         obj.setup_actions();
         obj.setup_buttons();
-        obj.setup_window();
+        #[cfg(debug_assertions)]
+        obj.setup_debug();
     }
 }
 

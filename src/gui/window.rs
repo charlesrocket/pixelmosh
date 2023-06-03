@@ -23,8 +23,8 @@ impl Window {
             .build()
     }
 
-    fn setup_window(&self) {
-        #[cfg(debug_assertions)]
+    #[cfg(debug_assertions)]
+    fn setup_debug(&self) {
         self.add_css_class("devel");
     }
 
