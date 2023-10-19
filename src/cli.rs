@@ -55,7 +55,7 @@ const SPINNER_2: [&str; 7] = [
 
 // Checks for TTY
 fn display_var() -> bool {
-    matches!(env::var("DISPLAY"), Ok(_))
+    env::var("DISPLAY").is_ok()
 }
 
 fn color_type(container: &MoshCore) -> &str {
