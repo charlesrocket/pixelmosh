@@ -1,4 +1,4 @@
-use glib::Cast;
+use glib::prelude::Cast;
 use gtk::{gdk, glib};
 use png::ColorType;
 

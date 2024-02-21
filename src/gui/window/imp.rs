@@ -51,7 +51,7 @@ impl ObjectSubclass for Window {
     type ParentType = adw::ApplicationWindow;
 
     fn new() -> Self {
-        let filters = gio::ListStore::new(gtk::FileFilter::static_type());
+        let filters = gio::ListStore::new::<gtk::FileFilter>();
         let png_filter = gtk::FileFilter::new();
 
         png_filter.add_mime_type("image/png");
