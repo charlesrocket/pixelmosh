@@ -29,7 +29,7 @@ test = false
 [features]
 default = ["cli"]
 cli = ["dep:clap", "dep:indicatif"]
-gui = ["dep:adw", "dep:glib", "glib-build-tools", "dep:gtk"]
+gui = ["dep:adw", "dep:glib", "dep:glib-build-tools", "dep:gtk"]
 
 [dependencies]
 adw = { version = "0.6", package = "libadwaita", features = ["v1_3"], optional = true }
