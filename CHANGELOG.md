@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.2] - 2024-02-22
+
+### Bug Fixes
+
+- Write image buffer
+- Update `FileFilter`
+
+### Miscellaneous tasks
+
+- Update GTK dependencies
+- Update LICENSE
+
+### Operations
+
+- Bump `checkout` to v4
+- Bump `cache` to v4
+- Drop `actions-rs/toolchain`
+
+### Build
+
+- Fix glib-build-tools
+
 ## [3.5.1] - 2023-10-20
 
 ### Miscellaneous tasks
@@ -90,10 +112,6 @@ All notable changes to this project will be documented in this file.
 - Add missing shortcuts
 - Use universal shortcut descriptor
 
-### CI/CD
-
-- Switch `lint` to macos
-
 ### Features
 
 - Add color scheme button
@@ -104,6 +122,10 @@ All notable changes to this project will be documented in this file.
 - Drop deprecated structs
 - Update dependencies
 - Set `gtk` to v4_10
+
+### Operations
+
+- Switch `lint` to macos
 
 ## [3.2.1] - 2023-05-22
 
