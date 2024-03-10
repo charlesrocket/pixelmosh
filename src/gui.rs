@@ -33,7 +33,7 @@ fn build_ui(app: &adw::Application) {
 
 fn load_css() {
     let provider = CssProvider::new();
-    provider.load_from_resource("/org/hellbyte/pixelmosh/style.css");
+    provider.load_from_string(include_str!("resources/style.css"));
 
     gtk::style_context_add_provider_for_display(
         &Display::default().expect("Could not connect to a display."),
