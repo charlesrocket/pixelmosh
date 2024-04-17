@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.3] - 2024-04-17
+
+### Bug Fixes
+
+- Update `load_css()`
+
+### Operations
+
+- Bump `codecov-action` to v4
+- Add codecov token
+
+### Build
+
+- Bump gtk features
+- Update `fast_image_resize`
+
 ## [3.5.2] - 2024-02-22
 
 ### Bug Fixes
@@ -199,4 +215,5 @@ All notable changes to this project will be documented in this file.
 ### Testing
 
 - Add `grayscale_alpha`
+
 
