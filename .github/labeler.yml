@@ -12,6 +12,10 @@ cargo:
 - changed-files:
   - any-glob-to-any-file: 'Cargo.toml'
 
+lib:
+- changed-files:
+  - any-glob-to-any-file: 'src/lib.rs'
+
 cli:
 - changed-files:
   - any-glob-to-any-file: 'src/cli.rs'
