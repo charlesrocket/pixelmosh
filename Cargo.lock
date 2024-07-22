@@ -797,7 +797,7 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
 name = "pixelmosh"
-version = "3.5.3"
+version = "3.6.0"
 dependencies = [
  "adler",
  "assert_cmd",

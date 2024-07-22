@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.6.0] - 2024-07-22
+
+### Bug Fixes
+
+- Use `clone_from()`
+- Update `pixelation()`
+
+### Features
+
+- Migrate to `AboutDialog`
+
+### Operations
+
+- Configure dependabot
+- Configure labeler
+- Add pull request template
+- Add `lib` label
+
+### Build
+
+- Update dependencies
+- Bump clap from 4.5.4 to 4.5.9
+- Bump fast_image_resize from 3.0.4 to 4.2.0
+
 ## [3.5.3] - 2024-04-17
 
 ### Bug Fixes
