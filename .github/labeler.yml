@@ -1,0 +1,32 @@
+---
+
+documentation:
+- changed-files:
+  - any-glob-to-any-file: 'README.md'
+
+build:
+- changed-files:
+  - any-glob-to-any-file: 'build.rs'
+
+cargo:
+- changed-files:
+  - any-glob-to-any-file: 'Cargo.toml'
+
+cli:
+- changed-files:
+  - any-glob-to-any-file: 'src/cli.rs'
+
+gui:
+- changed-files:
+  - any-glob-to-any-file: ['src/gui/**/*', 'src/resources/**/*', 'src/gui.rs']
+
+test:
+- changed-files:
+  - any-glob-to-any-file: 'tests/**/*'
+
+ops:
+- changed-files:
+  - any-glob-to-any-file: ['.github/**/*', 'codecov.yml']
+
+feature:
+ - head-branch: ['^feature', 'feature']
