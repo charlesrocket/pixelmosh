@@ -1,0 +1,27 @@
+---
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+
+    reviewers:
+      - "charlesrocket"
+
+    commit-message:
+      prefix: "ops"
+      include: "scope"
+
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+
+    reviewers:
+      - "charlesrocket"
+
+    commit-message:
+      prefix: "build"
+      include: "scope"
