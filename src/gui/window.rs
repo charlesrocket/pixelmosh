@@ -30,33 +30,53 @@ impl Window {
 
     fn setup_actions(&self) {
         let action_about = gio::SimpleAction::new("about", None);
-        action_about.connect_activate(clone!(@weak self as window => move |_, _| {
-            window.show_about_dialog();
-        }));
+        action_about.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
+                window.show_about_dialog();
+            }
+        ));
 
         let action_minimize = gio::SimpleAction::new("minimize", None);
-        action_minimize.connect_activate(clone!(@weak self as window => move |_, _| {
-            window.minimize();
-        }));
+        action_minimize.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
+                window.minimize();
+            }
+        ));
 
         let action_maximize = gio::SimpleAction::new("maximize", None);
-        action_maximize.connect_activate(clone!(@weak self as window => move |_, _| {
-            if window.is_maximized() {
-                window.unmaximize();
-            } else {
-                window.maximize();
+        action_maximize.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
+                if window.is_maximized() {
+                    window.unmaximize();
+                } else {
+                    window.maximize();
+                }
             }
-        }));
+        ));
 
         let action_close = gio::SimpleAction::new("close", None);
-        action_close.connect_activate(clone!(@weak self as window => move |_, _| {
-            window.close();
-        }));
+        action_close.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
+                window.close();
+            }
+        ));
 
         let action_style_manager = gio::SimpleAction::new("toggle-color-scheme", None);
-        action_style_manager.connect_activate(clone!(@weak self as window => move |_, _| {
-            window.toggle_color_scheme();
-        }));
+        action_style_manager.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
+                window.toggle_color_scheme();
+            }
+        ));
 
         self.add_action(&action_about);
         self.add_action(&action_minimize);
@@ -66,17 +86,21 @@ impl Window {
     }
 
     fn setup_callbacks(&self) {
-        self.imp()
-            .seed
-            .connect_icon_release(clone!(@weak self as window => move |_,_| {
+        self.imp().seed.connect_icon_release(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
                 window.mosh_with_seed();
-            }));
+            }
+        ));
 
-        self.imp()
-            .seed
-            .connect_changed(clone!(@weak self as window => move |_| {
+        self.imp().seed.connect_changed(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_| {
                 window.set_seed_button();
-            }));
+            }
+        ));
 
         self.set_stack();
     }
