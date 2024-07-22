@@ -41,13 +41,14 @@ write_file(
 #![allow(deprecated)]
 
 use fast_image_resize as fr;
+
 use png::{BitDepth, ColorType, Decoder};
 use rand::{
     distributions::{Distribution, Uniform},
     RngCore, SeedableRng,
 };
 
-use std::{cmp, num::NonZeroU32};
+use std::cmp;
 
 use crate::{
     err::MoshError,
@@ -273,24 +274,37 @@ impl MoshData {
 
     fn pixelation(&mut self, options: &MoshOptions, pixel_type: fr::PixelType) {
         if options.pixelation > 1 {
-            let width = NonZeroU32::new(self.width).unwrap();
-            let height = NonZeroU32::new(self.height).unwrap();
+            let width = self.width;
+            let height = self.height;
             let src_image =
-                fr::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type).unwrap();
+                fr::images::Image::from_vec_u8(width, height, self.buf.clone(), pixel_type)
+                    .unwrap();
 
-            let dest_width = NonZeroU32::new(self.width / u32::from(options.pixelation)).unwrap();
-            let dest_height = NonZeroU32::new(self.height / u32::from(options.pixelation)).unwrap();
-            let orig_width = NonZeroU32::new(self.width).unwrap();
-            let orig_height = NonZeroU32::new(self.height).unwrap();
+            let dest_width = self.width / u32::from(options.pixelation);
+            let dest_height = self.height / u32::from(options.pixelation);
+            let orig_width = self.width;
+            let orig_height = self.height;
 
-            let mut dest_image = fr::Image::new(dest_width, dest_height, src_image.pixel_type());
-            let mut orig_image = fr::Image::new(orig_width, orig_height, src_image.pixel_type());
-            let mut dest_view = dest_image.view_mut();
-            let mut orig_view = orig_image.view_mut();
-            let mut resizer = fr::Resizer::new(fr::ResizeAlg::Nearest);
+            let mut dest_image =
+                fr::images::Image::new(dest_width, dest_height, src_image.pixel_type());
+            let mut orig_image =
+                fr::images::Image::new(orig_width, orig_height, src_image.pixel_type());
+            let mut resizer = fr::Resizer::new();
 
-            resizer.resize(&src_image.view(), &mut dest_view).unwrap();
-            resizer.resize(&dest_image.view(), &mut orig_view).unwrap();
+            resizer
+                .resize(
+                    &src_image,
+                    &mut dest_image,
+                    &fr::ResizeOptions::new().resize_alg(fr::ResizeAlg::Nearest),
+                )
+                .unwrap();
+            resizer
+                .resize(
+                    &dest_image,
+                    &mut orig_image,
+                    &fr::ResizeOptions::new().resize_alg(fr::ResizeAlg::Nearest),
+                )
+                .unwrap();
 
             self.buf = orig_image.into_vec();
         }
