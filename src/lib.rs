@@ -135,7 +135,7 @@ impl MoshCore {
         let mut buf = vec![0_u8; reader.output_buffer_size()];
         let info = reader.next_frame(&mut buf)?;
 
-        self.data.buf = buf.clone();
+        self.data.buf.clone_from(&buf);
         self.data.image = buf;
         self.data.width = info.width;
         self.data.height = info.height;
