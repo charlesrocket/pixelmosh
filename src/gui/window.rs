@@ -34,7 +34,8 @@ impl Window {
             #[weak(rename_to = window)]
             self,
             move |_, _| {
-                window.show_about_dialog();
+                let dialog = Window::about_dialog();
+                dialog.present(Some(&window));
             }
         ));
 
@@ -245,14 +246,20 @@ impl Window {
         self.add_toast(toast);
     }
 
-    fn show_about_dialog(&self) {
-        adw::AboutWindow::builder()
+    fn about_dialog() -> adw::AboutDialog {
+        let about_dialog = adw::AboutDialog::builder()
             .application_name("PIXELMOSH")
             .version(env!("CARGO_PKG_VERSION"))
             .license_type(License::MitX11)
             .website(env!("CARGO_PKG_REPOSITORY"))
             .comments(env!("CARGO_PKG_DESCRIPTION"))
-            .build()
-            .present();
+            .build();
+
+        about_dialog.add_link(
+            "Release Notes",
+            "https://github.com/charlesrocket/pixelmosh/blob/trunk/CHANGELOG.md",
+        );
+
+        about_dialog
     }
 }
