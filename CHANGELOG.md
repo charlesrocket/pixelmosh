@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.6.1] - 2025-01-07
+
+### Operations
+
+- Update dependabot config
+- Bump codecov/codecov-action from 4 to 5
+
+### Build
+
+- Bump clap from 4.5.9 to 4.5.13
+- Bump predicates from 3.1.0 to 3.1.2
+- Bump fast_image_resize from 4.2.0 to 4.2.1
+- Bump assert_cmd from 2.0.14 to 2.0.15
+- Bump `fast_image_resize` to 5.1
+
 ## [3.6.0] - 2024-07-22
 
 ### Bug Fixes
