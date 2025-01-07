@@ -34,7 +34,7 @@ gui = ["dep:adw", "dep:glib", "dep:glib-build-tools", "dep:gtk"]
 [dependencies]
 adw = { version = "0.7", package = "libadwaita", features = ["v1_5"], optional = true }
 clap = { version = "4.5", features = ["string"], optional = true }
-fast_image_resize = "4.2"
+fast_image_resize = "5.1"
 glib = { version = "0.20", optional = true }
 gtk = { version = "0.9", package = "gtk4", features = ["v4_12"], optional = true }
 indicatif = { version = "0.17", optional = true }
