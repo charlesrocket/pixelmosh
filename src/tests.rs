@@ -10,7 +10,7 @@ use super::{
 
 #[test]
 fn rgb() {
-    let input = read_file("src/util/test-rgb.png").unwrap();
+    let input = read_file("tests/assets/test-rgb.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
@@ -33,7 +33,7 @@ fn rgb() {
 
 #[test]
 fn rgba() {
-    let input = read_file("src/util/test-rgb-alpha.png").unwrap();
+    let input = read_file("tests/assets/test-rgb-alpha.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
@@ -56,7 +56,7 @@ fn rgba() {
 
 #[test]
 fn grayscale() {
-    let input = read_file("src/util/test-grayscale.png").unwrap();
+    let input = read_file("tests/assets/test-grayscale.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
@@ -79,7 +79,7 @@ fn grayscale() {
 
 #[test]
 fn grayscale_alpha() {
-    let input = read_file("src/util/test-grayscale-alpha.png").unwrap();
+    let input = read_file("tests/assets/test-grayscale-alpha.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
@@ -112,7 +112,7 @@ fn seed() {
 #[test]
 #[should_panic(expected = "UnsupportedColorType")]
 fn indexed() {
-    let input = read_file("src/util/test-indexed.png").unwrap();
+    let input = read_file("tests/assets/test-indexed.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
@@ -134,7 +134,7 @@ fn encoding() {
 
 #[test]
 fn invalid_parameters() {
-    let input = read_file("src/util/test-grayscale.png").unwrap();
+    let input = read_file("tests/assets/test-grayscale.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
 

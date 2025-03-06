@@ -43,7 +43,7 @@ mod cli {
     fn unsupported_color_type() -> Result<(), Box<dyn Error>> {
         let mut cmd = Command::cargo_bin("pixelmosh")?;
 
-        cmd.arg("src/util/test-indexed.png");
+        cmd.arg("tests/assets/test-indexed.png");
         cmd.assert()
             .failure()
             .stderr(contains("Unsupported color type"));
@@ -55,7 +55,7 @@ mod cli {
     fn batch() -> Result<(), Box<dyn Error>> {
         let mut cmd = Command::cargo_bin("pixelmosh")?;
 
-        cmd.arg("src/util/test-grayscale.png")
+        cmd.arg("tests/assets/test-grayscale.png")
             .arg("--batch")
             .arg("2")
             .arg("--output")
@@ -84,7 +84,7 @@ mod cli {
     fn single() -> Result<(), Box<dyn Error>> {
         let mut cmd = Command::cargo_bin("pixelmosh")?;
 
-        cmd.arg("src/util/test-rgb.png")
+        cmd.arg("tests/assets/test-rgb.png")
             .arg("--min-rate")
             .arg("5")
             .arg("--max-rate")

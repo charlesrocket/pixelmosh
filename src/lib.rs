@@ -21,7 +21,7 @@ use libmosh::{
     MoshCore,
 };
 
-let input = read_file("src/util/test-rgb.png")?;
+let input = read_file("tests/assets/test-rgb.png")?;
 let output = "test.png";
 let mut core = MoshCore::new();
 
@@ -167,7 +167,7 @@ impl MoshCore {
         MoshCore,
     };
 
-    let input = read_file("src/util/test-rgb.png")?;
+    let input = read_file("tests/assets/test-rgb.png")?;
     let output = "test.png";
     let mut image = MoshCore::new();
 
@@ -419,4 +419,4 @@ impl Default for MoshOptions {
 const TEST_SEED: u64 = 901_042_006;
 
 #[cfg(test)]
-mod util;
+mod tests;
