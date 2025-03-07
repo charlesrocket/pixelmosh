@@ -62,6 +62,7 @@ pub mod ops;
 /// Image data.
 ///
 /// It holds the original image, buffer and parameters.
+#[non_exhaustive]
 #[derive(Clone)]
 pub struct MoshData {
     /// Buffer.
@@ -83,6 +84,7 @@ pub struct MoshData {
 /// Processing options.
 ///
 /// Minimal `pixelation` value is `1` (OFF).
+#[non_exhaustive]
 #[derive(Clone, Debug)]
 pub struct MoshOptions {
     /// Minimal amount of chunks to process.
@@ -108,6 +110,7 @@ pub struct MoshOptions {
 /// Core container.
 ///
 /// Holds image data and processing options.
+#[non_exhaustive]
 #[derive(Clone, Default)]
 pub struct MoshCore {
     pub data: MoshData,
