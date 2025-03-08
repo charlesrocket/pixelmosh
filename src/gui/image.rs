@@ -153,6 +153,10 @@ impl Image {
         self.core.options.seed
     }
 
+    pub fn set_ansi(&mut self, value: bool) {
+        self.core.options.ansi = value;
+    }
+
     pub fn set_seed(&mut self, value: u64) {
         self.core.options.seed = value;
     }

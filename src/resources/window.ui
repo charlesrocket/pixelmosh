@@ -196,6 +196,13 @@
                               </object>
                             </child>
                             <child>
+                              <object class="GtkToggleButton" id="btn_ansi">
+                                <property name="label">ANSI</property>
+                                <property name="active">False</property>
+                                <property name="tooltip-text">Use ANSI color palette</property>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkEntry" id="seed">
                                 <property name="placeholder-text" translatable="yes">Seed</property>
                                 <property name="secondary-icon-name">document-send-symbolic</property>

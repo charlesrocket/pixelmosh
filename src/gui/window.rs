@@ -87,6 +87,14 @@ impl Window {
     }
 
     fn setup_callbacks(&self) {
+        self.imp().btn_ansi.connect_toggled(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |button| {
+                window.toggle_ansi(button.is_active());
+            }
+        ));
+
         self.imp().seed.connect_icon_release(clone!(
             #[weak(rename_to = window)]
             self,
@@ -125,6 +133,10 @@ impl Window {
 
     fn set_color_type(&self, label: &str) {
         self.imp().color_type.set_label(label);
+    }
+
+    fn toggle_ansi(&self, value: bool) {
+        self.imp().image.borrow_mut().set_ansi(value);
     }
 
     fn set_seed_button(&self) {

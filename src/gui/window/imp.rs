@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{gio, glib, Button, CompositeTemplate, Entry, Label, SpinButton, Stack};
+use gtk::{gio, glib, Button, CompositeTemplate, Entry, Label, SpinButton, Stack, ToggleButton};
 use png::ColorType;
 
 use std::cell::RefCell;
@@ -10,6 +10,8 @@ use crate::gui::window::Image;
 #[derive(CompositeTemplate)]
 #[template(resource = "/org/hellbyte/pixelmosh/window.ui")]
 pub struct Window {
+    #[template_child]
+    pub btn_ansi: TemplateChild<ToggleButton>,
     #[template_child]
     pub btn_min_rate: TemplateChild<SpinButton>,
     #[template_child]
@@ -77,6 +79,7 @@ impl ObjectSubclass for Window {
             .build();
 
         Self {
+            btn_ansi: TemplateChild::default(),
             btn_min_rate: TemplateChild::default(),
             btn_max_rate: TemplateChild::default(),
             btn_pixelation: TemplateChild::default(),
