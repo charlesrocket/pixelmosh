@@ -161,6 +161,15 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
                 .default_value(container.options.channel_shift.to_string()),
         )
         .arg(
+            Arg::new("ansi")
+                .short('a')
+                .long("ansi")
+                .value_name("ANSI")
+                .help("ANSI colors")
+                .long_help("Use ANSI color set")
+                .action(ArgAction::SetTrue),
+        )
+        .arg(
             Arg::new("seed")
                 .short('s')
                 .long("seed")
@@ -209,6 +218,7 @@ fn args() -> (PathBuf, String, MoshCore, u8) {
     container.options.flip = *matches.get_one::<f64>("flip").unwrap();
     container.options.channel_swap = *matches.get_one::<f64>("channelswap").unwrap();
     container.options.channel_shift = *matches.get_one::<f64>("channelshift").unwrap();
+    container.options.ansi = *matches.get_one::<bool>("ansi").unwrap();
     container.options.seed = *matches.get_one::<u64>("seed").unwrap();
 
     (input.to_path_buf(), output.to_string(), container, *batch)
@@ -280,11 +290,8 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
 
         if let Err(error) = write_file(
             &filename(output, index, batch),
-            &container.data.buf,
-            container.data.width,
-            container.data.height,
-            container.data.color_type,
-            container.data.bit_depth,
+            &container.data,
+            &container.options,
         ) {
             spinner.finish_with_message("\x1b[1;31mERROR\x1b[0m");
             eprintln!("{error}");

@@ -1,12 +1,27 @@
 use adler::adler32;
-use png::{BitDepth, ColorType};
 
 use std::{fs::File, io::BufReader};
 
 use super::{
     ops::{read_file, write_file},
-    MoshCore,
+    MoshCore, MoshData, MoshOptions,
 };
+
+#[test]
+fn ansi() {
+    let input = read_file("tests/assets/test-rgb.png").unwrap();
+    let mut image = MoshCore::new();
+    image.options.ansi = true;
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file("moshed-ansi.png", &image.data, &image.options).unwrap();
+
+    let output = File::open("moshed-ansi.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 4_175_756_811);
+}
 
 #[test]
 fn rgb() {
@@ -14,15 +29,7 @@ fn rgb() {
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
-    write_file(
-        "moshed-rgb.png",
-        &image.data.buf,
-        image.data.width,
-        image.data.height,
-        image.data.color_type,
-        image.data.bit_depth,
-    )
-    .unwrap();
+    write_file("moshed-rgb.png", &image.data, &image.options).unwrap();
 
     let output = File::open("moshed-rgb.png").unwrap();
     let mut file = BufReader::new(output);
@@ -37,15 +44,7 @@ fn rgba() {
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
-    write_file(
-        "moshed-rgb-alpha.png",
-        &image.data.buf,
-        image.data.width,
-        image.data.height,
-        image.data.color_type,
-        image.data.bit_depth,
-    )
-    .unwrap();
+    write_file("moshed-rgb-alpha.png", &image.data, &image.options).unwrap();
 
     let output = File::open("moshed-rgb-alpha.png").unwrap();
     let mut file = BufReader::new(output);
@@ -60,15 +59,7 @@ fn grayscale() {
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
-    write_file(
-        "moshed-grayscale.png",
-        &image.data.buf,
-        image.data.width,
-        image.data.height,
-        image.data.color_type,
-        image.data.bit_depth,
-    )
-    .unwrap();
+    write_file("moshed-grayscale.png", &image.data, &image.options).unwrap();
 
     let output = File::open("moshed-grayscale.png").unwrap();
     let mut file = BufReader::new(output);
@@ -83,15 +74,7 @@ fn grayscale_alpha() {
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
-    write_file(
-        "moshed-grayscale-alpha.png",
-        &image.data.buf,
-        image.data.width,
-        image.data.height,
-        image.data.color_type,
-        image.data.bit_depth,
-    )
-    .unwrap();
+    write_file("moshed-grayscale-alpha.png", &image.data, &image.options).unwrap();
 
     let output = File::open("moshed-grayscale-alpha.png").unwrap();
     let mut file = BufReader::new(output);
@@ -121,15 +104,7 @@ fn indexed() {
 #[test]
 #[should_panic(expected = "EncodingError")]
 fn encoding() {
-    write_file(
-        "moshed.png",
-        &[0_u8],
-        400,
-        400,
-        ColorType::Rgba,
-        BitDepth::Eight,
-    )
-    .unwrap();
+    write_file("moshed.png", &MoshData::default(), &MoshOptions::default()).unwrap();
 }
 
 #[test]
