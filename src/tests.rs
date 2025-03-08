@@ -24,6 +24,22 @@ fn ansi() {
 }
 
 #[test]
+fn ansi_alpha() {
+    let input = read_file("tests/assets/test-rgb-alpha.png").unwrap();
+    let mut image = MoshCore::new();
+    image.options.ansi = true;
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file("moshed-ansi-alpha.png", &image.data, &image.options).unwrap();
+
+    let output = File::open("moshed-ansi-alpha.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 650_148_922);
+}
+
+#[test]
 fn rgb() {
     let input = read_file("tests/assets/test-rgb.png").unwrap();
     let mut image = MoshCore::new();
