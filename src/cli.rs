@@ -58,7 +58,7 @@ fn display_var() -> bool {
     env::var("DISPLAY").is_ok()
 }
 
-fn color_type(container: &MoshCore) -> &str {
+fn color_type_str(container: &MoshCore) -> &str {
     match container.data.color_type {
         ColorType::Grayscale => "Grayscale",
         ColorType::Indexed => "Indexed",
@@ -273,7 +273,7 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
         }
     };
 
-    spinner.println(format!("mode: {}", color_type(&container)));
+    spinner.println(format!("mode: {}", color_type_str(&container)));
 
     for _ in 0..batch {
         spinner.set_message("\x1b[94mprocessing\x1b[0m");
