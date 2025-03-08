@@ -8,7 +8,7 @@ use std::{
     path::Path,
 };
 
-use crate::MoshError;
+use crate::{MoshData, MoshError, MoshOptions};
 
 /// Reads provided file
 ///
@@ -30,24 +30,37 @@ pub fn read_file(file: impl AsRef<Path>) -> Result<Vec<u8>, MoshError> {
 /// # Errors
 ///
 /// It may fail if parameters are invalid or due I/O error.
-pub fn write_file(
-    dest: &str,
-    buf: &[u8],
-    width: u32,
-    height: u32,
-    color_type: ColorType,
-    bit_depth: BitDepth,
-) -> Result<(), MoshError> {
+pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<(), MoshError> {
     let path = Path::new(&dest);
     let output = File::create(path)?;
     let buf_writer = &mut BufWriter::new(output);
-    let mut encoder = Encoder::new(buf_writer, width, height);
+    let mut encoder = Encoder::new(buf_writer, data.width, data.height);
 
-    encoder.set_color(color_type);
-    encoder.set_depth(bit_depth);
+    encoder.set_color(if options.ansi {
+        ColorType::Indexed
+    } else {
+        data.color_type
+    });
+
+    encoder.set_depth(if options.ansi {
+        BitDepth::Eight
+    } else {
+        data.bit_depth
+    });
+
+    if options.ansi {
+        let mut palette: Vec<u8> = (0..=255).collect();
+
+        for (r, g, b) in crate::ANSI_COLORS.iter() {
+            palette.push(*r);
+            palette.push(*g);
+            palette.push(*b);
+        }
+        encoder.set_palette(crate::generate_palette())
+    };
 
     let mut writer = encoder.write_header()?;
-    writer.write_image_data(buf)?;
+    writer.write_image_data(&data.buf)?;
 
     Ok(())
 }

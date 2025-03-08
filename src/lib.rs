@@ -29,11 +29,8 @@ core.read_image(&input)?;
 core.mosh()?;
 write_file(
     output,
-    &core.data.buf,
-    core.data.width,
-    core.data.height,
-    core.data.color_type,
-    core.data.bit_depth,
+    &core.data,
+    &core.options,
 )?;
 # Ok::<(), MoshError>(())
 ```
@@ -58,6 +55,25 @@ use crate::{
 pub mod err;
 pub mod fx;
 pub mod ops;
+
+const ANSI_COLORS: [(u8, u8, u8); 16] = [
+    (0, 0, 0),       // Black
+    (205, 0, 0),     // Red
+    (0, 205, 0),     // Green
+    (205, 205, 0),   // Yellow
+    (0, 0, 205),     // Blue
+    (205, 0, 205),   // Magenta
+    (0, 205, 205),   // Cyan
+    (229, 229, 229), // White
+    (127, 127, 127), // Bright Black
+    (255, 0, 0),     // Bright Red
+    (0, 255, 0),     // Bright Green
+    (255, 255, 0),   // Bright Yellow
+    (0, 0, 255),     // Bright Blue
+    (255, 0, 255),   // Bright Magenta
+    (0, 255, 255),   // Bright Cyan
+    (255, 255, 255), // Bright White
+];
 
 /// Image data.
 ///
@@ -103,6 +119,8 @@ pub struct MoshOptions {
     pub channel_swap: f64,
     /// Chance of channel shift.
     pub channel_shift: f64,
+    /// Convert to ANSI color palette.
+    pub ansi: bool,
     /// Random seed.
     pub seed: u64,
 }
@@ -188,11 +206,8 @@ impl MoshCore {
     image.mosh()?;
     write_file(
         output,
-        &image.data.buf,
-        image.data.width,
-        image.data.height,
-        image.data.color_type,
-        image.data.bit_depth,
+        &image.data,
+        &image.options,
     )?;
     # Ok::<(), MoshError>(())
     ```
@@ -259,17 +274,21 @@ impl MoshData {
                 return Err(MoshError::UnsupportedColorType);
             }
             ColorType::Grayscale => {
-                Self::pixelation(self, options, fr::PixelType::U8);
+                self.pixelation(options, fr::PixelType::U8);
             }
             ColorType::GrayscaleAlpha => {
-                Self::pixelation(self, options, fr::PixelType::U8x2);
+                self.pixelation(options, fr::PixelType::U8x2);
             }
             ColorType::Rgb => {
-                Self::pixelation(self, options, fr::PixelType::U8x3);
+                self.pixelation(options, fr::PixelType::U8x3);
             }
             ColorType::Rgba => {
-                Self::pixelation(self, options, fr::PixelType::U8x4);
+                self.pixelation(options, fr::PixelType::U8x4);
             }
+        }
+
+        if options.ansi {
+            self.use_ansi();
         }
 
         Ok(())
@@ -311,6 +330,31 @@ impl MoshData {
 
             self.buf = orig_image.into_vec();
         }
+    }
+
+    fn use_ansi(&mut self) {
+        let mut ansi_buf: Vec<u8> = Vec::new();
+
+        for y in 0..self.height {
+            for x in 0..self.width {
+                let idx = (y * self.width + x) as usize
+                    * match self.color_type {
+                        ColorType::Rgb => 3,
+                        ColorType::Rgba => 4,
+                        _ => 3,
+                    };
+
+                let r = self.buf[idx];
+                let g = self.buf[idx + 1];
+                let b = self.buf[idx + 2];
+
+                let ansi_color = get_ansi_color(r, g, b);
+
+                ansi_buf.push(ansi_color);
+            }
+        }
+
+        self.buf = ansi_buf;
     }
 
     // Use pnglitch approach
@@ -414,9 +458,40 @@ impl Default for MoshOptions {
             flip: 0.3,
             channel_swap: 0.3,
             channel_shift: 0.3,
+            ansi: false,
             seed: Self::generate_seed(),
         }
     }
+}
+
+fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
+    let mut closest_index = 0;
+    let mut min_distance: i32 = i32::MAX;
+
+    for (index, &color) in ANSI_COLORS.iter().enumerate() {
+        // Calculate squared Euclidean distance between RGB colors
+        let distance = (r as i32 - color.0 as i32).pow(2)
+            + (g as i32 - color.1 as i32).pow(2)
+            + (b as i32 - color.2 as i32).pow(2);
+
+        if distance < min_distance {
+            min_distance = distance;
+            closest_index = index;
+        }
+    }
+
+    closest_index as u8
+}
+
+fn generate_palette() -> Vec<u8> {
+    let mut palette = Vec::with_capacity(ANSI_COLORS.len() * 3);
+    for &(r, g, b) in &ANSI_COLORS {
+        palette.push(r);
+        palette.push(g);
+        palette.push(b);
+    }
+
+    palette
 }
 
 const TEST_SEED: u64 = 901_042_006;
