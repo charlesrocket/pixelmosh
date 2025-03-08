@@ -339,14 +339,23 @@ impl MoshData {
             for x in 0..self.width {
                 let idx = (y * self.width + x) as usize
                     * match self.color_type {
+                        ColorType::Grayscale | ColorType::Indexed => 1,
+                        ColorType::GrayscaleAlpha => 2,
                         ColorType::Rgb => 3,
                         ColorType::Rgba => 4,
-                        _ => 3,
                     };
 
                 let r = self.buf[idx];
-                let g = self.buf[idx + 1];
-                let b = self.buf[idx + 2];
+
+                let g = match self.color_type {
+                    ColorType::Rgb | ColorType::Rgba => self.buf[idx + 1],
+                    _ => self.buf[idx],
+                };
+
+                let b = match self.color_type {
+                    ColorType::Rgb | ColorType::Rgba => self.buf[idx + 2],
+                    _ => self.buf[idx],
+                };
 
                 let ansi_color = get_ansi_color(r, g, b);
 

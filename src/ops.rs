@@ -49,13 +49,6 @@ pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<
     });
 
     if options.ansi {
-        let mut palette: Vec<u8> = (0..=255).collect();
-
-        for (r, g, b) in crate::ANSI_COLORS.iter() {
-            palette.push(*r);
-            palette.push(*g);
-            palette.push(*b);
-        }
         encoder.set_palette(crate::generate_palette())
     };
 

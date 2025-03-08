@@ -8,15 +8,15 @@ use super::{
 };
 
 #[test]
-fn ansi() {
+fn ansi_rgb() {
     let input = read_file("tests/assets/test-rgb.png").unwrap();
     let mut image = MoshCore::new();
     image.options.ansi = true;
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
-    write_file("moshed-ansi.png", &image.data, &image.options).unwrap();
+    write_file("moshed-ansi-rgb.png", &image.data, &image.options).unwrap();
 
-    let output = File::open("moshed-ansi.png").unwrap();
+    let output = File::open("moshed-ansi-rgb.png").unwrap();
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
@@ -24,19 +24,51 @@ fn ansi() {
 }
 
 #[test]
-fn ansi_alpha() {
+fn ansi_rgb_alpha() {
     let input = read_file("tests/assets/test-rgb-alpha.png").unwrap();
     let mut image = MoshCore::new();
     image.options.ansi = true;
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
-    write_file("moshed-ansi-alpha.png", &image.data, &image.options).unwrap();
+    write_file("moshed-ansi-rgb-alpha.png", &image.data, &image.options).unwrap();
 
-    let output = File::open("moshed-ansi-alpha.png").unwrap();
+    let output = File::open("moshed-ansi-rgb-alpha.png").unwrap();
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
     assert_eq!(checksum, 650_148_922);
+}
+
+#[test]
+fn ansi_grayscale() {
+    let input = read_file("tests/assets/test-grayscale.png").unwrap();
+    let mut image = MoshCore::new();
+    image.options.ansi = true;
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file("moshed-grayscale.png", &image.data, &image.options).unwrap();
+
+    let output = File::open("moshed-grayscale.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 1_409_399_618);
+}
+
+#[test]
+fn ansi_grayscale_alpha() {
+    let input = read_file("tests/assets/test-grayscale-alpha.png").unwrap();
+    let mut image = MoshCore::new();
+    image.options.ansi = true;
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file("moshed-grayscale-alpha.png", &image.data, &image.options).unwrap();
+
+    let output = File::open("moshed-grayscale-alpha.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 4_027_088_989);
 }
 
 #[test]
@@ -88,6 +120,7 @@ fn grayscale() {
 fn grayscale_alpha() {
     let input = read_file("tests/assets/test-grayscale-alpha.png").unwrap();
     let mut image = MoshCore::new();
+    image.options.ansi = true;
     image.read_image(&input).unwrap();
     image.mosh().unwrap();
     write_file("moshed-grayscale-alpha.png", &image.data, &image.options).unwrap();
@@ -96,7 +129,7 @@ fn grayscale_alpha() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 1_221_472_786);
+    assert_eq!(checksum, 4_027_088_989);
 }
 
 #[test]
