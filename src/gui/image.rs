@@ -122,14 +122,7 @@ impl Image {
     }
 
     pub fn save_file(&mut self, file: &Path) -> Result<(), MoshError> {
-        write_file(
-            file.to_str().unwrap(),
-            &self.core.data.buf,
-            self.core.data.width,
-            self.core.data.height,
-            self.core.data.color_type,
-            self.core.data.bit_depth,
-        )?;
+        write_file(file.to_str().unwrap(), &self.core.data, &self.core.options)?;
 
         Ok(())
     }
