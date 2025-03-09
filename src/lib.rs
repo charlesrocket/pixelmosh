@@ -93,6 +93,8 @@ pub struct MoshData {
     pub color_type: ColorType,
     /// Bit depth.
     pub bit_depth: BitDepth,
+    /// Color palette.
+    pub palette: Option<Vec<u8>>,
     /// Line size.
     pub line_size: usize,
 }
@@ -156,6 +158,10 @@ impl MoshCore {
         let mut reader = decoder.read_info()?;
         let mut buf = vec![0_u8; reader.output_buffer_size()];
         let info = reader.next_frame(&mut buf)?;
+
+        if let Some(palette) = &reader.info().palette {
+            self.data.palette = Some(palette.to_vec());
+        }
 
         self.data.buf.clone_from(&buf);
         self.data.image = buf;
@@ -251,6 +257,7 @@ impl MoshData {
             height: info.height,
             color_type: info.color_type,
             bit_depth: info.bit_depth,
+            palette: None,
             line_size: info.line_size,
         })
     }
@@ -271,7 +278,7 @@ impl MoshData {
 
         match self.color_type {
             ColorType::Indexed => {
-                return Err(MoshError::UnsupportedColorType);
+                self.pixelation(options, fr::PixelType::U8);
             }
             ColorType::Grayscale => {
                 self.pixelation(options, fr::PixelType::U8);
@@ -451,6 +458,7 @@ impl Default for MoshData {
             height: 1,
             color_type: ColorType::Rgba,
             bit_depth: BitDepth::Eight,
+            palette: None,
             line_size: 1,
         }
     }
@@ -473,7 +481,7 @@ impl Default for MoshOptions {
     }
 }
 
-fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
+pub fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
     let mut closest_index = 0;
     let mut min_distance: i32 = i32::MAX;
 
@@ -492,7 +500,7 @@ fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
     closest_index as u8
 }
 
-fn generate_palette() -> Vec<u8> {
+pub fn generate_palette() -> Vec<u8> {
     let mut palette = Vec::with_capacity(ANSI_COLORS.len() * 3);
     for &(r, g, b) in &ANSI_COLORS {
         palette.push(r);

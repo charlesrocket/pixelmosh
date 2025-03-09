@@ -48,8 +48,12 @@ pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<
         data.bit_depth
     });
 
+    if data.color_type == ColorType::Indexed {
+        encoder.set_palette(data.palette.clone().unwrap());
+    }
+
     if options.ansi {
-        encoder.set_palette(crate::generate_palette())
+        encoder.set_palette(crate::generate_palette());
     };
 
     let mut writer = encoder.write_header()?;
