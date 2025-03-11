@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use libmosh::{
     err::MoshError,
     ops::{read_file, write_file},
-    MoshCore, MoshOptions,
+    MoshCore, MoshData, MoshOptions,
 };
 
 pub struct Image {
@@ -34,24 +34,28 @@ impl Image {
         }
     }
 
-    fn generate_texture(
-        buf: &Vec<u8>,
-        width: u32,
-        height: u32,
-        color_type: ColorType,
-        line_size: usize,
-    ) -> gdk::MemoryTexture {
-        let (format, stride) = match &color_type {
-            ColorType::Indexed => {
-                todo!()
-            }
+    fn generate_texture(data: &mut MoshData, options: &MoshOptions) -> gdk::MemoryTexture {
+        let buf = if options.ansi {
+            &data.generate_ansi_data()
+        } else {
+            &data.buf
+        };
+        let src_palette = &data.palette.clone();
+        let width = data.width;
+        let height = data.height;
 
-            ColorType::Grayscale => {
+        let (format, stride) = match &data.color_type {
+            ColorType::Grayscale => (gdk::MemoryFormat::G8, (width)),
+            ColorType::GrayscaleAlpha => (gdk::MemoryFormat::G8a8, (width * 2)),
+            ColorType::Rgb => (gdk::MemoryFormat::R8g8b8, (width * 3)),
+            ColorType::Rgba => (gdk::MemoryFormat::R8g8b8a8, (width * 4)),
+            ColorType::Indexed => {
+                let palette = src_palette.clone().unwrap();
                 let mut rgb = Vec::with_capacity(buf.len());
-                for row in buf.chunks_exact(line_size) {
-                    for &pixel in &row[..width as usize] {
-                        rgb.extend_from_slice(&[pixel, pixel, pixel]);
-                    }
+                for i in buf.iter().copied().map(usize::from) {
+                    rgb.push(palette[i * 3]);
+                    rgb.push(palette[i * 3 + 1]);
+                    rgb.push(palette[i * 3 + 2]);
                 }
 
                 return gdk::MemoryTexture::new(
@@ -63,30 +67,6 @@ impl Image {
                 )
                 .upcast();
             }
-
-            ColorType::GrayscaleAlpha => {
-                let mut rgba = Vec::with_capacity(buf.len());
-                for row in buf.chunks_exact(line_size) {
-                    for pixels in row.chunks_exact(2) {
-                        let gray = pixels[0];
-                        let alpha = pixels[1];
-
-                        rgba.extend_from_slice(&[gray, gray, gray, alpha]);
-                    }
-                }
-
-                return gdk::MemoryTexture::new(
-                    width as i32,
-                    height as i32,
-                    gdk::MemoryFormat::R8g8b8a8,
-                    &glib::Bytes::from_owned(rgba),
-                    width as usize * 4,
-                )
-                .upcast();
-            }
-
-            ColorType::Rgb => (gdk::MemoryFormat::R8g8b8, (width * 3)),
-            ColorType::Rgba => (gdk::MemoryFormat::R8g8b8a8, (width * 4)),
         };
 
         gdk::MemoryTexture::new(
@@ -103,20 +83,10 @@ impl Image {
 
         self.core.read_image(&input)?;
 
-        if self.core.data.color_type != ColorType::Indexed {
-            let texture = Self::generate_texture(
-                &self.core.data.buf,
-                self.core.data.width,
-                self.core.data.height,
-                self.core.data.color_type,
-                self.core.data.line_size,
-            );
+        let texture = Self::generate_texture(&mut self.core.data, &self.core.options);
 
-            self.texture = texture.upcast();
-            self.is_present = true;
-        } else {
-            self.is_present = false;
-        }
+        self.texture = texture.upcast();
+        self.is_present = true;
 
         Ok(())
     }
@@ -129,14 +99,7 @@ impl Image {
 
     pub fn mosh_file(&mut self) {
         self.core.mosh().unwrap();
-        self.texture = Self::generate_texture(
-            &self.core.data.buf,
-            self.core.data.width,
-            self.core.data.height,
-            self.core.data.color_type,
-            self.core.data.line_size,
-        )
-        .upcast();
+        self.texture = Self::generate_texture(&mut self.core.data, &self.core.options).upcast();
     }
 
     pub fn get_texture(&mut self) -> gdk::Texture {

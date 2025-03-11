@@ -295,7 +295,7 @@ impl MoshData {
         }
 
         if options.ansi {
-            self.use_ansi();
+            self.buf = self.generate_ansi_data();
         }
 
         Ok(())
@@ -339,9 +339,20 @@ impl MoshData {
         }
     }
 
-    fn use_ansi(&mut self) {
-        let mut ansi_buf: Vec<u8> = Vec::new();
+    fn get_palette_color(&self, idx: usize) -> (u8, u8, u8) {
+        match &self.palette {
+            Some(palette) => {
+                let r = palette[idx * 3];
+                let g = palette[idx * 3 + 1];
+                let b = palette[idx * 3 + 2];
+                (r, g, b)
+            }
+            None => (0, 0, 0),
+        }
+    }
 
+    pub fn generate_ansi_data(&mut self) -> Vec<u8> {
+        let mut ansi_data: Vec<u8> = Vec::new();
         for y in 0..self.height {
             for x in 0..self.width {
                 let idx = (y * self.width + x) as usize
@@ -352,25 +363,42 @@ impl MoshData {
                         ColorType::Rgba => 4,
                     };
 
-                let r = self.buf[idx];
+                let r = match self.color_type {
+                    ColorType::Rgb | ColorType::Rgba => self.buf[idx],
+                    ColorType::Indexed => {
+                        let palette_idx = self.buf[idx] as usize;
+                        let (r, _, _) = self.get_palette_color(palette_idx);
+                        r
+                    }
+                    _ => self.buf[idx],
+                };
 
                 let g = match self.color_type {
                     ColorType::Rgb | ColorType::Rgba => self.buf[idx + 1],
+                    ColorType::Indexed => {
+                        let palette_idx = self.buf[idx] as usize;
+                        let (_, g, _) = self.get_palette_color(palette_idx);
+                        g
+                    }
                     _ => self.buf[idx],
                 };
 
                 let b = match self.color_type {
                     ColorType::Rgb | ColorType::Rgba => self.buf[idx + 2],
+                    ColorType::Indexed => {
+                        let palette_idx = self.buf[idx] as usize;
+                        let (_, _, b) = self.get_palette_color(palette_idx);
+                        b
+                    }
                     _ => self.buf[idx],
                 };
 
                 let ansi_color = get_ansi_color(r, g, b);
-
-                ansi_buf.push(ansi_color);
+                ansi_data.push(ansi_color);
             }
         }
 
-        self.buf = ansi_buf;
+        ansi_data
     }
 
     // Use pnglitch approach

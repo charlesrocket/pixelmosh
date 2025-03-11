@@ -17,8 +17,6 @@ pub enum MoshError {
     IoError(io::Error),
     /// Allocation failed.
     OutOfMemory,
-    /// Unsupported color type.
-    UnsupportedColorType,
 }
 
 impl std::error::Error for MoshError {}
@@ -30,7 +28,6 @@ impl Display for MoshError {
             Self::EncodingError(e) => Display::fmt(e, f),
             Self::IoError(e) => Display::fmt(e, f),
             Self::OutOfMemory => f.write_str("Out of memory"),
-            Self::UnsupportedColorType => f.write_str("Unsupported color type"),
         }
     }
 }

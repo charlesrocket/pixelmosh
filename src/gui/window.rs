@@ -1,7 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::{clone, Object};
 use gtk::{gio, glib, EntryIconPosition::Secondary, License};
-use png::ColorType;
 
 use libmosh::err::MoshError;
 
@@ -215,13 +214,9 @@ impl Window {
         image.new_seed();
 
         if image.open_file(&file.path().unwrap()).is_ok() {
-            if image.core.data.color_type != ColorType::Indexed {
-                image.mosh_file();
-                self.imp().picture.set_paintable(Some(&image.get_texture()));
-                self.skip_placeholder();
-            } else {
-                self.set_instructions();
-            }
+            image.mosh_file();
+            self.imp().picture.set_paintable(Some(&image.get_texture()));
+            self.skip_placeholder();
         } else {
             self.set_instructions();
         }

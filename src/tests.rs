@@ -133,21 +133,43 @@ fn grayscale_alpha() {
 }
 
 #[test]
+fn indexed() {
+    let input = read_file("tests/assets/test-indexed.png").unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file("moshed-indexed.png", &image.data, &image.options).unwrap();
+
+    let output = File::open("moshed-indexed.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 156_733_450);
+}
+
+#[test]
+fn ansi_indexed() {
+    let input = read_file("tests/assets/test-indexed.png").unwrap();
+    let mut image = MoshCore::new();
+    image.options.ansi = true;
+    image.read_image(&input).unwrap();
+    image.mosh().unwrap();
+    write_file("moshed-ansi-indexed.png", &image.data, &image.options).unwrap();
+
+    let output = File::open("moshed-ansi-indexed.png").unwrap();
+    let mut file = BufReader::new(output);
+    let checksum = adler32(&mut file).unwrap();
+
+    assert_eq!(checksum, 3_738_962_042);
+}
+
+#[test]
 fn seed() {
     let mut image = MoshCore::default();
     image.options.seed = 1;
     image.options.new_seed();
 
     assert_eq!(image.options.seed, 901_042_006);
-}
-
-#[test]
-#[should_panic(expected = "UnsupportedColorType")]
-fn indexed() {
-    let input = read_file("tests/assets/test-indexed.png").unwrap();
-    let mut image = MoshCore::new();
-    image.read_image(&input).unwrap();
-    image.mosh().unwrap();
 }
 
 #[test]
