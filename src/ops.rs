@@ -49,7 +49,11 @@ pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<
     });
 
     if data.color_type == ColorType::Indexed {
-        encoder.set_palette(data.palette.clone().unwrap());
+        if options.ansi {
+            encoder.set_palette(crate::generate_palette());
+        } else {
+            encoder.set_palette(data.palette.clone().unwrap());
+        }
     }
 
     if options.ansi {

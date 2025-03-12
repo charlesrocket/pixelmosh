@@ -35,27 +35,36 @@ impl Image {
     }
 
     fn generate_texture(data: &mut MoshData, options: &MoshOptions) -> gdk::MemoryTexture {
-        let buf = if options.ansi {
-            &data.generate_ansi_data()
-        } else {
-            &data.buf
-        };
-        let src_palette = &data.palette.clone();
+        let mut palette = None;
+        let buf = &data.buf;
         let width = data.width;
         let height = data.height;
+        let color_type = if options.ansi {
+            ColorType::Indexed
+        } else {
+            data.color_type
+        };
 
-        let (format, stride) = match &data.color_type {
+        if options.ansi {
+            palette = Some(libmosh::generate_palette());
+        } else {
+            if color_type == ColorType::Indexed {
+                palette = data.palette.clone();
+            }
+        };
+
+        let (format, stride) = match color_type {
             ColorType::Grayscale => (gdk::MemoryFormat::G8, (width)),
             ColorType::GrayscaleAlpha => (gdk::MemoryFormat::G8a8, (width * 2)),
             ColorType::Rgb => (gdk::MemoryFormat::R8g8b8, (width * 3)),
             ColorType::Rgba => (gdk::MemoryFormat::R8g8b8a8, (width * 4)),
             ColorType::Indexed => {
-                let palette = src_palette.clone().unwrap();
+                let p = palette.unwrap();
                 let mut rgb = Vec::with_capacity(buf.len());
                 for i in buf.iter().copied().map(usize::from) {
-                    rgb.push(palette[i * 3]);
-                    rgb.push(palette[i * 3 + 1]);
-                    rgb.push(palette[i * 3 + 2]);
+                    rgb.push(p[i * 3]);
+                    rgb.push(p[i * 3 + 1]);
+                    rgb.push(p[i * 3 + 2]);
                 }
 
                 return gdk::MemoryTexture::new(
