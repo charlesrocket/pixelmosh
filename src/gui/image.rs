@@ -89,10 +89,6 @@ impl Image {
         let input = read_file(file)?;
 
         self.core.read_image(&input)?;
-
-        let texture = Self::generate_texture(&mut self.core.data, &self.core.options);
-
-        self.texture = texture.upcast();
         self.is_present = true;
 
         Ok(())

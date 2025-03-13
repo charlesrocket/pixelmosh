@@ -292,7 +292,7 @@ impl MoshData {
         }
 
         if options.ansi {
-            self.buf = self.generate_ansi_data()?;
+            self.generate_ansi_data()?;
         }
 
         Ok(())
@@ -348,7 +348,7 @@ impl MoshData {
         }
     }
 
-    pub fn generate_ansi_data(&mut self) -> Result<Vec<u8>, MoshError> {
+    pub fn generate_ansi_data(&mut self) -> Result<(), MoshError> {
         let mut ansi_data: Vec<u8> = Vec::new();
         for y in 0..self.height {
             for x in 0..self.width {
@@ -394,7 +394,9 @@ impl MoshData {
             }
         }
 
-        Ok(ansi_data)
+        self.buf = ansi_data;
+
+        Ok(())
     }
 
     // Use pnglitch approach
