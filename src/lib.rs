@@ -361,7 +361,6 @@ impl MoshData {
                     };
 
                 let r = match self.color_type {
-                    ColorType::Rgb | ColorType::Rgba => self.buf[idx],
                     ColorType::Indexed => {
                         let palette_idx = self.buf[idx] as usize;
                         let (r, _, _) = self.get_palette_color(palette_idx)?;
