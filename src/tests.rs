@@ -179,6 +179,17 @@ fn encoding() {
 }
 
 #[test]
+#[should_panic(expected = "InvalidPalette")]
+fn invalid_palette() {
+    let input = read_file("tests/assets/test-indexed.png").unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+    image.options.ansi = true;
+    image.data.palette = None;
+    image.mosh().unwrap();
+}
+
+#[test]
 fn invalid_parameters() {
     let input = read_file("tests/assets/test-grayscale.png").unwrap();
     let mut image = MoshCore::new();

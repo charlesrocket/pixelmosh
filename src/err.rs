@@ -13,6 +13,8 @@ pub enum MoshError {
     DecodingError(png::DecodingError),
     /// i.e. wrong data size/formatter failure.
     EncodingError(png::EncodingError),
+    /// Image palette issue.
+    InvalidPalette,
     /// I/O errors.
     IoError(io::Error),
     /// Allocation failed.
@@ -26,6 +28,7 @@ impl Display for MoshError {
         match self {
             Self::DecodingError(e) => Display::fmt(e, f),
             Self::EncodingError(e) => Display::fmt(e, f),
+            Self::InvalidPalette => f.write_str("Invalid image palette"),
             Self::IoError(e) => Display::fmt(e, f),
             Self::OutOfMemory => f.write_str("Out of memory"),
         }

@@ -295,7 +295,7 @@ impl MoshData {
         }
 
         if options.ansi {
-            self.buf = self.generate_ansi_data();
+            self.buf = self.generate_ansi_data()?;
         }
 
         Ok(())
@@ -339,19 +339,19 @@ impl MoshData {
         }
     }
 
-    fn get_palette_color(&self, idx: usize) -> (u8, u8, u8) {
+    fn get_palette_color(&self, idx: usize) -> Result<(u8, u8, u8), MoshError> {
         match &self.palette {
             Some(palette) => {
                 let r = palette[idx * 3];
                 let g = palette[idx * 3 + 1];
                 let b = palette[idx * 3 + 2];
-                (r, g, b)
+                Ok((r, g, b))
             }
-            None => (0, 0, 0),
+            None => Err(MoshError::InvalidPalette),
         }
     }
 
-    pub fn generate_ansi_data(&mut self) -> Vec<u8> {
+    pub fn generate_ansi_data(&mut self) -> Result<Vec<u8>, MoshError> {
         let mut ansi_data: Vec<u8> = Vec::new();
         for y in 0..self.height {
             for x in 0..self.width {
@@ -367,7 +367,7 @@ impl MoshData {
                     ColorType::Rgb | ColorType::Rgba => self.buf[idx],
                     ColorType::Indexed => {
                         let palette_idx = self.buf[idx] as usize;
-                        let (r, _, _) = self.get_palette_color(palette_idx);
+                        let (r, _, _) = self.get_palette_color(palette_idx)?;
                         r
                     }
                     _ => self.buf[idx],
@@ -377,7 +377,7 @@ impl MoshData {
                     ColorType::Rgb | ColorType::Rgba => self.buf[idx + 1],
                     ColorType::Indexed => {
                         let palette_idx = self.buf[idx] as usize;
-                        let (_, g, _) = self.get_palette_color(palette_idx);
+                        let (_, g, _) = self.get_palette_color(palette_idx)?;
                         g
                     }
                     _ => self.buf[idx],
@@ -387,7 +387,7 @@ impl MoshData {
                     ColorType::Rgb | ColorType::Rgba => self.buf[idx + 2],
                     ColorType::Indexed => {
                         let palette_idx = self.buf[idx] as usize;
-                        let (_, _, b) = self.get_palette_color(palette_idx);
+                        let (_, _, b) = self.get_palette_color(palette_idx)?;
                         b
                     }
                     _ => self.buf[idx],
@@ -398,7 +398,7 @@ impl MoshData {
             }
         }
 
-        ansi_data
+        Ok(ansi_data)
     }
 
     // Use pnglitch approach
