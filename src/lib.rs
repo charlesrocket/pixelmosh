@@ -512,9 +512,9 @@ pub fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
 
     for (index, &color) in ANSI_COLORS.iter().enumerate() {
         // Calculate squared Euclidean distance between RGB colors
-        let distance = (r as i32 - color.0 as i32).pow(2)
-            + (g as i32 - color.1 as i32).pow(2)
-            + (b as i32 - color.2 as i32).pow(2);
+        let distance = (i32::from(r) - i32::from(color.0)).pow(2)
+            + (i32::from(g) - i32::from(color.1)).pow(2)
+            + (i32::from(b) - i32::from(color.2)).pow(2);
 
         if distance < min_distance {
             min_distance = distance;
