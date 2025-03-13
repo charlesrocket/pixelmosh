@@ -277,10 +277,7 @@ impl MoshData {
         }
 
         match self.color_type {
-            ColorType::Indexed => {
-                self.pixelation(options, fr::PixelType::U8);
-            }
-            ColorType::Grayscale => {
+            ColorType::Grayscale | ColorType::Indexed => {
                 self.pixelation(options, fr::PixelType::U8);
             }
             ColorType::GrayscaleAlpha => {
