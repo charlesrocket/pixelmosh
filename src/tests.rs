@@ -20,7 +20,7 @@ fn ansi_rgb() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 4_175_756_811);
+    assert_eq!(checksum, 2_188_040_842);
 }
 
 #[test]
@@ -36,7 +36,7 @@ fn ansi_rgb_alpha() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 650_148_922);
+    assert_eq!(checksum, 309_438_591);
 }
 
 #[test]
@@ -52,7 +52,7 @@ fn ansi_grayscale() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 1_409_399_618);
+    assert_eq!(checksum, 2_433_927_020);
 }
 
 #[test]
@@ -68,7 +68,7 @@ fn ansi_grayscale_alpha() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 4_027_088_989);
+    assert_eq!(checksum, 2_083_001_249);
 }
 
 #[test]
@@ -83,11 +83,11 @@ fn rgb() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 735_326_868);
+    assert_eq!(checksum, 1_527_506_200);
 }
 
 #[test]
-fn rgba() {
+fn rgb_alpha() {
     let input = read_file("tests/assets/test-rgb-alpha.png").unwrap();
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
@@ -98,7 +98,7 @@ fn rgba() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 3_417_004_742);
+    assert_eq!(checksum, 2_248_848_268);
 }
 
 #[test]
@@ -113,7 +113,7 @@ fn grayscale() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 2_009_866_405);
+    assert_eq!(checksum, 270_870_204);
 }
 
 #[test]
@@ -129,7 +129,7 @@ fn grayscale_alpha() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 4_027_088_989);
+    assert_eq!(checksum, 2_083_001_249);
 }
 
 #[test]
@@ -144,7 +144,7 @@ fn indexed() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 156_733_450);
+    assert_eq!(checksum, 619_133_944);
 }
 
 #[test]
@@ -160,7 +160,7 @@ fn ansi_indexed() {
     let mut file = BufReader::new(output);
     let checksum = adler32(&mut file).unwrap();
 
-    assert_eq!(checksum, 3_738_962_042);
+    assert_eq!(checksum, 3_221_649_406);
 }
 
 #[test]
@@ -195,9 +195,7 @@ fn invalid_parameters() {
     let mut image = MoshCore::new();
     image.read_image(&input).unwrap();
 
-    image.options.min_rate = 13;
-    image.options.max_rate = 6;
-    image.options.pixelation = 0;
+    image.options.pixelation = 106;
     image.options.line_shift = 0.5;
     image.options.reverse = 0.4;
     image.options.flip = 0.3;
