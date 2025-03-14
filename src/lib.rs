@@ -8,7 +8,7 @@ available in the [`ops`] module.
 # Usage
 Add `pixelmosh` to your dependencies in your project's `Cargo.toml`.
 
-```
+```shell
 cargo add pixelmosh --no-default-features
 ```
 
