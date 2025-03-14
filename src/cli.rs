@@ -1,4 +1,4 @@
-use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
+use clap::{value_parser, Arg, ArgAction, ArgMatches, Command, ValueHint};
 use indicatif::{ProgressBar, ProgressStyle};
 use png::ColorType;
 
@@ -85,14 +85,16 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
                 .action(ArgAction::Set)
                 .value_name("FILE")
                 .help("File path")
+                .long_help("Path to an image file")
                 .required(true)
+                .value_hint(ValueHint::FilePath)
                 .value_parser(value_parser!(PathBuf)),
         )
         .arg(
             Arg::new("minrate")
                 .short('n')
                 .long("min-rate")
-                .value_name("MIN_RATE")
+                .value_name("VALUE")
                 .help("Minimum chunks to process")
                 .value_parser(value_parser!(u16))
                 .default_value(container.options.min_rate.to_string()),
@@ -101,7 +103,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("maxrate")
                 .short('m')
                 .long("max-rate")
-                .value_name("MAX_RATE")
+                .value_name("VALUE")
                 .help("Maximum chunks to process")
                 .value_parser(value_parser!(u16))
                 .default_value(container.options.max_rate.to_string()),
@@ -110,7 +112,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("pixelation")
                 .short('p')
                 .long("pixelation")
-                .value_name("PIXELATION")
+                .value_name("VALUE")
                 .help("Pixelation rate")
                 .value_parser(value_parser!(u8))
                 .default_value(container.options.pixelation.to_string()),
@@ -119,7 +121,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("lineshift")
                 .short('l')
                 .long("line-shift")
-                .value_name("LINE_SHIFT")
+                .value_name("VALUE")
                 .help("Line shift rate")
                 .value_parser(value_parser!(f64))
                 .default_value(container.options.line_shift.to_string()),
@@ -128,7 +130,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("reverse")
                 .short('r')
                 .long("reverse")
-                .value_name("REVERSE")
+                .value_name("VALUE")
                 .help("Reverse rate")
                 .value_parser(value_parser!(f64))
                 .default_value(container.options.reverse.to_string()),
@@ -137,7 +139,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("flip")
                 .short('f')
                 .long("flip")
-                .value_name("FLIP")
+                .value_name("VALUE")
                 .help("Flip rate")
                 .value_parser(value_parser!(f64))
                 .default_value(container.options.flip.to_string()),
@@ -146,7 +148,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("channelswap")
                 .short('c')
                 .long("channel-swap")
-                .value_name("CHANNEL_SWAP")
+                .value_name("VALUE")
                 .help("Channel swap rate")
                 .value_parser(value_parser!(f64))
                 .default_value(container.options.channel_swap.to_string()),
@@ -155,7 +157,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("channelshift")
                 .short('t')
                 .long("channel-shift")
-                .value_name("CHANNEL_SHIFT")
+                .value_name("VALUE")
                 .help("Channel shift rate")
                 .value_parser(value_parser!(f64))
                 .default_value(container.options.channel_shift.to_string()),
@@ -164,8 +166,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("ansi")
                 .short('a')
                 .long("ansi")
-                .value_name("ANSI")
-                .help("ANSI colors")
+                .help("Use ANSI color palette")
                 .long_help("Use ANSI color set")
                 .action(ArgAction::SetTrue),
         )
@@ -173,7 +174,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("seed")
                 .short('s')
                 .long("seed")
-                .value_name("SEED")
+                .value_name("VALUE")
                 .help("Custom seed")
                 .long_help("Set a custom seed value")
                 .hide_default_value(true)
@@ -184,7 +185,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("batch")
                 .short('b')
                 .long("batch")
-                .value_name("BATCH")
+                .value_name("VALUE")
                 .help("Number of files to output")
                 .long_help("Enable batch mode and set the number of files to output")
                 .hide_default_value(true)
@@ -195,7 +196,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
             Arg::new("output")
                 .short('o')
                 .long("output")
-                .value_name("OUTPUT")
+                .value_name("VALUE")
                 .help("Output filename")
                 .hide_default_value(true)
                 .default_value("moshed"),
