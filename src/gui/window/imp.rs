@@ -153,11 +153,11 @@ impl ObjectSubclass for Window {
             |win, _action_name, _action_target| async move {
                 let dialog = &win.imp().dialog_save;
                 if let Ok(file) = dialog.save_future(Some(&win)).await {
-                    if let Err(error) = win.save_file(&file) {
+                    match win.save_file(&file) { Err(error) => {
                         win.show_message(&format!("Error saving the image: {}", error), 0);
-                    } else {
+                    } _ => {
                         win.show_message("DONE", 3);
-                    }
+                    }}
                 }
             },
         );
