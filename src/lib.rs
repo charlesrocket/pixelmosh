@@ -486,7 +486,7 @@ impl Default for MoshOptions {
     }
 }
 
-pub fn get_ansi_color(r: u8, g: u8, b: u8) -> Result<u8, MoshError> {
+fn get_ansi_color(r: u8, g: u8, b: u8) -> Result<u8, MoshError> {
     let mut closest_index = 0;
     let mut min_distance: i32 = i32::MAX;
 
