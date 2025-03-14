@@ -389,7 +389,7 @@ impl MoshData {
                     _ => self.buf[idx],
                 };
 
-                let ansi_color = get_ansi_color(r, g, b);
+                let ansi_color = get_ansi_color(r, g, b)?;
                 ansi_data.push(ansi_color);
             }
         }
@@ -507,7 +507,7 @@ impl Default for MoshOptions {
     }
 }
 
-pub fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
+pub fn get_ansi_color(r: u8, g: u8, b: u8) -> Result<u8, MoshError> {
     let mut closest_index = 0;
     let mut min_distance: i32 = i32::MAX;
 
@@ -523,7 +523,8 @@ pub fn get_ansi_color(r: u8, g: u8, b: u8) -> u8 {
         }
     }
 
-    closest_index as u8
+    let color = u8::try_from(closest_index)?;
+    Ok(color)
 }
 
 pub fn generate_palette() -> Vec<u8> {
