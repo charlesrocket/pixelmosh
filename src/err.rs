@@ -19,6 +19,8 @@ pub enum MoshError {
     IoError(io::Error),
     /// Out of range errors,
     ConversionError(num::TryFromIntError),
+    /// Probability distribution errors.
+    RngError(rand::distr::uniform::Error),
     /// Allocation failed.
     OutOfMemory,
 }
@@ -33,6 +35,7 @@ impl Display for MoshError {
             Self::InvalidPalette => f.write_str("Invalid image palette"),
             Self::IoError(e) => Display::fmt(e, f),
             Self::ConversionError(e) => Display::fmt(e, f),
+            Self::RngError(e) => Display::fmt(e, f),
             Self::OutOfMemory => f.write_str("Out of memory"),
         }
     }
@@ -59,5 +62,11 @@ impl From<png::DecodingError> for MoshError {
 impl From<png::EncodingError> for MoshError {
     fn from(e: png::EncodingError) -> Self {
         Self::EncodingError(e)
+    }
+}
+
+impl From<rand::distr::uniform::Error> for MoshError {
+    fn from(e: rand::distr::uniform::Error) -> Self {
+        Self::RngError(e)
     }
 }
