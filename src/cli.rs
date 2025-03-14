@@ -1,12 +1,12 @@
-use clap::{value_parser, Arg, ArgAction, ArgMatches, Command, ValueHint};
+use clap::{Arg, ArgAction, ArgMatches, Command, ValueHint, value_parser};
 use indicatif::{ProgressBar, ProgressStyle};
 use png::ColorType;
 
 use std::{env, path::PathBuf};
 
 use libmosh::{
-    ops::{read_file, write_file},
     MoshCore,
+    ops::{read_file, write_file},
 };
 
 // Logo

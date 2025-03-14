@@ -40,8 +40,8 @@ use fast_image_resize as fr;
 
 use png::{BitDepth, ColorType, Decoder};
 use rand::{
-    distributions::{Distribution, Uniform},
     RngCore, SeedableRng,
+    distributions::{Distribution, Uniform},
 };
 
 use std::cmp;

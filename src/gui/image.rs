@@ -5,9 +5,9 @@ use png::ColorType;
 use std::path::{Path, PathBuf};
 
 use libmosh::{
+    MoshCore, MoshData, MoshOptions,
     err::MoshError,
     ops::{read_file, write_file},
-    MoshCore, MoshData, MoshOptions,
 };
 
 pub struct Image {

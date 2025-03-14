@@ -3,8 +3,8 @@ use adler::adler32;
 use std::{fs::File, io::BufReader};
 
 use super::{
-    ops::{read_file, write_file},
     MoshCore, MoshData, MoshOptions,
+    ops::{read_file, write_file},
 };
 
 #[test]

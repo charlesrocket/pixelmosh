@@ -1,5 +1,5 @@
 use adw::{gio, prelude::*};
-use gtk::{gdk::Display, CssProvider};
+use gtk::{CssProvider, gdk::Display};
 
 use window::Window;
 

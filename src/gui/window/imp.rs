@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{gio, glib, Button, CompositeTemplate, Entry, Label, SpinButton, Stack, ToggleButton};
+use gtk::{Button, CompositeTemplate, Entry, Label, SpinButton, Stack, ToggleButton, gio, glib};
 use png::ColorType;
 
 use std::cell::RefCell;
@@ -153,11 +153,14 @@ impl ObjectSubclass for Window {
             |win, _action_name, _action_target| async move {
                 let dialog = &win.imp().dialog_save;
                 if let Ok(file) = dialog.save_future(Some(&win)).await {
-                    match win.save_file(&file) { Err(error) => {
-                        win.show_message(&format!("Error saving the image: {}", error), 0);
-                    } _ => {
-                        win.show_message("DONE", 3);
-                    }}
+                    match win.save_file(&file) {
+                        Err(error) => {
+                            win.show_message(&format!("Error saving the image: {}", error), 0);
+                        }
+                        _ => {
+                            win.show_message("DONE", 3);
+                        }
+                    }
                 }
             },
         );

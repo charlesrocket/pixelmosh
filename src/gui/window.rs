@@ -1,6 +1,6 @@
 use adw::{prelude::*, subclass::prelude::*};
-use glib::{clone, Object};
-use gtk::{gio, glib, EntryIconPosition::Secondary, License};
+use glib::{Object, clone};
+use gtk::{EntryIconPosition::Secondary, License, gio, glib};
 
 use libmosh::err::MoshError;
 
