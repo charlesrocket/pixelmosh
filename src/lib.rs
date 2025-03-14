@@ -41,7 +41,7 @@ use fast_image_resize as fr;
 use png::{BitDepth, ColorType, Decoder};
 use rand::{
     RngCore, SeedableRng,
-    distributions::{Distribution, Uniform},
+    distr::{Distribution, Uniform},
 };
 
 use std::cmp;
@@ -231,7 +231,7 @@ impl MoshOptions {
         if cfg!(test) {
             TEST_SEED
         } else {
-            rand::thread_rng().next_u64()
+            rand::rng().next_u64()
         }
     }
 
@@ -248,11 +248,11 @@ impl MoshData {
         let min_rate = options.min_rate;
         let max_rate = cmp::max(options.min_rate, options.max_rate);
         let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
-        let chunk_count_distrib = Uniform::from(min_rate..=max_rate);
+        let chunk_count_distrib = Uniform::new(min_rate, max_rate)?;
         let mosh_rate = chunk_count_distrib.sample(&mut rng);
 
         for _ in 0..mosh_rate {
-            Self::chunkmosh(self, &mut rng, options);
+            Self::chunkmosh(self, &mut rng, options)?;
         }
 
         match self.color_type {
@@ -382,7 +382,11 @@ impl MoshData {
     //
     // TODO
     // Add more `rng` to `chunk_size`?
-    fn chunkmosh(&mut self, rng: &mut impl rand::Rng, options: &MoshOptions) {
+    fn chunkmosh(
+        &mut self,
+        rng: &mut impl rand::Rng,
+        options: &MoshOptions,
+    ) -> Result<(), MoshError> {
         let line_count = self.buf.len() / self.line_size;
         let channel_count = match self.color_type {
             ColorType::Grayscale | ColorType::Indexed => 1,
@@ -391,9 +395,9 @@ impl MoshData {
             ColorType::Rgba => 4,
         };
 
-        let line_shift_distrib = Uniform::from(0..self.line_size);
-        let line_number_distrib = Uniform::from(0..line_count);
-        let channel_count_distrib = Uniform::from(0..channel_count);
+        let line_shift_distrib = Uniform::new(0, self.line_size)?;
+        let line_number_distrib = Uniform::new(0, line_count)?;
+        let channel_count_distrib = Uniform::new(0, channel_count)?;
 
         let first_line = line_number_distrib.sample(rng);
         let chunk_size = line_number_distrib.sample(rng) / 2;
@@ -403,21 +407,21 @@ impl MoshData {
             first_line + chunk_size
         };
 
-        let reverse = rng.gen_bool(options.reverse);
-        let flip = rng.gen_bool(options.flip);
+        let reverse = rng.random_bool(options.reverse);
+        let flip = rng.random_bool(options.flip);
 
-        let line_shift = rng.gen_bool(options.line_shift).then(|| {
+        let line_shift = rng.random_bool(options.line_shift).then(|| {
             let line_shift_amount = line_shift_distrib.sample(rng);
             MoshLine::Shift(line_shift_amount)
         });
 
-        let channel_shift = rng.gen_bool(options.channel_shift).then(|| {
+        let channel_shift = rng.random_bool(options.channel_shift).then(|| {
             let amount = line_shift_distrib.sample(rng) / channel_count;
             let channel = channel_count_distrib.sample(rng);
             MoshLine::ChannelShift(amount, channel, channel_count)
         });
 
-        let channel_swap = rng.gen_bool(options.channel_swap).then(|| {
+        let channel_swap = rng.random_bool(options.channel_swap).then(|| {
             let channel_1 = channel_count_distrib.sample(rng);
             let channel_2 = channel_count_distrib.sample(rng);
             MoshChunk::ChannelSwap(channel_1, channel_2, channel_count)
@@ -451,6 +455,8 @@ impl MoshData {
         if flip {
             MoshChunk::Flip.glitch(chunk);
         };
+
+        Ok(())
     }
 }
 
