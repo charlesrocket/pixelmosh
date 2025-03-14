@@ -10,7 +10,7 @@ Add `pixelmosh` to your dependencies in your project's `Cargo.toml`.
 
 ```toml
 [dependencies]
-pixelmosh = { version = "3.1", default-features = false }
+pixelmosh = { version = "4.0", default-features = false }
 ```
 
 # Example
