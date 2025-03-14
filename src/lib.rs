@@ -35,7 +35,6 @@ write_file(
 # Ok::<(), MoshError>(())
 ```
 */
-#![allow(deprecated)]
 
 use fast_image_resize as fr;
 
@@ -243,27 +242,7 @@ impl MoshOptions {
 }
 
 impl MoshData {
-    #[deprecated(since = "3.1.0", note = "Users should use MoshCore instead")]
-    pub fn new(input: &[u8]) -> Result<Self, MoshError> {
-        let decoder = Decoder::new(input);
-        let mut reader = decoder.read_info()?;
-        let mut buf = vec![0_u8; reader.output_buffer_size()];
-        let info = reader.next_frame(&mut buf)?;
-
-        Ok(Self {
-            buf: vec![0_u8],
-            image: buf,
-            width: info.width,
-            height: info.height,
-            color_type: info.color_type,
-            bit_depth: info.bit_depth,
-            palette: None,
-            line_size: info.line_size,
-        })
-    }
-
-    #[deprecated(since = "3.1.0")]
-    pub fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
+    fn mosh(&mut self, options: &MoshOptions) -> Result<(), MoshError> {
         self.buf.clone_from(&self.image);
 
         let min_rate = options.min_rate;
