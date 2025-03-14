@@ -2,7 +2,7 @@
 
 use std::{
     fmt::{self, Display},
-    io,
+    io, num,
 };
 
 /// It handles internal, I/O and formatter errors
@@ -17,6 +17,8 @@ pub enum MoshError {
     InvalidPalette,
     /// I/O errors.
     IoError(io::Error),
+    /// Out of range errors,
+    ConversionError(num::TryFromIntError),
     /// Allocation failed.
     OutOfMemory,
 }
@@ -30,6 +32,7 @@ impl Display for MoshError {
             Self::EncodingError(e) => Display::fmt(e, f),
             Self::InvalidPalette => f.write_str("Invalid image palette"),
             Self::IoError(e) => Display::fmt(e, f),
+            Self::ConversionError(e) => Display::fmt(e, f),
             Self::OutOfMemory => f.write_str("Out of memory"),
         }
     }
@@ -38,6 +41,12 @@ impl Display for MoshError {
 impl From<io::Error> for MoshError {
     fn from(e: io::Error) -> Self {
         Self::IoError(e)
+    }
+}
+
+impl From<num::TryFromIntError> for MoshError {
+    fn from(e: num::TryFromIntError) -> Self {
+        Self::ConversionError(e)
     }
 }
 
