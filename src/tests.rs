@@ -190,6 +190,26 @@ fn invalid_palette() {
 }
 
 #[test]
+#[should_panic(expected = "RngError(EmptyRange)")]
+fn invalid_range() {
+    let input = read_file("tests/assets/test-grayscale.png").unwrap();
+    let mut image = MoshCore::new();
+    image.read_image(&input).unwrap();
+
+    image.options.min_rate = 13;
+    image.options.max_rate = 6;
+    image.options.pixelation = 0;
+    image.options.line_shift = 0.5;
+    image.options.reverse = 0.4;
+    image.options.flip = 0.3;
+    image.options.channel_swap = 0.2;
+    image.options.channel_shift = 0.1;
+    image.options.seed = 42;
+
+    image.mosh().unwrap();
+}
+
+#[test]
 fn invalid_parameters() {
     let input = read_file("tests/assets/test-grayscale.png").unwrap();
     let mut image = MoshCore::new();
