@@ -2,6 +2,70 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2025-03-14
+
+### Bug Fixes
+
+- Mark structs non-exhaustive
+- Update `save_file()`
+- Improve grayscale support
+- Update `generate_texture()`
+- Improve `get_ansi_color()` i32 casts
+- Update texture generator
+- Improve u8 casting
+- Update argument descriptions
+- Use `Uniform::new()`
+
+### Documentation
+
+- Update `Options`
+
+### Features
+
+- Add ANSI color set support
+- Add `ansi` option
+- Add `ansi` button
+- Add `MoshData::palette`
+- [**breaking**] Support all color types
+- Add `MoshError::InvalidPalette`
+- Implement `TryFromIntError`
+- Implement `uniform::Error`
+
+### Miscellaneous tasks
+
+- Update LICENSE
+
+### Operations
+
+- Change codecov threshold
+
+### Refactor
+
+- Rename color type string function
+- Collapse `options.ansi` block
+- Merge `mosh` arm patterns
+- Drop redundant match arm
+- Remove deprecated functions
+- Update `win.save-file`
+- Make `get_ansi_color()` private
+
+### Styling
+
+- Fix project formatting
+
+### Testing
+
+- Move assets
+- Add `ansi_alpha`
+- Update assertions
+- Add `invalid_range`
+
+### Build
+
+- Add gui block
+- Bump rust edition to 2024
+- Update dependencies
+
 ## [3.6.1] - 2025-01-07
 
 ### Operations
