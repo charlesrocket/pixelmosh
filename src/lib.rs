@@ -8,9 +8,8 @@ available in the [`ops`] module.
 # Usage
 Add `pixelmosh` to your dependencies in your project's `Cargo.toml`.
 
-```toml
-[dependencies]
-pixelmosh = { version = "4.0", default-features = false }
+```
+cargo add pixelmosh --no-default-features
 ```
 
 # Example
