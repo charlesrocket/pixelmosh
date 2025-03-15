@@ -139,7 +139,7 @@ impl ObjectSubclass for Window {
                     };
 
                     if let Some(file_path) = file.path() {
-                        win.set_title(file_path.file_name().and_then(|name| name.to_str()))
+                        win.set_title(file_path.file_name().and_then(|name| name.to_str()));
                     }
 
                     win.set_color_type(color_type);

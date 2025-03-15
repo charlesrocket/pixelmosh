@@ -142,7 +142,7 @@ impl Window {
         let seed = &self.imp().seed;
 
         if seed.buffer().text().to_string().is_empty() {
-            seed.set_icon_sensitive(Secondary, false)
+            seed.set_icon_sensitive(Secondary, false);
         } else {
             seed.set_icon_sensitive(Secondary, true);
         }

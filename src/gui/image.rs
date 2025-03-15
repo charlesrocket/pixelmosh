@@ -105,7 +105,7 @@ impl Image {
         let max_rate = std::cmp::max(self.core.options.max_rate, min_rate);
 
         if min_rate == max_rate {
-            self.core.options.max_rate = max_rate + 1
+            self.core.options.max_rate = max_rate + 1;
         };
 
         self.core.mosh().unwrap();
