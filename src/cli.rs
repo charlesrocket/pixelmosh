@@ -222,7 +222,7 @@ fn args() -> (PathBuf, String, MoshCore, u8) {
     container.options.ansi = *matches.get_one::<bool>("ansi").unwrap();
     container.options.seed = *matches.get_one::<u64>("seed").unwrap();
 
-    (input.to_path_buf(), output.to_string(), container, *batch)
+    (input.clone(), output.to_string(), container, *batch)
 }
 
 fn filename(output: &str, index: u8, batch: u8) -> String {
