@@ -48,7 +48,7 @@ impl Image {
         if options.ansi {
             palette = Some(libmosh::generate_palette());
         } else if color_type == ColorType::Indexed {
-            palette = data.palette.clone();
+            palette.clone_from(&data.palette);
         };
 
         let (format, stride) = match color_type {
