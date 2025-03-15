@@ -78,6 +78,9 @@ impl ObjectSubclass for Window {
             .modal(true)
             .build();
 
+        let style_manager = adw::StyleManager::default();
+        style_manager.set_color_scheme(adw::ColorScheme::ForceDark);
+
         Self {
             btn_ansi: TemplateChild::default(),
             btn_min_rate: TemplateChild::default(),
@@ -97,7 +100,7 @@ impl ObjectSubclass for Window {
             stack: TemplateChild::default(),
             seed: TemplateChild::default(),
             color_type: TemplateChild::default(),
-            style_manager: adw::StyleManager::default(),
+            style_manager,
         }
     }
 
