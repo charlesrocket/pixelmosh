@@ -15,7 +15,7 @@ impl Bench {
 
         core.read_image(image).unwrap();
 
-        core.options.min_rate = 3;
+        core.options.min_rate = 2;
         core.options.max_rate = 3;
         core.options.pixelation = 2;
         core.options.line_shift = 1.0;
