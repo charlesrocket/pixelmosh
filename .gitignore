@@ -1,5 +1,7 @@
 target/
 debug/
 
+**/*.rs.bk
+
 moshed*
 test.png
