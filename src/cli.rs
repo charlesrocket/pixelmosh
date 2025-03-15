@@ -247,7 +247,7 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
     };
 
     if let Some(file_name) = input.file_name().and_then(|name| name.to_str()) {
-        println!("file: {}", file_name);
+        println!("file: {file_name}");
     }
 
     println!("seed: \x1b[3m{}\x1b[0m", &container.options.seed);
