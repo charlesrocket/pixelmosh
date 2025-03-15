@@ -326,6 +326,11 @@ impl MoshData {
         }
     }
 
+    /// Converts an image buffer using the ANSI color set.
+    ///
+    /// # Errors
+    ///
+    /// It may fail if the image data has the wrong format.
     pub fn generate_ansi_data(&mut self) -> Result<(), MoshError> {
         let mut ansi_data: Vec<u8> = Vec::new();
         for y in 0..self.height {
