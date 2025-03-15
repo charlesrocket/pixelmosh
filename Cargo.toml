@@ -36,7 +36,7 @@ adw = { version = "0.7", package = "libadwaita", features = ["v1_5"], optional =
 clap = { version = "4.5", features = ["string"], optional = true }
 fast_image_resize = "5.1"
 glib = { version = "0.20", optional = true }
-gtk = { version = "0.9", package = "gtk4", features = ["v4_12"], optional = true }
+gtk = { version = "0.9", package = "gtk4", features = ["v4_16"], optional = true }
 indicatif = { version = "0.17", optional = true }
 png = "0.17"
 rand = "0.9"
