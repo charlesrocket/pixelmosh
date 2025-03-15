@@ -139,6 +139,7 @@ impl MoshCore {
     /// Creates a new, empty instance of [`MoshCore`] with a random [seed].
     ///
     /// [seed]: MoshOptions::seed
+    #[must_use]
     pub fn new() -> Self {
         Self {
             data: MoshData::default(),
@@ -516,6 +517,7 @@ fn get_ansi_color(r: u8, g: u8, b: u8) -> Result<u8, MoshError> {
     Ok(color)
 }
 
+#[must_use]
 pub fn generate_palette() -> Vec<u8> {
     let mut palette = Vec::with_capacity(ANSI_COLORS.len() * 3);
     for &(r, g, b) in &ANSI_COLORS {
