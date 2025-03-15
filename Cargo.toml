@@ -10,7 +10,7 @@ keywords = ["glitch"]
 license = "MIT"
 readme = "README.md"
 build = "build.rs"
-exclude = [".github", "codecov.yml", "example/delorean.png"]
+exclude = ["/.github", "/example", "codecov.yml"]
 
 [profile.release]
 debug = 0
