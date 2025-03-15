@@ -101,6 +101,13 @@ impl Image {
     }
 
     pub fn mosh_file(&mut self) {
+        let min_rate = self.core.options.min_rate;
+        let max_rate = std::cmp::max(self.core.options.max_rate, min_rate);
+
+        if min_rate == max_rate {
+            self.core.options.max_rate = max_rate + 1
+        };
+
         self.core.mosh().unwrap();
         self.texture = Self::generate_texture(&mut self.core.data, &self.core.options).upcast();
     }
