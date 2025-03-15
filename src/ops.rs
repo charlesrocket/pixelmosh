@@ -29,7 +29,7 @@ pub fn read_file(file: impl AsRef<Path>) -> Result<Vec<u8>, MoshError> {
 ///
 /// # Errors
 ///
-/// It may fail if parameters are invalid or due I/O error.
+/// It may fail if parameters are invalid, palette is missing, or there is an I/O error.
 pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<(), MoshError> {
     let path = Path::new(&dest);
     let output = File::create(path)?;
@@ -52,8 +52,11 @@ pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<
         if options.ansi {
             encoder.set_palette(crate::generate_palette());
         } else {
-            encoder.set_palette(data.palette.clone().unwrap());
-        }
+            match &data.palette {
+                Some(palette) => encoder.set_palette(palette),
+                None => return Err(MoshError::InvalidPalette),
+            }
+        };
     }
 
     if options.ansi {
