@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.1] - 2025-03-16
+
+### Bug Fixes
+
+- Handle invalid chunk rates
+- Handle missing palette
+- Mark `must_use` functions
+- Explicit `input` clone
+- Start with `ColorScheme::ForceDark`
+- Update core options
+
+### Documentation
+
+- Update dependency usage
+- Use `cargo add`
+- Fix usage code block
+- Comment `generate_ansi_data()`
+
+### Miscellaneous tasks
+
+- Add ansi example
+- Update `exclude`
+- Ignore `debug/`
+- Ignore backups
+- Move examples
+- Exclude examples
+
+### Operations
+
+- Add changelog
+
+### Performance
+
+- Avoid palette allocation
+
+### Refactor
+
+- Move vars into `format`
+
+### Styling
+
+- Add missing semi-columns
+
+### Build
+
+- Use gtk4 v4_16
+- Use libadwaita v1_6
+
 ## [4.0.0] - 2025-03-14
 
 ### Bug Fixes
