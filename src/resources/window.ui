@@ -154,6 +154,15 @@
                         <property name="tooltip-text">Save to file</property>
                       </object>
                     </child>
+                    <child>
+                      <object class="AdwSpinner" id="spinner">
+                        <property name="visible">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="width-request">24</property>
+                        <property name="height-request">24</property>
+                      </object>
+                    </child>
                     <child type="end">
                       <object class="GtkMenuButton">
                         <property name="icon-name">open-menu-symbolic</property>

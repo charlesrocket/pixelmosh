@@ -4,6 +4,8 @@ use gtk::{EntryIconPosition::Secondary, License, gio, glib};
 
 use libmosh::err::MoshError;
 
+use std::sync::Arc;
+
 use crate::gui::image::Image;
 
 mod imp;
@@ -13,6 +15,12 @@ glib::wrapper! {
         @extends adw::ApplicationWindow, gtk::Window, gtk::Widget,
         @implements gio::ActionGroup, gio::ActionMap, gtk::Accessible, gtk::Buildable,
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
+}
+
+enum Mode {
+    Normal,
+    Rewind,
+    Seed,
 }
 
 impl Window {
@@ -98,7 +106,12 @@ impl Window {
             #[weak(rename_to = window)]
             self,
             move |_, _| {
-                window.mosh_with_seed();
+                match window.mosh(Mode::Seed) {
+                    Ok(()) => {}
+                    Err(error) => {
+                        window.show_message(&format!("Failed: {error}"), 0);
+                    }
+                };
             }
         ));
 
@@ -135,7 +148,7 @@ impl Window {
     }
 
     fn toggle_ansi(&self, value: bool) {
-        self.imp().image.borrow_mut().set_ansi(value);
+        self.imp().image.lock().unwrap().set_ansi(value);
     }
 
     fn set_seed_button(&self) {
@@ -149,67 +162,87 @@ impl Window {
     }
 
     fn set_rewind_button(&self) {
-        if self.imp().image.borrow_mut().settings.is_none() {
+        if self.imp().image.lock().unwrap().settings.is_none() {
             self.imp().btn_rewind.set_sensitive(false);
         } else {
             self.imp().btn_rewind.set_sensitive(true);
         }
     }
 
-    fn mosh_with_seed(&self) {
+    fn mosh(&self, mode: Mode) -> Result<(), MoshError> {
+        self.imp().spinner.set_visible(true);
+        let (sender, receiver) = async_channel::bounded(1);
         let buffer = &self.imp().seed.buffer();
         let seed = buffer.text().to_string();
-        let mut image = self.imp().image.borrow_mut();
+        let image = Arc::clone(&self.imp().image);
 
         if seed.parse::<u64>().is_err() {
-            image.new_seed();
+            image.lock().unwrap().new_seed();
             self.imp()
                 .seed
                 .buffer()
-                .set_text(image.get_seed().to_string());
-
-            image.mosh_file();
+                .set_text(image.lock().unwrap().get_seed().to_string());
         } else {
-            image.set_seed(seed.parse::<u64>().unwrap());
-            image.mosh_file();
-            buffer.set_text(image.get_seed().to_string());
+            image.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
         }
 
-        image.new_seed();
-        self.imp().picture.set_paintable(Some(&image.get_texture()));
-    }
+        if image.lock().unwrap().is_present {
+            let image_spawn_clone = image.clone();
+            gio::spawn_blocking(move || {
+                let mut thread_image = image_spawn_clone.lock().unwrap();
 
-    fn mosh_rewind(&self) {
-        let mut image = self.imp().image.borrow_mut();
+                match mode {
+                    Mode::Normal => {
+                        thread_image.save_settings();
+                        thread_image.new_seed();
+                        thread_image.mosh_file();
+                    }
+                    Mode::Rewind => {
+                        thread_image.load_settings();
+                        thread_image.mosh_file();
+                    }
+                    Mode::Seed => {
+                        thread_image.mosh_file();
+                        thread_image.new_seed();
+                    }
+                };
 
-        image.load_settings();
-        image.mosh_file();
-        self.imp()
-            .seed
-            .buffer()
-            .set_text(image.get_seed().to_string());
+                sender.send_blocking(true).unwrap();
+            });
 
-        self.imp().picture.set_paintable(Some(&image.get_texture()));
-    }
-
-    fn mosh(&self) {
-        let mut image = self.imp().image.borrow_mut();
-
-        if image.is_present {
-            image.save_settings();
-            image.new_seed();
-            image.mosh_file();
             self.imp()
                 .seed
                 .buffer()
-                .set_text(image.get_seed().to_string());
+                .set_text(image.clone().lock().unwrap().get_seed().to_string());
 
-            self.imp().picture.set_paintable(Some(&image.get_texture()));
+            glib::spawn_future_local(clone!(
+                #[weak(rename_to = image_clone)]
+                self,
+                async move {
+                    while let Ok(show_image) = receiver.recv().await {
+                        if show_image {
+                            image_clone.imp().spinner.set_visible(false);
+                            image_clone
+                                .imp()
+                                .seed
+                                .buffer()
+                                .set_text(image.lock().unwrap().get_seed().to_string());
+                            image_clone
+                                .imp()
+                                .picture
+                                .set_paintable(Some(&image.lock().unwrap().get_texture()));
+                        }
+                    }
+                }
+            ));
         }
+
+        Ok(())
     }
 
     fn load_file(&self, file: &gio::File) {
-        let mut image = self.imp().image.borrow_mut();
+        let cont = Arc::clone(&self.imp().image);
+        let mut image = cont.lock().unwrap();
 
         image.new_seed();
 
@@ -225,7 +258,8 @@ impl Window {
     fn save_file(&self, file: &gio::File) -> Result<(), MoshError> {
         self.imp()
             .image
-            .borrow_mut()
+            .lock()
+            .unwrap()
             .save_file(&file.path().unwrap())?;
 
         Ok(())

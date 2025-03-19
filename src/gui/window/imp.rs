@@ -3,9 +3,9 @@ use glib::subclass::InitializingObject;
 use gtk::{Button, CompositeTemplate, Entry, Label, SpinButton, Stack, ToggleButton, gio, glib};
 use png::ColorType;
 
-use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
 
-use crate::gui::window::Image;
+use crate::gui::window::{Image, Mode::Normal, Mode::Rewind};
 
 #[derive(CompositeTemplate)]
 #[template(resource = "/org/hellbyte/pixelmosh/window.ui")]
@@ -31,10 +31,12 @@ pub struct Window {
     #[template_child]
     pub btn_rewind: TemplateChild<Button>,
     #[template_child]
+    pub spinner: TemplateChild<adw::Spinner>,
+    #[template_child]
     pub toast_overlay: TemplateChild<adw::ToastOverlay>,
     pub dialog_open: gtk::FileDialog,
     pub dialog_save: gtk::FileDialog,
-    pub image: RefCell<Image>,
+    pub image: Arc<Mutex<Image>>,
     #[template_child]
     pub picture: TemplateChild<gtk::Picture>,
     #[template_child]
@@ -92,10 +94,11 @@ impl ObjectSubclass for Window {
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
             btn_rewind: TemplateChild::default(),
+            spinner: TemplateChild::default(),
             toast_overlay: TemplateChild::default(),
             dialog_open,
             dialog_save,
-            image: RefCell::new(Image::default()),
+            image: Arc::new(Mutex::new(Image::default())),
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
             seed: TemplateChild::default(),
@@ -111,7 +114,13 @@ impl ObjectSubclass for Window {
             "win.mosh-file",
             None,
             |win, _action_name, _action_target| {
-                win.mosh();
+                match win.mosh(Normal) {
+                    Ok(()) => {}
+                    Err(error) => {
+                        win.show_message(&format!("Failed: {error}"), 0);
+                    }
+                };
+
                 win.set_rewind_button();
             },
         );
@@ -120,7 +129,13 @@ impl ObjectSubclass for Window {
             "win.mosh-rewind",
             None,
             |win, _action_name, _action_target| {
-                win.mosh_rewind();
+                match win.mosh(Rewind) {
+                    Ok(()) => {}
+                    Err(error) => {
+                        win.show_message(&format!("Failed: {error}"), 0);
+                    }
+                };
+
                 win.set_rewind_button();
             },
         );
@@ -133,7 +148,7 @@ impl ObjectSubclass for Window {
                 if let Ok(file) = dialog.open_future(Some(&win)).await {
                     win.load_file(&file);
 
-                    let color_type = match win.imp().image.borrow_mut().core.data.color_type {
+                    let color_type = match win.imp().image.lock().unwrap().core.data.color_type {
                         ColorType::Grayscale => "Grayscale",
                         ColorType::Indexed => "Indexed",
                         ColorType::GrayscaleAlpha => "Grayscale/A",
@@ -191,42 +206,51 @@ impl ObjectImpl for Window {
 impl Window {
     #[template_callback]
     fn handle_min_rate(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_min_rate(button.value() as u16);
+        self.image
+            .lock()
+            .unwrap()
+            .set_min_rate(button.value() as u16);
     }
 
     #[template_callback]
     fn handle_max_rate(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_max_rate(button.value() as u16);
+        self.image
+            .lock()
+            .unwrap()
+            .set_max_rate(button.value() as u16);
     }
 
     #[template_callback]
     fn handle_pixelation(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_pixelation(button.value() as u8);
+        self.image
+            .lock()
+            .unwrap()
+            .set_pixelation(button.value() as u8);
     }
 
     #[template_callback]
     fn handle_line_shift(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_line_shift(button.value());
+        self.image.lock().unwrap().set_line_shift(button.value());
     }
 
     #[template_callback]
     fn handle_reverse(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_reverse(button.value());
+        self.image.lock().unwrap().set_reverse(button.value());
     }
 
     #[template_callback]
     fn handle_flip(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_flip(button.value());
+        self.image.lock().unwrap().set_flip(button.value());
     }
 
     #[template_callback]
     fn handle_channel_swap(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_channel_swap(button.value());
+        self.image.lock().unwrap().set_channel_swap(button.value());
     }
 
     #[template_callback]
     fn handle_channel_shift(&self, button: &gtk::SpinButton) {
-        self.image.borrow_mut().set_channel_shift(button.value());
+        self.image.lock().unwrap().set_channel_shift(button.value());
     }
 }
 
