@@ -159,8 +159,8 @@
                         <property name="visible">False</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
-                        <property name="width-request">24</property>
-                        <property name="height-request">24</property>
+                        <property name="width-request">20</property>
+                        <property name="height-request">20</property>
                       </object>
                     </child>
                     <child type="end">
