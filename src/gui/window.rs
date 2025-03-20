@@ -17,6 +17,7 @@ glib::wrapper! {
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
 }
 
+#[derive(PartialEq)]
 enum Mode {
     Normal,
     Rewind,
@@ -115,6 +116,19 @@ impl Window {
             }
         ));
 
+        self.imp().seed.connect_changed(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_| {
+                let seed = &window.imp().seed;
+                if seed.buffer().text().to_string().is_empty() {
+                    seed.set_icon_sensitive(Secondary, false);
+                } else {
+                    seed.set_icon_sensitive(Secondary, true);
+                }
+            }
+        ));
+
         self.set_stack();
     }
 
@@ -143,18 +157,20 @@ impl Window {
         self.imp().btn_rewind.set_sensitive(false);
         self.imp().btn_mosh.set_sensitive(false);
         let (sender, receiver) = async_channel::bounded(1);
-        let buffer = &self.imp().seed.buffer();
-        let seed = buffer.text().to_string();
         let image = Arc::clone(&self.imp().image);
 
-        if seed.parse::<u64>().is_err() {
-            image.lock().unwrap().new_seed();
-            self.imp()
-                .seed
-                .buffer()
-                .set_text(image.lock().unwrap().get_seed().to_string());
-        } else {
-            image.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
+        if mode == Mode::Seed {
+            let buffer = &self.imp().seed.buffer();
+            let seed = buffer.text().to_string();
+            if seed.parse::<u64>().is_err() {
+                image.lock().unwrap().new_seed();
+                self.imp()
+                    .seed
+                    .buffer()
+                    .set_text(image.lock().unwrap().get_seed().to_string());
+            } else {
+                image.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
+            }
         }
 
         if image.lock().unwrap().is_present {
@@ -221,11 +237,6 @@ impl Window {
     fn load_file(&self, file: &gio::File) {
         let mut image = self.imp().image.lock().unwrap();
         image.save_settings();
-
-        self.imp()
-            .seed
-            .buffer()
-            .set_text(image.get_seed().to_string());
 
         if image.open_file(&file.path().unwrap()).is_ok() {
             let data = &image.core.data;
