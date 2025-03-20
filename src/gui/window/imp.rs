@@ -31,6 +31,8 @@ pub struct Window {
     #[template_child]
     pub btn_rewind: TemplateChild<Button>,
     #[template_child]
+    pub btn_mosh: TemplateChild<Button>,
+    #[template_child]
     pub spinner: TemplateChild<adw::Spinner>,
     #[template_child]
     pub toast_overlay: TemplateChild<adw::ToastOverlay>,
@@ -94,6 +96,7 @@ impl ObjectSubclass for Window {
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
             btn_rewind: TemplateChild::default(),
+            btn_mosh: TemplateChild::default(),
             spinner: TemplateChild::default(),
             toast_overlay: TemplateChild::default(),
             dialog_open,
@@ -120,8 +123,6 @@ impl ObjectSubclass for Window {
                         win.show_message(&format!("Failed: {error}"), 0);
                     }
                 };
-
-                win.set_rewind_button();
             },
         );
 
@@ -135,8 +136,6 @@ impl ObjectSubclass for Window {
                         win.show_message(&format!("Failed: {error}"), 0);
                     }
                 };
-
-                win.set_rewind_button();
             },
         );
 
@@ -196,7 +195,6 @@ impl ObjectImpl for Window {
 
         obj.setup_callbacks();
         obj.setup_actions();
-        obj.setup_buttons();
         #[cfg(debug_assertions)]
         obj.setup_debug();
     }

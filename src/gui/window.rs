@@ -115,20 +115,7 @@ impl Window {
             }
         ));
 
-        self.imp().seed.connect_changed(clone!(
-            #[weak(rename_to = window)]
-            self,
-            move |_| {
-                window.set_seed_button();
-            }
-        ));
-
         self.set_stack();
-    }
-
-    fn setup_buttons(&self) {
-        self.set_seed_button();
-        self.set_rewind_button();
     }
 
     fn skip_placeholder(&self) {
@@ -151,26 +138,10 @@ impl Window {
         self.imp().image.lock().unwrap().set_ansi(value);
     }
 
-    fn set_seed_button(&self) {
-        let seed = &self.imp().seed;
-
-        if seed.buffer().text().to_string().is_empty() {
-            seed.set_icon_sensitive(Secondary, false);
-        } else {
-            seed.set_icon_sensitive(Secondary, true);
-        }
-    }
-
-    fn set_rewind_button(&self) {
-        if self.imp().image.lock().unwrap().settings.is_none() {
-            self.imp().btn_rewind.set_sensitive(false);
-        } else {
-            self.imp().btn_rewind.set_sensitive(true);
-        }
-    }
-
     fn mosh(&self, mode: Mode) -> Result<(), MoshError> {
         self.imp().spinner.set_visible(true);
+        self.imp().btn_rewind.set_sensitive(false);
+        self.imp().btn_mosh.set_sensitive(false);
         let (sender, receiver) = async_channel::bounded(1);
         let buffer = &self.imp().seed.buffer();
         let seed = buffer.text().to_string();
@@ -210,24 +181,31 @@ impl Window {
                 sender.send_blocking(true).unwrap();
             });
 
-            self.imp()
-                .seed
-                .buffer()
-                .set_text(image.clone().lock().unwrap().get_seed().to_string());
-
             glib::spawn_future_local(clone!(
-                #[weak(rename_to = image_clone)]
+                #[weak(rename_to = window_clone)]
                 self,
                 async move {
                     while let Ok(show_image) = receiver.recv().await {
                         if show_image {
-                            image_clone.imp().spinner.set_visible(false);
-                            image_clone
+                            let seed = &window_clone.imp().seed;
+                            window_clone.imp().spinner.set_visible(false);
+                            window_clone.imp().btn_mosh.set_sensitive(true);
+                            if window_clone.imp().image.lock().unwrap().settings.is_some() {
+                                window_clone.imp().btn_rewind.set_sensitive(true);
+                            }
+
+                            if seed.buffer().text().to_string().is_empty() {
+                                seed.set_icon_sensitive(Secondary, false);
+                            } else {
+                                seed.set_icon_sensitive(Secondary, true);
+                            }
+
+                            window_clone
                                 .imp()
                                 .seed
                                 .buffer()
                                 .set_text(image.lock().unwrap().get_seed().to_string());
-                            image_clone
+                            window_clone
                                 .imp()
                                 .picture
                                 .set_paintable(Some(&image.lock().unwrap().get_texture()));
