@@ -219,14 +219,20 @@ impl Window {
     }
 
     fn load_file(&self, file: &gio::File) {
-        let cont = Arc::clone(&self.imp().image);
-        let mut image = cont.lock().unwrap();
+        let mut image = self.imp().image.lock().unwrap();
+        image.save_settings();
 
-        image.new_seed();
+        self.imp()
+            .seed
+            .buffer()
+            .set_text(image.get_seed().to_string());
 
         if image.open_file(&file.path().unwrap()).is_ok() {
-            image.mosh_file();
-            self.imp().picture.set_paintable(Some(&image.get_texture()));
+            let data = &image.core.data;
+            let settings = &image.settings.clone().unwrap();
+            self.imp()
+                .picture
+                .set_paintable(Some(&Image::generate_texture(&data, &settings)));
             self.skip_placeholder();
         } else {
             self.set_instructions();

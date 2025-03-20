@@ -34,7 +34,7 @@ impl Image {
         }
     }
 
-    fn generate_texture(data: &mut MoshData, options: &MoshOptions) -> gdk::MemoryTexture {
+    pub fn generate_texture(data: &MoshData, options: &MoshOptions) -> gdk::MemoryTexture {
         let mut palette = None;
         let buf = &data.buf;
         let width = data.width;
