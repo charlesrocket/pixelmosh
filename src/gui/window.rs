@@ -235,19 +235,47 @@ impl Window {
     }
 
     fn load_file(&self, file: &gio::File) {
-        let mut base = self.imp().base.lock().unwrap();
-        base.save_settings();
+        self.skip_placeholder();
+        let (sender, receiver) = async_channel::bounded(1);
+        let base_arc = Arc::clone(&self.imp().base);
+        let base = base_arc.clone();
+        base.lock().unwrap().save_settings();
 
-        if base.open_file(&file.path().unwrap()).is_ok() {
-            let data = &base.core.data;
-            let settings = &base.settings.clone().unwrap();
-            self.imp()
-                .picture
-                .set_paintable(Some(&Base::generate_texture(&data, &settings)));
-            self.skip_placeholder();
-        } else {
-            self.set_instructions();
-        }
+        let thread_base = base_arc.clone();
+        let file_copy = file.clone();
+        gio::spawn_blocking(move || {
+            if thread_base
+                .lock()
+                .unwrap()
+                .open_file(&file_copy.path().unwrap())
+                .is_ok()
+            {
+                sender.send_blocking(true).unwrap();
+            } else {
+                sender.send_blocking(false).unwrap();
+            }
+        });
+
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = window_clone)]
+            self,
+            async move {
+                while let Ok(image_loaded) = receiver.recv().await {
+                    let base_clone = base_arc.clone();
+                    let main_base = base_clone.lock().unwrap();
+                    if image_loaded {
+                        let data = &main_base.core.data;
+                        let settings = &main_base.settings.clone().unwrap();
+                        window_clone
+                            .imp()
+                            .picture
+                            .set_paintable(Some(&Base::generate_texture(data, settings)));
+                    } else {
+                        window_clone.set_instructions();
+                    }
+                }
+            }
+        ));
     }
 
     fn save_file(&self, file: &gio::File) -> Result<(), MoshError> {

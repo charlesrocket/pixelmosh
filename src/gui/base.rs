@@ -109,7 +109,7 @@ impl Base {
         };
 
         self.core.mosh().unwrap();
-        self.texture = Self::generate_texture(&mut self.core.data, &self.core.options).upcast();
+        self.texture = Self::generate_texture(&self.core.data, &self.core.options).upcast();
     }
 
     pub fn get_texture(&mut self) -> gdk::Texture {
