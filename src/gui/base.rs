@@ -10,14 +10,14 @@ use libmosh::{
     ops::{read_file, write_file},
 };
 
-pub struct Image {
+pub struct Base {
     pub core: MoshCore,
     pub texture: gdk::Texture,
     pub settings: Option<MoshOptions>,
     pub is_present: bool,
 }
 
-impl Image {
+impl Base {
     fn new() -> Self {
         Self {
             core: MoshCore::new(),
@@ -115,9 +115,7 @@ impl Image {
     pub fn get_texture(&mut self) -> gdk::Texture {
         self.texture.clone()
     }
-}
 
-impl Image {
     pub fn new_seed(&mut self) {
         self.core.options.new_seed();
     }
@@ -178,7 +176,7 @@ impl Image {
     }
 }
 
-impl Default for Image {
+impl Default for Base {
     fn default() -> Self {
         Self::new()
     }

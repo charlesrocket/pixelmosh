@@ -5,7 +5,7 @@ use png::ColorType;
 
 use std::sync::{Arc, Mutex};
 
-use crate::gui::window::{Image, Mode::Normal, Mode::Rewind};
+use crate::gui::window::{Base, Mode::Normal, Mode::Rewind};
 
 #[derive(CompositeTemplate)]
 #[template(resource = "/org/hellbyte/pixelmosh/window.ui")]
@@ -38,7 +38,7 @@ pub struct Window {
     pub toast_overlay: TemplateChild<adw::ToastOverlay>,
     pub dialog_open: gtk::FileDialog,
     pub dialog_save: gtk::FileDialog,
-    pub image: Arc<Mutex<Image>>,
+    pub base: Arc<Mutex<Base>>,
     #[template_child]
     pub picture: TemplateChild<gtk::Picture>,
     #[template_child]
@@ -101,7 +101,7 @@ impl ObjectSubclass for Window {
             toast_overlay: TemplateChild::default(),
             dialog_open,
             dialog_save,
-            image: Arc::new(Mutex::new(Image::default())),
+            base: Arc::new(Mutex::new(Base::default())),
             picture: TemplateChild::default(),
             stack: TemplateChild::default(),
             seed: TemplateChild::default(),
@@ -147,7 +147,7 @@ impl ObjectSubclass for Window {
                 if let Ok(file) = dialog.open_future(Some(&win)).await {
                     win.load_file(&file);
 
-                    let color_type = match win.imp().image.lock().unwrap().core.data.color_type {
+                    let color_type = match win.imp().base.lock().unwrap().core.data.color_type {
                         ColorType::Grayscale => "Grayscale",
                         ColorType::Indexed => "Indexed",
                         ColorType::GrayscaleAlpha => "Grayscale/A",
@@ -204,7 +204,7 @@ impl ObjectImpl for Window {
 impl Window {
     #[template_callback]
     fn handle_min_rate(&self, button: &gtk::SpinButton) {
-        self.image
+        self.base
             .lock()
             .unwrap()
             .set_min_rate(button.value() as u16);
@@ -212,7 +212,7 @@ impl Window {
 
     #[template_callback]
     fn handle_max_rate(&self, button: &gtk::SpinButton) {
-        self.image
+        self.base
             .lock()
             .unwrap()
             .set_max_rate(button.value() as u16);
@@ -220,7 +220,7 @@ impl Window {
 
     #[template_callback]
     fn handle_pixelation(&self, button: &gtk::SpinButton) {
-        self.image
+        self.base
             .lock()
             .unwrap()
             .set_pixelation(button.value() as u8);
@@ -228,27 +228,27 @@ impl Window {
 
     #[template_callback]
     fn handle_line_shift(&self, button: &gtk::SpinButton) {
-        self.image.lock().unwrap().set_line_shift(button.value());
+        self.base.lock().unwrap().set_line_shift(button.value());
     }
 
     #[template_callback]
     fn handle_reverse(&self, button: &gtk::SpinButton) {
-        self.image.lock().unwrap().set_reverse(button.value());
+        self.base.lock().unwrap().set_reverse(button.value());
     }
 
     #[template_callback]
     fn handle_flip(&self, button: &gtk::SpinButton) {
-        self.image.lock().unwrap().set_flip(button.value());
+        self.base.lock().unwrap().set_flip(button.value());
     }
 
     #[template_callback]
     fn handle_channel_swap(&self, button: &gtk::SpinButton) {
-        self.image.lock().unwrap().set_channel_swap(button.value());
+        self.base.lock().unwrap().set_channel_swap(button.value());
     }
 
     #[template_callback]
     fn handle_channel_shift(&self, button: &gtk::SpinButton) {
-        self.image.lock().unwrap().set_channel_shift(button.value());
+        self.base.lock().unwrap().set_channel_shift(button.value());
     }
 }
 

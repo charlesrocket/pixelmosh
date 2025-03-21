@@ -3,7 +3,7 @@ use gtk::{CssProvider, gdk::Display};
 
 use window::Window;
 
-mod image;
+mod base;
 mod window;
 
 const APP_ID: &str = "org.hellbyte.pixelmosh";

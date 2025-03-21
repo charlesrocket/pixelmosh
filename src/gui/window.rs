@@ -6,7 +6,7 @@ use libmosh::err::MoshError;
 
 use std::sync::Arc;
 
-use crate::gui::image::Image;
+use crate::gui::base::Base;
 
 mod imp;
 
@@ -149,7 +149,7 @@ impl Window {
     }
 
     fn toggle_ansi(&self, value: bool) {
-        self.imp().image.lock().unwrap().set_ansi(value);
+        self.imp().base.lock().unwrap().set_ansi(value);
     }
 
     fn mosh(&self, mode: Mode) -> Result<(), MoshError> {
@@ -157,40 +157,40 @@ impl Window {
         self.imp().btn_rewind.set_sensitive(false);
         self.imp().btn_mosh.set_sensitive(false);
         let (sender, receiver) = async_channel::bounded(1);
-        let image = Arc::clone(&self.imp().image);
+        let base = Arc::clone(&self.imp().base);
 
         if mode == Mode::Seed {
             let buffer = &self.imp().seed.buffer();
             let seed = buffer.text().to_string();
             if seed.parse::<u64>().is_err() {
-                image.lock().unwrap().new_seed();
+                base.lock().unwrap().new_seed();
                 self.imp()
                     .seed
                     .buffer()
-                    .set_text(image.lock().unwrap().get_seed().to_string());
+                    .set_text(base.lock().unwrap().get_seed().to_string());
             } else {
-                image.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
+                base.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
             }
         }
 
-        if image.lock().unwrap().is_present {
-            let image_spawn_clone = image.clone();
+        if base.lock().unwrap().is_present {
+            let base_spawn_clone = base.clone();
             gio::spawn_blocking(move || {
-                let mut thread_image = image_spawn_clone.lock().unwrap();
+                let mut thread_base = base_spawn_clone.lock().unwrap();
 
                 match mode {
                     Mode::Normal => {
-                        thread_image.save_settings();
-                        thread_image.new_seed();
-                        thread_image.mosh_file();
+                        thread_base.save_settings();
+                        thread_base.new_seed();
+                        thread_base.mosh_file();
                     }
                     Mode::Rewind => {
-                        thread_image.load_settings();
-                        thread_image.mosh_file();
+                        thread_base.load_settings();
+                        thread_base.mosh_file();
                     }
                     Mode::Seed => {
-                        thread_image.mosh_file();
-                        thread_image.new_seed();
+                        thread_base.mosh_file();
+                        thread_base.new_seed();
                     }
                 };
 
@@ -206,7 +206,7 @@ impl Window {
                             let seed = &window_clone.imp().seed;
                             window_clone.imp().spinner.set_visible(false);
                             window_clone.imp().btn_mosh.set_sensitive(true);
-                            if window_clone.imp().image.lock().unwrap().settings.is_some() {
+                            if window_clone.imp().base.lock().unwrap().settings.is_some() {
                                 window_clone.imp().btn_rewind.set_sensitive(true);
                             }
 
@@ -220,11 +220,11 @@ impl Window {
                                 .imp()
                                 .seed
                                 .buffer()
-                                .set_text(image.lock().unwrap().get_seed().to_string());
+                                .set_text(base.lock().unwrap().get_seed().to_string());
                             window_clone
                                 .imp()
                                 .picture
-                                .set_paintable(Some(&image.lock().unwrap().get_texture()));
+                                .set_paintable(Some(&base.lock().unwrap().get_texture()));
                         }
                     }
                 }
@@ -235,15 +235,15 @@ impl Window {
     }
 
     fn load_file(&self, file: &gio::File) {
-        let mut image = self.imp().image.lock().unwrap();
-        image.save_settings();
+        let mut base = self.imp().base.lock().unwrap();
+        base.save_settings();
 
-        if image.open_file(&file.path().unwrap()).is_ok() {
-            let data = &image.core.data;
-            let settings = &image.settings.clone().unwrap();
+        if base.open_file(&file.path().unwrap()).is_ok() {
+            let data = &base.core.data;
+            let settings = &base.settings.clone().unwrap();
             self.imp()
                 .picture
-                .set_paintable(Some(&Image::generate_texture(&data, &settings)));
+                .set_paintable(Some(&Base::generate_texture(&data, &settings)));
             self.skip_placeholder();
         } else {
             self.set_instructions();
@@ -252,7 +252,7 @@ impl Window {
 
     fn save_file(&self, file: &gio::File) -> Result<(), MoshError> {
         self.imp()
-            .image
+            .base
             .lock()
             .unwrap()
             .save_file(&file.path().unwrap())?;
