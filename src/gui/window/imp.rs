@@ -1,6 +1,8 @@
 use adw::{prelude::*, subclass::prelude::*};
 use glib::subclass::InitializingObject;
-use gtk::{Button, CompositeTemplate, Entry, Label, SpinButton, Stack, ToggleButton, gio, glib};
+use gtk::{
+    Button, CompositeTemplate, Entry, Label, MenuButton, SpinButton, Stack, ToggleButton, gio, glib,
+};
 use png::ColorType;
 
 use std::sync::{Arc, Mutex};
@@ -28,6 +30,12 @@ pub struct Window {
     pub btn_channel_swap: TemplateChild<SpinButton>,
     #[template_child]
     pub btn_channel_shift: TemplateChild<SpinButton>,
+    #[template_child]
+    pub btn_open: TemplateChild<Button>,
+    #[template_child]
+    pub btn_save: TemplateChild<Button>,
+    #[template_child]
+    pub btn_menu: TemplateChild<MenuButton>,
     #[template_child]
     pub btn_rewind: TemplateChild<Button>,
     #[template_child]
@@ -95,6 +103,9 @@ impl ObjectSubclass for Window {
             btn_flip: TemplateChild::default(),
             btn_channel_swap: TemplateChild::default(),
             btn_channel_shift: TemplateChild::default(),
+            btn_open: TemplateChild::default(),
+            btn_save: TemplateChild::default(),
+            btn_menu: TemplateChild::default(),
             btn_rewind: TemplateChild::default(),
             btn_mosh: TemplateChild::default(),
             spinner: TemplateChild::default(),

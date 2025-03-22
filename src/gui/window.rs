@@ -152,10 +152,38 @@ impl Window {
         self.imp().base.lock().unwrap().set_ansi(value);
     }
 
+    fn busy(&self, is_busy: bool) {
+        let seed = &self.imp().seed;
+
+        if is_busy {
+            self.imp().spinner.set_visible(true);
+            self.imp().btn_rewind.set_sensitive(false);
+            self.imp().btn_mosh.set_sensitive(false);
+            self.imp().btn_open.set_sensitive(false);
+            self.imp().btn_save.set_sensitive(false);
+            self.imp().btn_menu.set_sensitive(false);
+        } else {
+            self.imp().spinner.set_visible(false);
+            self.imp().btn_mosh.set_sensitive(true);
+            self.imp().btn_open.set_sensitive(true);
+            self.imp().btn_save.set_sensitive(true);
+            self.imp().btn_menu.set_sensitive(true);
+
+            if self.imp().base.lock().unwrap().settings.is_some() {
+                self.imp().btn_rewind.set_sensitive(true);
+            }
+
+            if seed.buffer().text().to_string().is_empty() {
+                seed.set_icon_sensitive(Secondary, false);
+            } else {
+                seed.set_icon_sensitive(Secondary, true);
+            }
+        }
+    }
+
     fn mosh(&self, mode: Mode) -> Result<(), MoshError> {
-        self.imp().spinner.set_visible(true);
-        self.imp().btn_rewind.set_sensitive(false);
-        self.imp().btn_mosh.set_sensitive(false);
+        self.busy(true);
+
         let (sender, receiver) = async_channel::bounded(1);
         let base = Arc::clone(&self.imp().base);
 
@@ -203,19 +231,7 @@ impl Window {
                 async move {
                     while let Ok(show_image) = receiver.recv().await {
                         if show_image {
-                            let seed = &window_clone.imp().seed;
-                            window_clone.imp().spinner.set_visible(false);
-                            window_clone.imp().btn_mosh.set_sensitive(true);
-                            if window_clone.imp().base.lock().unwrap().settings.is_some() {
-                                window_clone.imp().btn_rewind.set_sensitive(true);
-                            }
-
-                            if seed.buffer().text().to_string().is_empty() {
-                                seed.set_icon_sensitive(Secondary, false);
-                            } else {
-                                seed.set_icon_sensitive(Secondary, true);
-                            }
-
+                            window_clone.busy(false);
                             window_clone
                                 .imp()
                                 .seed

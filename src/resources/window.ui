@@ -125,7 +125,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="btn_open">
                         <property name="action-name">win.open-file</property>
                         <property name="icon-name">document-open-symbolic</property>
                         <property name="tooltip-text">New image</property>
@@ -148,7 +148,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="btn_save">
                         <property name="action-name">win.save-file</property>
                         <property name="icon-name">document-save-symbolic</property>
                         <property name="tooltip-text">Save to file</property>
@@ -164,7 +164,7 @@
                       </object>
                     </child>
                     <child type="end">
-                      <object class="GtkMenuButton">
+                      <object class="GtkMenuButton" id="btn_menu">
                         <property name="icon-name">open-menu-symbolic</property>
                         <property name="menu-model">main-menu</property>
                         <property name="tooltip-text" translatable="yes">Menu</property>
