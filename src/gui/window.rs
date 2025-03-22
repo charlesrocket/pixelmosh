@@ -153,24 +153,25 @@ impl Window {
     }
 
     fn busy(&self, is_busy: bool) {
-        let seed = &self.imp().seed;
+        let window = self.imp();
+        let seed = &window.seed;
 
         if is_busy {
-            self.imp().spinner.set_visible(true);
-            self.imp().btn_rewind.set_sensitive(false);
-            self.imp().btn_mosh.set_sensitive(false);
-            self.imp().btn_open.set_sensitive(false);
-            self.imp().btn_save.set_sensitive(false);
-            self.imp().btn_menu.set_sensitive(false);
+            window.spinner.set_visible(true);
+            window.btn_rewind.set_sensitive(false);
+            window.btn_mosh.set_sensitive(false);
+            window.btn_open.set_sensitive(false);
+            window.btn_save.set_sensitive(false);
+            window.btn_menu.set_sensitive(false);
         } else {
-            self.imp().spinner.set_visible(false);
-            self.imp().btn_mosh.set_sensitive(true);
-            self.imp().btn_open.set_sensitive(true);
-            self.imp().btn_save.set_sensitive(true);
-            self.imp().btn_menu.set_sensitive(true);
+            window.spinner.set_visible(false);
+            window.btn_mosh.set_sensitive(true);
+            window.btn_open.set_sensitive(true);
+            window.btn_save.set_sensitive(true);
+            window.btn_menu.set_sensitive(true);
 
-            if self.imp().base.lock().unwrap().settings.is_some() {
-                self.imp().btn_rewind.set_sensitive(true);
+            if window.base.lock().unwrap().settings.is_some() {
+                window.btn_rewind.set_sensitive(true);
             }
 
             if seed.buffer().text().to_string().is_empty() {
