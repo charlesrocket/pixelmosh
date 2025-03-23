@@ -229,9 +229,8 @@ impl Window {
         }
 
         let base = Arc::clone(&self.imp().base);
-        let base_spawn_clone = base.clone();
         gio::spawn_blocking(move || {
-            let mut thread_base = base_spawn_clone.lock().unwrap();
+            let mut thread_base = base.lock().unwrap();
 
             match mode {
                 Mode::Normal => {
@@ -273,11 +272,11 @@ impl Window {
         self.busy(true);
         let (sender, receiver) = async_channel::bounded(1);
         let base_arc = Arc::clone(&self.imp().base);
-        let thread_base_clone = base_arc.clone();
+        let base_clone = base_arc.clone();
         let file_copy = file.clone();
 
         gio::spawn_blocking(move || {
-            let mut base = thread_base_clone.lock().unwrap();
+            let mut base = base_clone.lock().unwrap();
             base.save_settings();
 
             if base.open_file(&file_copy.path().unwrap()).is_ok() {
@@ -292,9 +291,9 @@ impl Window {
             self,
             async move {
                 while let Ok(image_loaded) = receiver.recv().await {
-                    let base_clone = base_arc.clone();
+                    let base_clone_w = base_arc.clone();
                     if image_loaded {
-                        let main_base = base_clone.lock().unwrap();
+                        let main_base = base_clone_w.lock().unwrap();
                         let data = &main_base.core.data;
                         let settings = &main_base.settings.clone().unwrap();
 
