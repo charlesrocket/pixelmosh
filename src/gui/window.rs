@@ -270,20 +270,17 @@ impl Window {
 
     fn load_file(&self, file: &gio::File) {
         self.skip_placeholder();
+        self.busy(true);
         let (sender, receiver) = async_channel::bounded(1);
         let base_arc = Arc::clone(&self.imp().base);
-        let base = base_arc.clone();
-        base.lock().unwrap().save_settings();
-
-        let thread_base = base_arc.clone();
+        let thread_base_clone = base_arc.clone();
         let file_copy = file.clone();
+
         gio::spawn_blocking(move || {
-            if thread_base
-                .lock()
-                .unwrap()
-                .open_file(&file_copy.path().unwrap())
-                .is_ok()
-            {
+            let mut base = thread_base_clone.lock().unwrap();
+            base.save_settings();
+
+            if base.open_file(&file_copy.path().unwrap()).is_ok() {
                 sender.send_blocking(true).unwrap();
             } else {
                 sender.send_blocking(false).unwrap();
@@ -296,10 +293,11 @@ impl Window {
             async move {
                 while let Ok(image_loaded) = receiver.recv().await {
                     let base_clone = base_arc.clone();
-                    let main_base = base_clone.lock().unwrap();
                     if image_loaded {
+                        let main_base = base_clone.lock().unwrap();
                         let data = &main_base.core.data;
                         let settings = &main_base.settings.clone().unwrap();
+
                         window_clone
                             .imp()
                             .picture
@@ -307,6 +305,8 @@ impl Window {
                     } else {
                         window_clone.set_instructions();
                     }
+
+                    window_clone.busy(false);
                 }
             }
         ));
