@@ -103,6 +103,19 @@ impl Window {
             }
         ));
 
+        self.imp().seed.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_| {
+                match window.mosh(Mode::Seed) {
+                    Ok(()) => {}
+                    Err(error) => {
+                        window.show_message(&format!("Failed: {error}"), 0);
+                    }
+                };
+            }
+        ));
+
         self.imp().seed.connect_icon_release(clone!(
             #[weak(rename_to = window)]
             self,
@@ -152,6 +165,19 @@ impl Window {
         self.imp().base.lock().unwrap().set_ansi(value);
     }
 
+    fn parse_seed(&self) {
+        let mut base = self.imp().base.lock().unwrap();
+        let buffer = &self.imp().seed.buffer();
+        let seed = buffer.text().to_string();
+
+        if seed.parse::<u64>().is_err() {
+            base.new_seed();
+            self.update_seed();
+        } else {
+            base.set_seed(seed.parse::<u64>().unwrap());
+        }
+    }
+
     fn update_seed(&self) {
         let seed = self.imp().base.lock().unwrap().get_seed();
         self.imp().seed.buffer().set_text(seed.to_string());
@@ -197,19 +223,12 @@ impl Window {
         self.busy(true);
 
         let (sender, receiver) = async_channel::bounded(1);
-        let base = Arc::clone(&self.imp().base);
 
         if mode == Mode::Seed {
-            let buffer = &self.imp().seed.buffer();
-            let seed = buffer.text().to_string();
-            if seed.parse::<u64>().is_err() {
-                base.lock().unwrap().new_seed();
-                self.update_seed();
-            } else {
-                base.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
-            }
+            self.parse_seed();
         }
 
+        let base = Arc::clone(&self.imp().base);
         let base_spawn_clone = base.clone();
         gio::spawn_blocking(move || {
             let mut thread_base = base_spawn_clone.lock().unwrap();
@@ -226,7 +245,6 @@ impl Window {
                 }
                 Mode::Seed => {
                     thread_base.mosh_file();
-                    thread_base.new_seed();
                 }
             };
 
