@@ -152,6 +152,17 @@ impl Window {
         self.imp().base.lock().unwrap().set_ansi(value);
     }
 
+    fn update_seed(&self) {
+        let seed = self.imp().base.lock().unwrap().get_seed();
+        self.imp().seed.buffer().set_text(seed.to_string());
+    }
+
+    fn update_picture(&self) {
+        let mut base = self.imp().base.lock().unwrap();
+        let texture = base.get_texture();
+        self.imp().picture.set_paintable(Some(&texture));
+    }
+
     fn busy(&self, is_busy: bool) {
         let window = self.imp();
         let seed = &window.seed;
@@ -193,60 +204,48 @@ impl Window {
             let seed = buffer.text().to_string();
             if seed.parse::<u64>().is_err() {
                 base.lock().unwrap().new_seed();
-                self.imp()
-                    .seed
-                    .buffer()
-                    .set_text(base.lock().unwrap().get_seed().to_string());
+                self.update_seed();
             } else {
                 base.lock().unwrap().set_seed(seed.parse::<u64>().unwrap());
             }
         }
 
-        if base.lock().unwrap().is_present {
-            let base_spawn_clone = base.clone();
-            gio::spawn_blocking(move || {
-                let mut thread_base = base_spawn_clone.lock().unwrap();
+        let base_spawn_clone = base.clone();
+        gio::spawn_blocking(move || {
+            let mut thread_base = base_spawn_clone.lock().unwrap();
 
-                match mode {
-                    Mode::Normal => {
-                        thread_base.save_settings();
-                        thread_base.new_seed();
-                        thread_base.mosh_file();
-                    }
-                    Mode::Rewind => {
-                        thread_base.load_settings();
-                        thread_base.mosh_file();
-                    }
-                    Mode::Seed => {
-                        thread_base.mosh_file();
-                        thread_base.new_seed();
-                    }
-                };
+            match mode {
+                Mode::Normal => {
+                    thread_base.save_settings();
+                    thread_base.new_seed();
+                    thread_base.mosh_file();
+                }
+                Mode::Rewind => {
+                    thread_base.load_settings();
+                    thread_base.mosh_file();
+                }
+                Mode::Seed => {
+                    thread_base.mosh_file();
+                    thread_base.new_seed();
+                }
+            };
 
-                sender.send_blocking(true).unwrap();
-            });
+            sender.send_blocking(true).unwrap();
+        });
 
-            glib::spawn_future_local(clone!(
-                #[weak(rename_to = window_clone)]
-                self,
-                async move {
-                    while let Ok(show_image) = receiver.recv().await {
-                        if show_image {
-                            window_clone.busy(false);
-                            window_clone
-                                .imp()
-                                .seed
-                                .buffer()
-                                .set_text(base.lock().unwrap().get_seed().to_string());
-                            window_clone
-                                .imp()
-                                .picture
-                                .set_paintable(Some(&base.lock().unwrap().get_texture()));
-                        }
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = window_clone)]
+            self,
+            async move {
+                while let Ok(show_image) = receiver.recv().await {
+                    if show_image {
+                        window_clone.busy(false);
+                        window_clone.update_seed();
+                        window_clone.update_picture();
                     }
                 }
-            ));
-        }
+            }
+        ));
 
         Ok(())
     }

@@ -14,7 +14,6 @@ pub struct Base {
     pub core: MoshCore,
     pub texture: gdk::Texture,
     pub settings: Option<MoshOptions>,
-    pub is_present: bool,
 }
 
 impl Base {
@@ -30,7 +29,6 @@ impl Base {
             )
             .upcast(),
             settings: None,
-            is_present: false,
         }
     }
 
@@ -89,7 +87,6 @@ impl Base {
         let input = read_file(file)?;
 
         self.core.read_image(&input)?;
-        self.is_present = true;
 
         Ok(())
     }
