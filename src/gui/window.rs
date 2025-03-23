@@ -166,15 +166,22 @@ impl Window {
     }
 
     fn parse_seed(&self) {
-        let mut base = self.imp().base.lock().unwrap();
         let buffer = &self.imp().seed.buffer();
         let seed = buffer.text().to_string();
+        let filtered_seed: String = seed.chars().filter(|c| c.is_numeric()).collect();
 
-        if seed.parse::<u64>().is_err() {
-            base.new_seed();
+        if filtered_seed.parse::<u64>().is_err()
+            || filtered_seed.is_empty()
+            || filtered_seed.len() > u64::MAX.try_into().unwrap()
+        {
+            self.imp().base.lock().unwrap().new_seed();
             self.update_seed();
         } else {
-            base.set_seed(seed.parse::<u64>().unwrap());
+            self.imp()
+                .base
+                .lock()
+                .unwrap()
+                .set_seed(filtered_seed.parse::<u64>().unwrap());
         }
     }
 
