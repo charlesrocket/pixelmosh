@@ -99,7 +99,7 @@ impl Window {
             #[weak(rename_to = window)]
             self,
             move |button| {
-                window.toggle_ansi(button.is_active());
+                window.set_ansi(button.is_active());
             }
         ));
 
@@ -161,7 +161,7 @@ impl Window {
         self.imp().color_type.set_label(label);
     }
 
-    fn toggle_ansi(&self, value: bool) {
+    fn set_ansi(&self, value: bool) {
         self.imp().base.lock().unwrap().set_ansi(value);
     }
 
@@ -269,6 +269,7 @@ impl Window {
 
     fn load_file(&self, file: &gio::File) {
         self.skip_placeholder();
+        self.imp().btn_ansi.set_active(false);
         self.busy(true);
         let (sender, receiver) = async_channel::bounded(1);
         let base_arc = Arc::clone(&self.imp().base);
