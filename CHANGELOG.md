@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.0] - 2025-03-23
+
+### Bug Fixes
+
+- Adjust spinner
+- Fix button states
+- Fix `Window::load_file()`
+- Improve seed entry
+- Unblock `load_file()`
+- Disable main buttons during processing
+- Fix seed mode
+- Improve file load
+- Fix ansi button
+- Filter seed entries
+
+### Features
+
+- Add spinner
+
+### Operations
+
+- Exclude beta/nightly from release
+
+### Refactor
+
+- `Image` -> `Base`
+- Improve `Window::busy()`
+- Drop `Base::is_present`
+- Fix redundant clones
+
+### Build
+
+- Make `async-channel` optional
+
 ## [4.0.1] - 2025-03-16
 
 ### Bug Fixes
