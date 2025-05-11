@@ -47,7 +47,7 @@ impl Base {
             palette = Some(libmosh::generate_palette());
         } else if color_type == ColorType::Indexed {
             palette.clone_from(&data.palette);
-        };
+        }
 
         let (format, stride) = match color_type {
             ColorType::Grayscale => (gdk::MemoryFormat::G8, (width)),
@@ -103,7 +103,7 @@ impl Base {
 
         if min_rate == max_rate {
             self.core.options.max_rate = max_rate + 1;
-        };
+        }
 
         self.core.mosh().unwrap();
         self.texture = Self::generate_texture(&self.core.data, &self.core.options).upcast();

@@ -455,11 +455,11 @@ impl MoshData {
 
         if let Some(do_channel_swap) = channel_swap {
             do_channel_swap.glitch(chunk);
-        };
+        }
 
         if flip {
             MoshChunk::Flip.glitch(chunk);
-        };
+        }
 
         Ok(())
     }

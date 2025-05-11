@@ -272,7 +272,7 @@ fn cli(input: PathBuf, output: &str, mut container: MoshCore, batch: u8) {
             eprintln!("{error}");
             std::process::exit(1)
         }
-    };
+    }
 
     spinner.println(format!("mode: {}", color_type_str(&container)));
 

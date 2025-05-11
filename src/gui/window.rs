@@ -112,7 +112,7 @@ impl Window {
                     Err(error) => {
                         window.show_message(&format!("Failed: {error}"), 0);
                     }
-                };
+                }
             }
         ));
 
@@ -125,7 +125,7 @@ impl Window {
                     Err(error) => {
                         window.show_message(&format!("Failed: {error}"), 0);
                     }
-                };
+                }
             }
         ));
 
@@ -252,7 +252,7 @@ impl Window {
                 Mode::Seed => {
                     thread_base.mosh_file();
                 }
-            };
+            }
 
             sender.send_blocking(true).unwrap();
         });

@@ -56,12 +56,12 @@ pub fn write_file(dest: &str, data: &MoshData, options: &MoshOptions) -> Result<
                 Some(palette) => encoder.set_palette(palette),
                 None => return Err(MoshError::InvalidPalette),
             }
-        };
+        }
     }
 
     if options.ansi {
         encoder.set_palette(crate::generate_palette());
-    };
+    }
 
     let mut writer = encoder.write_header()?;
     writer.write_image_data(&data.buf)?;
