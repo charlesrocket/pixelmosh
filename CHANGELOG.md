@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.1] - 2025-05-11
+
+### Miscellaneous tasks
+
+- Add errors todo
+
+### Styling
+
+- Remove extra semicolons
+
+### Build
+
+- Add lto profile
+
 ## [4.1.0] - 2025-03-23
 
 ### Bug Fixes
