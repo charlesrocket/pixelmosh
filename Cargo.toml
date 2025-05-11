@@ -12,9 +12,8 @@ readme = "README.md"
 build = "build.rs"
 exclude = ["codecov.yml", "example*", ".*"]
 
-[profile.release]
-debug = 0
-strip = true
+[profile.release-lto]
+inherits = "release"
 lto = true
 
 [lib]
