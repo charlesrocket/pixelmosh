@@ -226,6 +226,7 @@ impl Window {
         }
     }
 
+    // TODO send errors
     fn mosh(&self, mode: Mode) -> Result<(), MoshError> {
         self.busy(true);
 
