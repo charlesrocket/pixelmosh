@@ -169,7 +169,7 @@ impl ObjectSubclass for Window {
                 if let Ok(file) = dialog.save_future(Some(&win)).await {
                     match win.save_file(&file) {
                         Err(error) => {
-                            win.show_message(&format!("Error saving the image: {error}"), 0);
+                            win.show_message(&format!("Error saving the image: {error}"), 10);
                         }
                         _ => {
                             win.show_message("DONE", 3);
