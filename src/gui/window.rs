@@ -107,12 +107,7 @@ impl Window {
             #[weak(rename_to = window)]
             self,
             move |_| {
-                match window.mosh(Mode::Seed) {
-                    Ok(()) => {}
-                    Err(error) => {
-                        window.show_message(&format!("Failed: {error}"), 0);
-                    }
-                }
+                window.mosh(Mode::Seed);
             }
         ));
 
@@ -120,12 +115,7 @@ impl Window {
             #[weak(rename_to = window)]
             self,
             move |_, _| {
-                match window.mosh(Mode::Seed) {
-                    Ok(()) => {}
-                    Err(error) => {
-                        window.show_message(&format!("Failed: {error}"), 0);
-                    }
-                }
+                window.mosh(Mode::Seed);
             }
         ));
 
@@ -226,11 +216,11 @@ impl Window {
         }
     }
 
-    // TODO send errors
-    fn mosh(&self, mode: Mode) -> Result<(), MoshError> {
+    fn mosh(&self, mode: Mode) {
         self.busy(true);
 
         let (sender, receiver) = async_channel::bounded(1);
+        let (sender_e, receiver_e) = async_channel::bounded(1);
 
         if mode == Mode::Seed {
             self.parse_seed();
@@ -244,18 +234,23 @@ impl Window {
                 Mode::Normal => {
                     thread_base.save_settings();
                     thread_base.new_seed();
-                    thread_base.mosh_file();
+                    match thread_base.mosh_file() {
+                        Ok(()) => sender.send_blocking(true).unwrap(),
+                        Err(error) => sender_e.send_blocking(error).unwrap(),
+                    }
                 }
                 Mode::Rewind => {
                     thread_base.load_settings();
-                    thread_base.mosh_file();
+                    match thread_base.mosh_file() {
+                        Ok(()) => sender.send_blocking(true).unwrap(),
+                        Err(error) => sender_e.send_blocking(error).unwrap(),
+                    }
                 }
-                Mode::Seed => {
-                    thread_base.mosh_file();
-                }
+                Mode::Seed => match thread_base.mosh_file() {
+                    Ok(()) => sender.send_blocking(true).unwrap(),
+                    Err(error) => sender_e.send_blocking(error).unwrap(),
+                },
             }
-
-            sender.send_blocking(true).unwrap();
         });
 
         glib::spawn_future_local(clone!(
@@ -272,7 +267,15 @@ impl Window {
             }
         ));
 
-        Ok(())
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = window_clone)]
+            self,
+            async move {
+                while let Ok(error) = receiver_e.recv().await {
+                    window_clone.show_message(&format!("Failed: {error}"), 0);
+                }
+            }
+        ));
     }
 
     fn load_file(&self, file: &gio::File) {

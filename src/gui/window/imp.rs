@@ -127,23 +127,13 @@ impl ObjectSubclass for Window {
         klass.install_action(
             "win.mosh-file",
             None,
-            |win, _action_name, _action_target| match win.mosh(Normal) {
-                Ok(()) => {}
-                Err(error) => {
-                    win.show_message(&format!("Failed: {error}"), 0);
-                }
-            },
+            |win, _action_name, _action_target| win.mosh(Normal),
         );
 
         klass.install_action(
             "win.mosh-rewind",
             None,
-            |win, _action_name, _action_target| match win.mosh(Rewind) {
-                Ok(()) => {}
-                Err(error) => {
-                    win.show_message(&format!("Failed: {error}"), 0);
-                }
-            },
+            |win, _action_name, _action_target| win.mosh(Rewind),
         );
 
         klass.install_action_async(

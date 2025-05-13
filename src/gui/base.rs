@@ -97,7 +97,7 @@ impl Base {
         Ok(())
     }
 
-    pub fn mosh_file(&mut self) {
+    pub fn mosh_file(&mut self) -> Result<(), MoshError> {
         let min_rate = self.core.options.min_rate;
         let max_rate = std::cmp::max(self.core.options.max_rate, min_rate);
 
@@ -105,8 +105,10 @@ impl Base {
             self.core.options.max_rate = max_rate + 1;
         }
 
-        self.core.mosh().unwrap();
+        self.core.mosh()?;
         self.texture = Self::generate_texture(&self.core.data, &self.core.options).upcast();
+
+        Ok(())
     }
 
     pub fn get_texture(&mut self) -> gdk::Texture {
