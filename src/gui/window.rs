@@ -272,6 +272,7 @@ impl Window {
             self,
             async move {
                 while let Ok(error) = receiver_e.recv().await {
+                    window_clone.busy(false);
                     window_clone.show_message(&format!("Failed: {error}"), 0);
                 }
             }
