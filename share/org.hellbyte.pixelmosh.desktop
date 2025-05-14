@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Pixelmosh
+Icon=org.hellbyte.pixelmosh
+Exec=pixelmosh
+Comment=PNG Corrupter
+Categories=Graphics;GTK;
+Terminal=false
