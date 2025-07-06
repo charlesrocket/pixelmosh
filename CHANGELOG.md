@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.3] - 2025-07-06
+
+### Operations
+
+- Drop `reviewers`
+
+### Build
+
+- Exclude desktop files
+- Bump `indicatif` to 0.18
+
 ## [4.1.2] - 2025-05-14
 
 ### Bug Fixes
@@ -426,5 +437,7 @@ All notable changes to this project will be documented in this file.
 ### Testing
 
 - Add `grayscale_alpha`
+
+## [1.0.0] - 2022-07-23
 
 
