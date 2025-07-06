@@ -7,9 +7,6 @@ updates:
     schedule:
       interval: "monthly"
 
-    reviewers:
-      - "charlesrocket"
-
     commit-message:
       prefix: "ops"
       include: "scope"
