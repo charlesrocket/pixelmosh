@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.4] - 2025-07-29
+
+### Bug Fixes
+
+- Update `window` wrapper
+
+### Build
+
+- Update GTK dependencies
+
 ## [4.1.3] - 2025-07-06
 
 ### Operations
