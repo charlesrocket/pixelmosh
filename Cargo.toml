@@ -1,6 +1,6 @@
 [package]
 name = "pixelmosh"
-version = "4.1.4"
+version = "4.2.0"
 edition = "2024"
 repository = "https://github.com/charlesrocket/pixelmosh"
 authors = ["charlesrocket"]
