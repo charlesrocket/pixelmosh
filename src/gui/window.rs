@@ -359,7 +359,7 @@ impl Window {
     fn about_dialog() -> adw::AboutDialog {
         let about_dialog = adw::AboutDialog::builder()
             .application_name("PIXELMOSH")
-            .version(env!("CARGO_PKG_VERSION"))
+            .version(crate::version())
             .license_type(License::MitX11)
             .website(env!("CARGO_PKG_REPOSITORY"))
             .comments(env!("CARGO_PKG_DESCRIPTION"))

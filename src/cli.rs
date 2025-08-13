@@ -73,7 +73,7 @@ fn arg_matches() -> (ArgMatches, MoshCore) {
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(BANNER)
-        .version(env!("CARGO_PKG_VERSION"))
+        .version(crate::version())
         .help_template(
             "{name} v{version} \
                 CLI\n{about-with-newline}\

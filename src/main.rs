@@ -12,3 +12,9 @@ fn main() {
         cli::start();
     }
 }
+
+fn version() -> String {
+    let version = env!("CARGO_PKG_VERSION");
+    let os = std::env::consts::OS;
+    [version, os].join("-")
+}
