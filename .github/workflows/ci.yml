@@ -22,7 +22,7 @@ jobs:
           - toolchain: ${{ startsWith(github.ref, 'refs/tags/') && 'nightly' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -48,7 +48,7 @@ jobs:
     if: "!startsWith(github.ref, 'refs/tags/')"
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -73,7 +73,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
