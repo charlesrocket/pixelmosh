@@ -22,8 +22,8 @@ jobs:
           - toolchain: ${{ startsWith(github.ref, 'refs/tags/') && 'nightly' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
-      - uses: actions/cache@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
         with:
           path: |
             ~/.cargo/bin/
@@ -48,8 +48,8 @@ jobs:
     if: "!startsWith(github.ref, 'refs/tags/')"
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/cache@v4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
         with:
           path: |
             ~/.cargo/bin/
@@ -73,8 +73,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
-      - uses: actions/cache@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
         with:
           path: |
             ~/.cargo/bin/
@@ -89,7 +89,7 @@ jobs:
       - name: Generate code coverage
         run: cargo llvm-cov --workspace --lcov --output-path lcov.info
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@fdcc8476540edceab3de004e990f80d881c6cc00
         with:
           files: lcov.info
           fail_ci_if_error: true
