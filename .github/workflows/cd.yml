@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
         with:
           persist-credentials: false
-      - uses: taiki-e/setup-cross-toolchain-action@84e58a47fc2bcd3821a2aa8c153595bbffb0e10f
+      - uses: taiki-e/setup-cross-toolchain-action@15a579e0045e5e4f668b73a441b9609884abffc9
         with:
           target: ${{ matrix.target }}
         if: (matrix.os == '' || startsWith(matrix.os, 'ubuntu')) && !contains(matrix.target, '-musl')
