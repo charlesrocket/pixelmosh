@@ -38,7 +38,7 @@ fast_image_resize = "5.1"
 glib = { version = "0.21", optional = true }
 gtk = { version = "0.10", package = "gtk4", features = ["v4_16"], optional = true }
 indicatif = { version = "0.18", optional = true }
-png = "0.17"
+png = "0.18"
 rand = "0.9"
 rand_chacha = "0.9"
 
