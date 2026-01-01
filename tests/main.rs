@@ -3,12 +3,12 @@ mod cli {
     use std::{error::Error, fs::File, io::BufReader, process::Command};
 
     use adler::adler32;
-    use assert_cmd::prelude::*;
+    use assert_cmd::{cargo, prelude::*};
     use predicates::str::contains;
 
     #[test]
     fn file_not_found() -> Result<(), Box<dyn Error>> {
-        let mut cmd = Command::cargo_bin("pixelmosh")?;
+        let mut cmd = Command::new(cargo::cargo_bin!("pixelmosh"));
 
         cmd.arg("test/file/not/found");
 
@@ -29,7 +29,7 @@ mod cli {
 
     #[test]
     fn invalid_sig() -> Result<(), Box<dyn Error>> {
-        let mut cmd = Command::cargo_bin("pixelmosh")?;
+        let mut cmd = Command::new(cargo::cargo_bin!("pixelmosh"));
 
         cmd.arg("README.md");
         cmd.assert()
@@ -41,7 +41,7 @@ mod cli {
 
     #[test]
     fn batch() -> Result<(), Box<dyn Error>> {
-        let mut cmd = Command::cargo_bin("pixelmosh")?;
+        let mut cmd = Command::new(cargo::cargo_bin!("pixelmosh"));
 
         cmd.arg("tests/assets/test-grayscale.png")
             .arg("--batch")
@@ -70,7 +70,7 @@ mod cli {
 
     #[test]
     fn single() -> Result<(), Box<dyn Error>> {
-        let mut cmd = Command::cargo_bin("pixelmosh")?;
+        let mut cmd = Command::new(cargo::cargo_bin!("pixelmosh"));
 
         cmd.arg("tests/assets/test-rgb.png")
             .arg("--min-rate")
