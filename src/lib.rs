@@ -43,7 +43,7 @@ use rand::{
     distr::{Distribution, Uniform},
 };
 
-use std::cmp;
+use std::{cmp, io::Cursor};
 
 use crate::{
     err::MoshError,
@@ -153,9 +153,15 @@ impl MoshCore {
     ///
     /// It may fail if an image is not a valid PNG file.
     pub fn read_image(&mut self, input: &[u8]) -> Result<(), MoshError> {
-        let decoder = Decoder::new(input);
+        let decoder = Decoder::new(Cursor::new(input));
         let mut reader = decoder.read_info()?;
-        let mut buf = vec![0_u8; reader.output_buffer_size()];
+        let mut buf = vec![
+            0_u8;
+            reader
+                .output_buffer_size()
+                .expect("Failed to read from buffer")
+        ];
+
         let info = reader.next_frame(&mut buf)?;
 
         if let Some(palette) = &reader.info().palette {
