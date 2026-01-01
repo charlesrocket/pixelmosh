@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.0] - 2026-01-01
+
+### Bug Fixes
+
+- Change tooltip
+- Update `read_image()`
+
+### Features
+
+- Add `version()`
+
+### Operations
+
+- Bump actions/checkout from 4 to 5
+- Pin actions
+- Pin `labeler`
+- Bump codecov/codecov-action from 5.5.0 to 5.5.1
+- Bump actions/labeler from 5.0.0 to 6.0.1
+- Bump actions/cache from 4.2.4 to 4.3.0
+- Bump taiki-e/setup-cross-toolchain-action
+- Bump actions/checkout from 5.0.0 to 6.0.0
+- Bump codecov/codecov-action from 5.5.1 to 5.5.2
+- Bump taiki-e/setup-cross-toolchain-action
+- Bump actions/checkout from 6.0.0 to 6.0.1
+- Bump actions/cache from 4.3.0 to 5.0.1
+- Fix action version
+
+### Testing
+
+- Update integration/unit cases
+- Switch to `cargo_bin!`
+
+### Build
+
+- Bump slab from 0.4.10 to 0.4.11
+- Bump `png` to `0.18`
+
 ## [4.1.4] - 2025-07-29
 
 ### Bug Fixes
