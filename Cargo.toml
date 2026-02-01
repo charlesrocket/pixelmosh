@@ -1,6 +1,6 @@
 [package]
 name = "pixelmosh"
-version = "4.2.0"
+version = "4.2.1"
 edition = "2024"
 repository = "https://github.com/charlesrocket/pixelmosh"
 authors = ["charlesrocket"]
@@ -34,7 +34,7 @@ gui = ["dep:adw", "dep:async-channel", "dep:glib", "dep:glib-build-tools", "dep:
 adw = { version = "0.8", package = "libadwaita", features = ["v1_7"], optional = true }
 async-channel = { version = "2.3", optional = true }
 clap = { version = "4.5", features = ["string"], optional = true }
-fast_image_resize = "5.1"
+fast_image_resize = "6.0"
 glib = { version = "0.21", optional = true }
 gtk = { version = "0.10", package = "gtk4", features = ["v4_16"], optional = true }
 indicatif = { version = "0.18", optional = true }
