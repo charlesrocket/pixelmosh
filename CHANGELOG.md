@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.1] - 2026-02-01
+
+### Operations
+
+- Bump actions/cache from 5.0.1 to 5.0.3
+- Bump actions/checkout from 6.0.1 to 6.0.2
+- Bump taiki-e/create-gh-release-action from 1.9.1 to 1.9.2
+- Bump taiki-e/setup-cross-toolchain-action
+
+### Build
+
+- Bump `fast_image_resize` to `6.0`
+
 ## [4.2.0] - 2026-01-01
 
 ### Bug Fixes
