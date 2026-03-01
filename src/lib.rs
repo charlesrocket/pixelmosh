@@ -39,8 +39,9 @@ use fast_image_resize as fr;
 
 use png::{BitDepth, ColorType, Decoder};
 use rand::{
-    RngCore, SeedableRng,
+    Rng, RngExt, SeedableRng,
     distr::{Distribution, Uniform},
+    rngs::ChaCha8Rng,
 };
 
 use std::{cmp, io::Cursor};
@@ -253,7 +254,7 @@ impl MoshData {
 
         let min_rate = options.min_rate;
         let max_rate = cmp::max(options.min_rate, options.max_rate);
-        let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(options.seed);
+        let mut rng = ChaCha8Rng::seed_from_u64(options.seed);
         let chunk_count_distrib = Uniform::new(min_rate, max_rate)?;
         let mosh_rate = chunk_count_distrib.sample(&mut rng);
 
