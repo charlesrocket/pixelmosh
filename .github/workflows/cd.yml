@@ -58,7 +58,7 @@ jobs:
         if: (matrix.os == '' || startsWith(matrix.os, 'ubuntu')) && !contains(matrix.target, '-musl')
       - uses: taiki-e/install-action@cross
         if: contains(matrix.target, '-musl')
-      - uses: taiki-e/upload-rust-binary-action@3962470d6e7f1993108411bc3f75a135ec67fc8c
+      - uses: taiki-e/upload-rust-binary-action@f391289bcff6a7f36b6301c0a74199657bbb4561
         with:
           bin: pixelmosh
           target: ${{ matrix.target }}
