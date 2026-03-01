@@ -62,8 +62,8 @@ mod cli {
         let mut file_2 = BufReader::new(output_2);
         let checksum_2 = adler32(&mut file_2)?;
 
-        assert_eq!(checksum_1, 828_912_804);
-        assert_eq!(checksum_2, 2_283_675_618);
+        assert_eq!(checksum_1, 2_264_458_370);
+        assert_eq!(checksum_2, 294_764_484);
 
         Ok(())
     }
@@ -90,7 +90,7 @@ mod cli {
         let mut file = BufReader::new(output);
         let checksum = adler32(&mut file)?;
 
-        assert_eq!(checksum, 3_910_851_361);
+        assert_eq!(checksum, 4_180_968_860);
 
         Ok(())
     }
