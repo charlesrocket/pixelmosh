@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.2] - 2026-03-01
+
+### Bug Fixes
+
+- Drop `rand_chacha`
+- Set `input-purpose`
+
+### Operations
+
+- Bump taiki-e/upload-rust-binary-action from 1.27.0 to 1.28.0
+
+### Testing
+
+- Update checksums
+
+### Build
+
+- Update gtk
+
 ## [4.2.1] - 2026-02-01
 
 ### Operations
