@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           persist-credentials: false
-      - uses: taiki-e/create-gh-release-action@c5baa0b5dc700cf06439d87935e130220a6882d9
+      - uses: taiki-e/create-gh-release-action@eba8ea96c86cca8a37f1b56e94b4d13301fba651
         with:
           changelog: CHANGELOG.md
           token: ${{ secrets.GITHUB_TOKEN }}
