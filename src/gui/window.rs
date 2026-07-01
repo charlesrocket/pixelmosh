@@ -367,7 +367,7 @@ impl Window {
 
         about_dialog.add_link(
             "Release Notes",
-            "https://github.com/charlesrocket/pixelmosh/blob/trunk/CHANGELOG.md",
+            "https://codeberg.org/charlesrocket/pixelmosh/src/branch/trunk/CHANGELOG.md",
         );
 
         about_dialog
