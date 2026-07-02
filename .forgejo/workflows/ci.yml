@@ -111,14 +111,10 @@ jobs:
         uses: https://github.com/taiki-e/install-action@cargo-llvm-cov
       - name: Generate code coverage
         run: cargo llvm-cov --workspace --features ${{ matrix.feature }} --lcov --output-path lcov.info
-      - name: Upload to codecov.io
-        uses: https://github.com/codecov/codecov-action@v7
-        with:
-          files: lcov.info
-          fail_ci_if_error: false
-          flags: ${{ matrix.feature }}
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
+      - name: Install codecov
+        run: pip install codecov-cli
+      - name: Upload coverage
+        run: codecovcli --verbose upload-process --disable-search -t ${{ secrets.CODECOV_TOKEN }} -n ${{ forgejo.run_id }} -F ${{ matrix.feature }} -f lcov.info
 
   create-release:
     name: Release
