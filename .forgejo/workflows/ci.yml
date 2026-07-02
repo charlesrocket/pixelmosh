@@ -1,0 +1,150 @@
+name: CI
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  cargo:
+    name: Test | ${{ matrix.feature }} / ${{ matrix.toolchain }}
+    runs-on: codeberg-medium
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - beta
+        feature:
+          - default
+          #- gui
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ matrix.toolchain }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install libgtk-4-dev libadwaita-1-dev -y
+        if: matrix.feature == 'gui'
+      - name: Install Rust
+        uses: https://github.com/dtolnay/rust-toolchain@master
+        with:
+          components: rustfmt
+          toolchain: ${{ matrix.toolchain }}
+      - name: Check
+        run: cargo fmt --check --verbose
+      - name: Build
+        run: cargo build --features ${{ matrix.feature }} --verbose
+      - name: Test
+        run: cargo test --features ${{ matrix.feature }} --verbose
+
+  clippy:
+    name: Lint | ${{ matrix.feature }}
+    if: forgejo.ref_type == 'branch'
+    runs-on: codeberg-medium
+    strategy:
+      matrix:
+        feature:
+          - default
+          #- gui
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: clippy-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install libgtk-4-dev libadwaita-1-dev -y
+        if: matrix.feature == 'gui'
+      - name: Install Rust
+        uses: https://github.com/dtolnay/rust-toolchain@master
+        with:
+          components: clippy
+          toolchain: stable
+      - run: cargo clippy --features ${{ matrix.feature }} -- -D clippy::all -D warnings
+
+  codecov:
+    needs: cargo
+    name: Coverage | ${{ matrix.feature }}
+    if: forgejo.ref_type == 'branch'
+    runs-on: codeberg-medium
+    strategy:
+      matrix:
+        feature:
+          - default
+          #- gui
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-codecov-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install libgtk-4-dev libadwaita-1-dev -y
+        if: matrix.feature == 'gui'
+      - name: Install Rust
+        uses: https://github.com/dtolnay/rust-toolchain@stable
+      - name: Install LLVM
+        uses: https://github.com/taiki-e/install-action@cargo-llvm-cov
+      - name: Generate code coverage
+        run: cargo llvm-cov --workspace --features ${{ matrix.feature }} --lcov --output-path lcov.info
+      - name: Upload to codecov.io
+        uses: https://github.com/codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
+        with:
+          files: lcov.info
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  create-release:
+    name: Release
+    needs: cargo
+    runs-on: codeberg-tiny
+    if: forgejo.ref_type == 'tag'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Add release
+        uses: https://data.forgejo.org/actions/forgejo-release@v2.12.1
+        with:
+          direction: upload
+          url: https://codeberg.org
+          repo: charlesrocket/pixelmosh
+          release-notes-file: CHANGELOG.md
+          release-notes-assistant: true
+
+  publish:
+    needs: create-release
+    name: Crate
+    runs-on: codeberg-medium
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Install Rust
+        uses: https://github.com/dtolnay/rust-toolchain@stable
+      - name: Publish
+        run: cargo publish --token ${CRATES_TOKEN}
+        env:
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
