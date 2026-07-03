@@ -131,7 +131,6 @@ jobs:
           url: https://codeberg.org
           repo: charlesrocket/pixelmosh
           release-notes-file: CHANGELOG.md
-          release-notes-assistant: true
 
   publish:
     needs: release
