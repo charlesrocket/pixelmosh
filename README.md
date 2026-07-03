@@ -1,6 +1,6 @@
 # `pixelmosh`
 [![Crates.io](https://img.shields.io/crates/v/pixelmosh)](https://crates.io/crates/pixelmosh)
-[![Tests](https://github.com/charlesrocket/pixelmosh/actions/workflows/ci.yml/badge.svg?branch=trunk)](https://github.com/charlesrocket/pixelmosh/actions/workflows/ci.yml)
+[![CI](https://codeberg.org/charlesrocket/pixelmosh/badges/workflows/ci.yml/badge.svg?branch=trunk)](https://codeberg.org/charlesrocket/pixelmosh/actions)
 [![codecov](https://codecov.io/gh/charlesrocket/pixelmosh/branch/trunk/graph/badge.svg)](https://codecov.io/gh/charlesrocket/pixelmosh)
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/pixelmosh.svg)](https://repology.org/project/pixelmosh/versions)
