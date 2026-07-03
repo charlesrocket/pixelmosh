@@ -5,21 +5,21 @@
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/pixelmosh.svg)](https://repology.org/project/pixelmosh/versions)
 
-### Compilation
+## Compilation
 
-#### CLI
+### CLI
 
 ```
 cargo install pixelmosh
 ```
 
-#### GUI (GTK)
+### GUI (GTK)
 
 ```
 cargo install pixelmosh --features gui
 ```
 
-### Basic usage
+## Basic usage
 
 ```
 pixelmosh foo.png
@@ -58,3 +58,7 @@ Options:
 
 ## `libmosh`
 Follow the [example](https://docs.rs/pixelmosh/latest/libmosh/struct.MoshCore.html#example) from [docs.rs](https://docs.rs/pixelmosh/latest/libmosh/).
+
+## Contributing
+
+Patches are accepted via [Codeberg](https://codeberg.org/charlesrocket/pixelmosh/) or e-mail.
