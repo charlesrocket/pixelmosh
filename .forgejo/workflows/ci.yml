@@ -49,7 +49,7 @@ jobs:
 
   clippy:
     name: Lint | ${{ matrix.feature }}
-    if: forgejo.ref_type == 'branch'
+    if: forgejo.ref_type != 'tag'
     runs-on: codeberg-medium
     strategy:
       matrix:
@@ -82,7 +82,7 @@ jobs:
   codecov:
     needs: cargo
     name: Coverage | ${{ matrix.feature }}
-    if: forgejo.ref_type == 'branch'
+    if: forgejo.ref_type != 'tag'
     runs-on: codeberg-medium
     strategy:
       matrix:
@@ -112,15 +112,15 @@ jobs:
       - name: Generate code coverage
         run: cargo llvm-cov --workspace --features ${{ matrix.feature }} --lcov --output-path lcov.info
       - name: Install codecov
-        run: pip install codecov-cli
+        run: curl -Os https://cli.codecov.io/latest/linux/codecov && sudo chmod +x codecov
       - name: Upload coverage
-        run: codecovcli --verbose upload-process --disable-search -t ${{ secrets.CODECOV_TOKEN }} -n ${{ forgejo.run_id }} -F ${{ matrix.feature }} -f lcov.info
+        run: ./codecov upload-process --git-service github --disable-search -t ${{ secrets.CODECOV_TOKEN }} -n ${{ forgejo.run_id }} -F ${{ matrix.feature }} -f lcov.info
 
-  create-release:
+  release:
     name: Release
     needs: cargo
     runs-on: codeberg-tiny
-    if: forgejo.ref_type == 'tag'
+    if: ${{ forgejo.ref_type == 'tag' && forgejo.repository_owner == 'charlesrocket' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -134,7 +134,7 @@ jobs:
           release-notes-assistant: true
 
   publish:
-    needs: create-release
+    needs: release
     name: Crate
     runs-on: codeberg-medium
     steps:
