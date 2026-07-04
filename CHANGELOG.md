@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.3] - 2026-07-04
+
+### Bug Fixes
+
+- Switch to `AdwHeaderBar`
+- Move repository
+
+### Documentation
+
+- Add packaging status
+- Add `Contributing`
+- Update ci badge
+
+### Operations
+
+- Bump actions/cache from 5.0.3 to 5.0.4
+- Bump taiki-e/setup-cross-toolchain-action
+- Bump taiki-e/create-gh-release-action from 1.9.2 to 1.9.3
+- Bump codecov/codecov-action from 5.5.2 to 6.0.0
+- Bump taiki-e/upload-rust-binary-action from 1.28.0 to 1.29.1
+- Bump actions/cache from 5.0.4 to 5.0.5
+- Bump taiki-e/upload-rust-binary-action from 1.29.1 to 1.30.2
+- Bump taiki-e/create-gh-release-action from 1.9.3 to 1.11.0
+- Bump actions/labeler from 6.0.1 to 6.1.0
+- Bump codecov/codecov-action from 6.0.0 to 6.0.1
+- Bump taiki-e/setup-cross-toolchain-action
+- Bump codecov/codecov-action from 6.0.1 to 7.0.0
+- Bump actions/checkout from 6.0.2 to 6.0.3
+- Update actions
+- Add coverage flags
+- Switch to `codecov-cli`
+- Pull codecov directly
+- Disable release notes assistant
+- Extract changelog
+
+### Build
+
+- Bump rand from 0.10.0 to 0.10.1
+- Edit features
+
 ## [4.2.2] - 2026-03-01
 
 ### Bug Fixes
