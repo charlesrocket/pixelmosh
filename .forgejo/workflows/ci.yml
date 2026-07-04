@@ -1,9 +1,6 @@
 name: CI
 on: [push, pull_request]
 
-permissions:
-  contents: read
-
 env:
   CARGO_TERM_COLOR: always
 
@@ -77,7 +74,8 @@ jobs:
         with:
           components: clippy
           toolchain: stable
-      - run: cargo clippy --features ${{ matrix.feature }} -- -D clippy::all -D warnings
+      - name: Validate
+        run: cargo clippy --features ${{ matrix.feature }} -- -D clippy::all -D warnings
 
   codecov:
     needs: cargo
@@ -119,20 +117,32 @@ jobs:
   release:
     name: Release
     needs: cargo
-    runs-on: codeberg-tiny
+    runs-on: codeberg-small
     if: ${{ forgejo.ref_type == 'tag' && forgejo.repository_owner == 'charlesrocket' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      - name: Add release
-        uses: https://data.forgejo.org/actions/forgejo-release@v2.12.1
+      - name: Extract changelog
+        env:
+          TAG: ${{ forgejo.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "\\[" ver "\\]") { found=1; next }
+              next
+            }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+      - name: Publish
+        uses: https://data.forgejo.org/actions/forgejo-release@v2.13.1
         with:
           direction: upload
-          url: https://codeberg.org
-          repo: charlesrocket/pixelmosh
-          release-notes-file: CHANGELOG.md
+          release-notes-file: release-notes.md
+          skip-assets: true
 
-  publish:
+  crate:
     needs: release
     name: Crate
     runs-on: codeberg-medium
