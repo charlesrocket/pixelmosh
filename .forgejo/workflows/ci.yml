@@ -5,7 +5,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  cargo:
+  test:
     name: Test | ${{ matrix.feature }} / ${{ matrix.toolchain }}
     runs-on: codeberg-medium
     strategy:
@@ -90,7 +90,7 @@ jobs:
         run: cargo clippy --features ${{ matrix.feature }} -- -D clippy::all -D warnings
 
   codecov:
-    needs: cargo
+    needs: test
     name: Coverage | ${{ matrix.feature }}
     if: forgejo.ref_type != 'tag'
     runs-on: codeberg-medium
@@ -134,21 +134,14 @@ jobs:
       - name: Upload coverage
         run: ./codecov upload-process --git-service github --disable-search -t ${{ secrets.CODECOV_TOKEN }} -n ${{ forgejo.run_id }} -F ${{ matrix.feature }} -f lcov.info
 
-  release:
-    name: Create release
-    needs: cargo
+  crate:
+    name: Publish crate
+    needs: test
+    runs-on: codeberg-medium
     if: >-
       forgejo.ref_type == 'tag' &&
       forgejo.repository_owner == 'charlesrocket'
 
-    uses: charlesrocket/reusable/.forgejo/workflows/release.yml@trunk
-    with:
-      skip-assets: true
-
-  crate:
-    needs: release
-    name: Crate
-    runs-on: codeberg-medium
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -160,3 +153,14 @@ jobs:
         run: cargo publish --token ${CRATES_TOKEN}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+
+  release:
+    name: Create release
+    needs: crate
+    if: >-
+      forgejo.ref_type == 'tag' &&
+      forgejo.repository_owner == 'charlesrocket'
+
+    uses: charlesrocket/reusable/.forgejo/workflows/release.yml@trunk
+    with:
+      skip-assets: true
