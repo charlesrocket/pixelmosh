@@ -16,6 +16,7 @@ jobs:
         feature:
           - default
           #- gui
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -28,19 +29,25 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
+
           key: ${{ matrix.toolchain }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Install dependencies
         run: sudo apt update && sudo apt install libgtk-4-dev libadwaita-1-dev -y
         if: matrix.feature == 'gui'
+
       - name: Install Rust
         uses: https://github.com/dtolnay/rust-toolchain@master
         with:
           components: rustfmt
           toolchain: ${{ matrix.toolchain }}
+
       - name: Check
         run: cargo fmt --check --verbose
+
       - name: Build
         run: cargo build --features ${{ matrix.feature }} --verbose
+
       - name: Test
         run: cargo test --features ${{ matrix.feature }} --verbose
 
@@ -53,6 +60,7 @@ jobs:
         feature:
           - default
           #- gui
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -65,15 +73,19 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
+
           key: clippy-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Install dependencies
         run: sudo apt update && sudo apt install libgtk-4-dev libadwaita-1-dev -y
         if: matrix.feature == 'gui'
+
       - name: Install Rust
         uses: https://github.com/dtolnay/rust-toolchain@master
         with:
           components: clippy
           toolchain: stable
+
       - name: Validate
         run: cargo clippy --features ${{ matrix.feature }} -- -D clippy::all -D warnings
 
@@ -87,6 +99,7 @@ jobs:
         feature:
           - default
           #- gui
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -99,48 +112,38 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
+
           key: ${{ runner.os }}-codecov-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Install dependencies
         run: sudo apt update && sudo apt install libgtk-4-dev libadwaita-1-dev -y
         if: matrix.feature == 'gui'
+
       - name: Install Rust
         uses: https://github.com/dtolnay/rust-toolchain@stable
+
       - name: Install LLVM
         uses: https://github.com/taiki-e/install-action@cargo-llvm-cov
+
       - name: Generate code coverage
         run: cargo llvm-cov --workspace --features ${{ matrix.feature }} --lcov --output-path lcov.info
+
       - name: Install codecov
         run: curl -Os https://cli.codecov.io/latest/linux/codecov && sudo chmod +x codecov
+
       - name: Upload coverage
         run: ./codecov upload-process --git-service github --disable-search -t ${{ secrets.CODECOV_TOKEN }} -n ${{ forgejo.run_id }} -F ${{ matrix.feature }} -f lcov.info
 
   release:
-    name: Release
+    name: Create release
     needs: cargo
-    runs-on: codeberg-small
-    if: ${{ forgejo.ref_type == 'tag' && forgejo.repository_owner == 'charlesrocket' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Extract changelog
-        env:
-          TAG: ${{ forgejo.ref_name }}
-        run: |
-          VERSION="${TAG#v}"
-          awk -v ver="$VERSION" '
-            /^## \[/ {
-              if (found) exit
-              if ($0 ~ "\\[" ver "\\]") { found=1; next }
-              next
-            }
-            found { print }
-          ' CHANGELOG.md > release-notes.md
-      - name: Publish
-        uses: https://data.forgejo.org/actions/forgejo-release@v2.13.1
-        with:
-          direction: upload
-          release-notes-file: release-notes.md
-          skip-assets: true
+    if: >-
+      forgejo.ref_type == 'tag' &&
+      forgejo.repository_owner == 'charlesrocket'
+
+    uses: charlesrocket/reusable/.forgejo/workflows/release.yml@trunk
+    with:
+      skip-assets: true
 
   crate:
     needs: release
@@ -149,8 +152,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
       - name: Install Rust
         uses: https://github.com/dtolnay/rust-toolchain@stable
+
       - name: Publish
         run: cargo publish --token ${CRATES_TOKEN}
         env:
